@@ -47,7 +47,9 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center mb-6" aria-label="Ir al inicio">
-              <img src="/images/logo.png" alt="Orkiosk" className="h-8" />
+              <span className="font-logo text-2xl tracking-tight text-white">
+                Orkiosk
+              </span>
             </Link>
             <p className="text-gray-400 mb-6 max-w-sm">
               Quiscos de autoservicio inteligentes con software, hardware y analítica en tiempo real para optimizar tu negocio.

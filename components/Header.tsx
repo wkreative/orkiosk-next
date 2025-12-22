@@ -36,7 +36,9 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center group" aria-label="Ir al inicio">
-            <img src="/images/logo.png" alt="Orkiosk" className="h-8 md:h-10" />
+            <span className="font-logo text-2xl md:text-3xl tracking-tight text-gray-900 group-hover:text-primary-600 transition-colors">
+              Orkiosk
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
