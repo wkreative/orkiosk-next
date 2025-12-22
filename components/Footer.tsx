@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Monitor, Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from 'lucide-react'
+import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from 'lucide-react'
 
 const currentYear = new Date().getFullYear()
 
@@ -46,11 +46,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand Section */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center space-x-2 mb-6" aria-label="Ir al inicio">
-              <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center">
-                <Monitor className="w-6 h-6 text-white" />
-              </div>
-              <span className="font-heading font-bold text-xl text-white">Orkiosk</span>
+            <Link href="/" className="flex items-center mb-6" aria-label="Ir al inicio">
+              <img src="/images/logo.png" alt="Orkiosk" className="h-8" />
             </Link>
             <p className="text-gray-400 mb-6 max-w-sm">
               Quiscos de autoservicio inteligentes con software, hardware y analítica en tiempo real para optimizar tu negocio.

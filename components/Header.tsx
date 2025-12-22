@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Monitor } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 
 const navigation = [
   { name: 'Inicio', href: '/' },
@@ -35,16 +35,8 @@ export default function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Navegación principal">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group" aria-label="Ir al inicio">
-            <div className="relative">
-              <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-200">
-                <Monitor className="w-6 h-6 text-white" />
-              </div>
-              <div className="absolute -inset-1 bg-primary-400 rounded-xl blur opacity-25 group-hover:opacity-50 transition-opacity duration-200" />
-            </div>
-            <span className="font-heading font-bold text-xl text-gray-900">
-              Orkiosk
-            </span>
+          <Link href="/" className="flex items-center group" aria-label="Ir al inicio">
+            <img src="/images/logo.png" alt="Orkiosk" className="h-8 md:h-10" />
           </Link>
 
           {/* Desktop Navigation */}
