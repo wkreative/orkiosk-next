@@ -1,5 +1,6 @@
 import { TinaAdmin } from 'tinacms'
+import config from '../../tina/config'
 
 export default function Admin() {
-  return <TinaAdmin />
+  return <TinaAdmin config={config} />
 }
