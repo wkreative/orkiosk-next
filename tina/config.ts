@@ -1,7 +1,6 @@
 import { defineConfig } from 'tinacms'
 
 export default defineConfig({
-  publicFolder: 'public',
   build: {
     outputFolder: 'admin',
     publicFolder: 'public',
