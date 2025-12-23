@@ -17,7 +17,6 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPostBySlug(params.slug)
-  const shareUrl = `https://orkiosk.com/blog/${params.slug}`
 
   if (!post) {
     return {
@@ -56,6 +55,10 @@ function formatDate(dateString: string): string {
 
 export default function BlogPostPage({ params }: Props) {
   const post = getPostBySlug(params.slug)
+  const shareUrl = `https://orkiosk.com/blog/${params.slug}`
+  const relatedPosts = getAllPosts()
+    .filter((item) => item.slug !== post?.slug)
+    .slice(0, 3)
 
   if (!post) {
     notFound()
@@ -189,6 +192,37 @@ export default function BlogPostPage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {/* Recommended Posts */}
+      {relatedPosts.length > 0 && (
+        <section className="py-12 border-t border-gray-200">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-lg font-heading font-semibold text-gray-900 mb-6 text-center">
+              Publicaciones recomendadas
+            </h2>
+            <div className="grid gap-6 md:grid-cols-3">
+              {relatedPosts.map((item) => (
+                <Link
+                  key={item.slug}
+                  href={`/blog/${item.slug}`}
+                  className="group rounded-2xl border border-gray-200 p-5 text-left transition-colors hover:border-primary-300"
+                >
+                  <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">
+                    {item.category || 'Orkiosk'}
+                  </p>
+                  <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-primary-600">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 line-clamp-3">
+                    {item.excerpt}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
     </article>
   )
 }
