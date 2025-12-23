@@ -58,7 +58,7 @@ export default function BlogPage() {
 
                   {/* Title */}
                   <h2 className="text-xl font-heading font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
-                    <Link href={`/blog/${post.slug}`} className="before:absolute before:inset-0">
+                    <Link href={`/blog/${post.slug}`} >
                       {post.title}
                     </Link>
                   </h2>
