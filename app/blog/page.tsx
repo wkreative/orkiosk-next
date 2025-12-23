@@ -3,18 +3,71 @@ import Link from 'next/link'
 import { Calendar, ArrowRight } from 'lucide-react'
 import { getAllPosts } from '@/lib/posts'
 
-export const metadata: Metadata = {
-  title: 'Blog',
-  description: 'Descubre consejos, tendencias y novedades sobre optimizacion de negocios, transformacion digital y tecnologia de autoservicio.',
-  alternates: {
-    canonical: 'https://orkiosk.com/blog',
-  },
-  openGraph: {
-    title: 'Blog | Orkiosk',
-    description: 'Descubre consejos, tendencias y novedades sobre optimizacion de negocios, transformacion digital y tecnologia de autoservicio.',
-    url: 'https://orkiosk.com/blog',
-    type: 'website',
-  },
+const STOP_WORDS = new Set([
+  'a', 'al', 'algo', 'ante', 'antes', 'bajo', 'bien', 'cada', 'como', 'con',
+  'contra', 'cual', 'cuales', 'cuando', 'de', 'del', 'desde', 'donde', 'dos',
+  'el', 'ella', 'ellas', 'ellos', 'en', 'entre', 'era', 'eramos', 'es', 'esa',
+  'esas', 'ese', 'eso', 'esos', 'esta', 'estas', 'este', 'esto', 'estos',
+  'fue', 'fueron', 'ha', 'hasta', 'hay', 'la', 'las', 'le', 'les', 'lo', 'los',
+  'mas', 'me', 'mi', 'mientras', 'muy', 'no', 'nos', 'o', 'otra', 'otras',
+  'otro', 'otros', 'para', 'pero', 'por', 'porque', 'que', 'se', 'sin', 'sobre',
+  'su', 'sus', 'tambien', 'tan', 'tanto', 'te', 'tu', 'tus', 'un', 'una', 'uno',
+  'unos', 'unas', 'y', 'ya',
+])
+
+function normalizeToken(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+function extractKeywords(text: string): string[] {
+  const normalized = normalizeToken(text)
+  if (!normalized) {
+    return []
+  }
+  const counts = new Map<string, number>()
+  normalized.split(' ').forEach((word) => {
+    if (word.length < 3 || STOP_WORDS.has(word)) {
+      return
+    }
+    counts.set(word, (counts.get(word) ?? 0) + 1)
+  })
+  return Array.from(counts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([word]) => word)
+}
+
+function buildBlogKeywords(): string[] {
+  const posts = getAllPosts()
+  const combined = posts
+    .map((post) => [post.title, post.excerpt, post.category ?? ''].join(' '))
+    .join(' ')
+  const keywords = extractKeywords(combined)
+  return Array.from(new Set(keywords)).slice(0, 20)
+}
+
+export function generateMetadata(): Metadata {
+  const description =
+    'Descubre consejos, tendencias y novedades sobre optimizacion de negocios, transformacion digital y tecnologia de autoservicio.'
+  return {
+    title: 'Blog',
+    description,
+    keywords: buildBlogKeywords(),
+    alternates: {
+      canonical: 'https://orkiosk.com/blog',
+    },
+    openGraph: {
+      title: 'Blog | Orkiosk',
+      description,
+      url: 'https://orkiosk.com/blog',
+      type: 'website',
+    },
+  }
 }
 
 function formatDate(dateString: string): string {
