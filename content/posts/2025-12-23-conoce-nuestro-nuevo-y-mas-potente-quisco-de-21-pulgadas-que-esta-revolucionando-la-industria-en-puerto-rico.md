@@ -1,5 +1,5 @@
 ---
-title: Conoce Nuestro nuevo y mas potente quisco de 21 pulgadas que esta
+title: Conoce Nuestro nuevo y mas potente quoisco de 21 pulgadas que esta
   revolucionando la industria en Puerto Rico
 excerpt: Conoce Nuestro nuevo y mas potente quisco de 21 pulgadas que esta
   revolucionando la industria en Puerto Rico
