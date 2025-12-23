@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { Menu, X, ChevronDown } from 'lucide-react'
 
 export type NavItem = {
   name: string
@@ -43,6 +44,19 @@ const defaultCopy: HeaderCopy = {
 export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isLangOpen, setIsLangOpen] = useState(false)
+  const [hash, setHash] = useState('')
+  const pathname = usePathname() ?? '/'
+  const segments = pathname.split('/').filter(Boolean)
+  const currentLocale = segments[0] === 'en' ? 'en' : 'es'
+  const restPath = segments[0] === 'en' || segments[0] === 'es'
+    ? `/${segments.slice(1).join('/')}`
+    : pathname
+
+  const localeHref = (locale: 'es' | 'en') => {
+    const suffix = restPath === '/' ? '' : restPath
+    return `/${locale}${suffix}${hash}`
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,6 +66,10 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  useEffect(() => {
+    setHash(window.location.hash)
+  }, [pathname])
 
   return (
     <header
@@ -83,6 +101,38 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
                 {item.name}
               </Link>
             ))}
+          </div>
+
+          {/* Language Switcher */}
+          <div className="hidden md:flex items-center relative">
+            <button
+              type="button"
+              className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors"
+              onClick={() => setIsLangOpen((open) => !open)}
+              aria-expanded={isLangOpen}
+              aria-haspopup="true"
+            >
+              <span>{currentLocale.toUpperCase()}</span>
+              <ChevronDown className="w-4 h-4" />
+            </button>
+            {isLangOpen && (
+              <div className="absolute right-0 top-full mt-2 w-40 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden">
+                <Link
+                  href={localeHref('es')}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  onClick={() => setIsLangOpen(false)}
+                >
+                  Español
+                </Link>
+                <Link
+                  href={localeHref('en')}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  onClick={() => setIsLangOpen(false)}
+                >
+                  English
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* CTA Button */}
@@ -120,6 +170,42 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
           }`}
         >
           <div className="py-4 space-y-2">
+            <div className="px-4">
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors"
+                onClick={() => setIsLangOpen((open) => !open)}
+                aria-expanded={isLangOpen}
+                aria-haspopup="true"
+              >
+                <span>{currentLocale.toUpperCase()}</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              {isLangOpen && (
+                <div className="mt-2 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden">
+                  <Link
+                    href={localeHref('es')}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    onClick={() => {
+                      setIsLangOpen(false)
+                      setIsMobileMenuOpen(false)
+                    }}
+                  >
+                    Español
+                  </Link>
+                  <Link
+                    href={localeHref('en')}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    onClick={() => {
+                      setIsLangOpen(false)
+                      setIsMobileMenuOpen(false)
+                    }}
+                  >
+                    English
+                  </Link>
+                </div>
+              )}
+            </div>
             {copy.nav.map((item) => (
               <Link
                 key={item.name}
