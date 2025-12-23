@@ -17,29 +17,39 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPostBySlug(params.slug)
+  const shareUrl = `https://orkiosk.com/blog/${params.slug}`
+  const imageUrl = post?.image
+    ? post.image.startsWith('http')
+      ? post.image
+      : `https://orkiosk.com${post.image}`
+    : undefined
 
   if (!post) {
     return {
-      title: 'Artículo no encontrado',
+      title: 'Articulo no encontrado',
     }
   }
 
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: {
+      canonical: shareUrl,
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: 'article',
+      url: shareUrl,
       publishedTime: post.date,
       authors: post.author ? [post.author] : ['Orkiosk'],
-      images: post.image ? [{ url: post.image }] : [],
+      images: imageUrl ? [{ url: imageUrl }] : [],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.excerpt,
-      images: post.image ? [post.image] : [],
+      images: imageUrl ? [imageUrl] : [],
     },
   }
 }
@@ -56,9 +66,36 @@ function formatDate(dateString: string): string {
 export default function BlogPostPage({ params }: Props) {
   const post = getPostBySlug(params.slug)
   const shareUrl = `https://orkiosk.com/blog/${params.slug}`
+  const imageUrl = post?.image
+    ? post.image.startsWith('http')
+      ? post.image
+      : `https://orkiosk.com${post.image}`
+    : undefined
   const relatedPosts = getAllPosts()
     .filter((item) => item.slug !== post?.slug)
     .slice(0, 3)
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post?.title,
+    description: post?.excerpt,
+    datePublished: post?.date,
+    dateModified: post?.date,
+    author: post?.author
+      ? { '@type': 'Person', name: post.author }
+      : { '@type': 'Organization', name: 'Orkiosk' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Orkiosk',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://orkiosk.com/images/logo.png',
+      },
+    },
+    url: shareUrl,
+    mainEntityOfPage: shareUrl,
+    image: imageUrl ? [imageUrl] : undefined,
+  }
 
   if (!post) {
     notFound()
@@ -96,6 +133,10 @@ export default function BlogPostPage({ params }: Props) {
 
   return (
     <article className="pt-20 md:pt-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero Section */}
       <header className="py-16 md:py-24 bg-gradient-to-b from-primary-50 to-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -154,7 +195,7 @@ export default function BlogPostPage({ params }: Props) {
       <section className="py-12 bg-gray-50 border-t border-gray-200">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gray-600 mb-4">
-            ¿Te gustó este artículo? Compártelo con otros
+            &iquest;Te gust&oacute; este art&iacute;culo? Comp&aacute;rtelo con otros
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a

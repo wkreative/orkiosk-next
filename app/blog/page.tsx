@@ -5,7 +5,16 @@ import { getAllPosts } from '@/lib/posts'
 
 export const metadata: Metadata = {
   title: 'Blog',
-  description: 'Descubre consejos, tendencias y novedades sobre optimización de negocios, transformación digital y tecnología de autoservicio.',
+  description: 'Descubre consejos, tendencias y novedades sobre optimizacion de negocios, transformacion digital y tecnologia de autoservicio.',
+  alternates: {
+    canonical: 'https://orkiosk.com/blog',
+  },
+  openGraph: {
+    title: 'Blog | Orkiosk',
+    description: 'Descubre consejos, tendencias y novedades sobre optimizacion de negocios, transformacion digital y tecnologia de autoservicio.',
+    url: 'https://orkiosk.com/blog',
+    type: 'website',
+  },
 }
 
 function formatDate(dateString: string): string {
@@ -29,7 +38,7 @@ export default function BlogPage() {
             Blog de <span className="text-gradient">Orkiosk</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-            Descubre consejos, tendencias y novedades sobre optimización de negocios, transformación digital y tecnología de autoservicio.
+            Descubre consejos, tendencias y novedades sobre optimizacion de negocios, transformacion digital y tecnologia de autoservicio.
           </p>
         </div>
       </section>
@@ -50,7 +59,7 @@ export default function BlogPage() {
                     <time dateTime={post.date}>{formatDate(post.date)}</time>
                     {post.category && (
                       <>
-                        <span className="text-gray-300">•</span>
+                        <span className="text-gray-300">|</span>
                         <span className="text-primary-600 font-medium">{post.category}</span>
                       </>
                     )}
@@ -73,7 +82,7 @@ export default function BlogPage() {
                     href={`/blog/${post.slug}`}
                     className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors"
                   >
-                    <span>Leer más</span>
+                    <span>Leer mas</span>
                     <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </article>
@@ -84,9 +93,7 @@ export default function BlogPage() {
               <p className="text-gray-500 text-lg mb-4">
                 No hay artículos publicados aún.
               </p>
-              <Link href="/admin" className="btn-primary">
-                Crear Primer Artículo
-              </Link>
+              <Link href="/admin" className="btn-primary">Crear Primer Articulo</Link>
             </div>
           )}
         </div>
@@ -101,9 +108,7 @@ export default function BlogPage() {
           <p className="text-primary-100 text-lg mb-8">
             Suscríbete a nuestro boletín y recibe las últimas noticias sobre tecnología y optimización de negocios.
           </p>
-          <Link href="/#contact" className="btn-secondary bg-white text-primary-600 border-white hover:bg-primary-50">
-            Contáctanos
-          </Link>
+          <Link href="/#contact" className="btn-secondary bg-white text-primary-600 border-white hover:bg-primary-50">Contactanos</Link>
         </div>
       </section>
     </div>

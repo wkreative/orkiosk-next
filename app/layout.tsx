@@ -11,16 +11,16 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://orkioskweb.netlify.app'),
+  metadataBase: new URL('https://orkiosk.com'),
   title: {
-    default: 'Orkiosk | Quiscos de Autoservicio Inteligentes',
+    default: 'Orkiosk | Quioscos de Autoservicio Inteligentes',
     template: '%s | Orkiosk',
   },
-  description: 'Quiscos de autoservicio inteligentes con software, hardware y analítica en tiempo real. Reduce tiempos de espera, integra pagos y optimiza tu negocio.',
+  description: 'Quioscos de autoservicio inteligentes con software, hardware y analítica en tiempo real. Reduce tiempos de espera, integra pagos y optimiza tu negocio.',
   keywords: [
-    'quisco',
-    'quisco de autoservicio',
-    'kiosko',
+    'quiosco',
+    'quiosco de autoservicio',
+    'kiosco',
     'self-service kiosk',
     'punto de venta',
     'POS',
@@ -30,11 +30,12 @@ export const metadata: Metadata = {
     'pantallas interactivas',
     'software para restaurantes',
     'hardware POS',
-    'analítica en tiempo real',
-    'Colombia',
-    'Bogotá',
+    'analitica en tiempo real',
+    'Puerto Rico',
+    'San Juan',
+    'Estados Unidos',
   ],
-  authors: [{ name: 'Orkiosk', url: 'https://orkioskweb.netlify.app' }],
+  authors: [{ name: 'Orkiosk', url: 'https://orkiosk.com' }],
   creator: 'Orkiosk',
   publisher: 'Orkiosk',
   robots: {
@@ -50,29 +51,29 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'es_CO',
-    url: 'https://orkioskweb.netlify.app',
+    locale: 'es_PR',
+    url: 'https://orkiosk.com',
     siteName: 'Orkiosk',
-    title: 'Orkiosk | Quiscos de Autoservicio Inteligentes',
-    description: 'Quiscos de autoservicio inteligentes con software, hardware y analítica en tiempo real.',
+    title: 'Orkiosk | Quioscos de Autoservicio Inteligentes',
+    description: 'Quioscos de autoservicio inteligentes con software, hardware y analítica en tiempo real.',
     images: [
       {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Orkiosk - Quiscos de Autoservicio',
+        alt: 'Orkiosk - Quioscos de Autoservicio',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Orkiosk | Quiscos de Autoservicio Inteligentes',
-    description: 'Quiscos de autoservicio inteligentes con software, hardware y analítica en tiempo real.',
+    title: 'Orkiosk | Quioscos de Autoservicio Inteligentes',
+    description: 'Quioscos de autoservicio inteligentes con software, hardware y analítica en tiempo real.',
     images: ['/images/og-image.jpg'],
     creator: '@orkiosk',
   },
   alternates: {
-    canonical: 'https://orkioskweb.netlify.app',
+    canonical: 'https://orkiosk.com',
   },
   icons: {
     icon: '/favicon.ico',
@@ -93,7 +94,7 @@ export default function RootLayout({
         {/* Preconnect to external domains for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://orkioskweb.netlify.app" />
+        <link rel="dns-prefetch" href="https://orkiosk.com" />
 
         {/* JSON-LD Schema for Organization */}
         <script
@@ -103,24 +104,26 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'Organization',
               name: 'Orkiosk',
-              url: 'https://orkioskweb.netlify.app',
-              logo: 'https://orkioskweb.netlify.app/images/logo.png',
-              description: 'Quiscos de autoservicio inteligentes con software, hardware y analítica en tiempo real.',
+              url: 'https://orkiosk.com',
+              logo: 'https://orkiosk.com/images/logo.png',
+              description: 'Quioscos de autoservicio inteligentes con software, hardware y analítica en tiempo real.',
               foundingDate: '2020',
               address: {
                 '@type': 'PostalAddress',
-                addressCountry: 'CO',
+                addressCountry: 'PR',
+                addressRegion: 'PR',
+                addressLocality: 'San Juan',
               },
               contactPoint: {
                 '@type': 'ContactPoint',
-                telephone: '+57-300-000-0000',
+                telephone: '+1-877-799-3720',
                 contactType: 'customer service',
                 availableLanguage: 'Spanish',
               },
               sameAs: [
                 'https://www.facebook.com/orkiosk',
                 'https://www.instagram.com/orkiosk',
-                'https://www.linkedin.com/company/orkiosk',
+                'https://www.youtube.com/@orkiosk',
               ],
             }),
           }}
@@ -134,12 +137,12 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
               name: 'Orkiosk',
-              url: 'https://orkioskweb.netlify.app',
+              url: 'https://orkiosk.com',
               potentialAction: {
                 '@type': 'SearchAction',
                 target: {
                   '@type': 'EntryPoint',
-                  urlTemplate: 'https://orkioskweb.netlify.app/blog?q={search_term_string}',
+                  urlTemplate: 'https://orkiosk.com/blog?q={search_term_string}',
                 },
                 'query-input': 'required name=search_term_string',
               },

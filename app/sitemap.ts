@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { getAllPosts } from '@/lib/posts'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://orkioskweb.netlify.app'
+  const baseUrl = 'https://orkiosk.com'
   const posts = getAllPosts()
 
   // Static pages

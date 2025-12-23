@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/admin/',
     },
-    sitemap: 'https://orkioskweb.netlify.app/sitemap.xml',
+    sitemap: 'https://orkiosk.com/sitemap.xml',
   }
 }
