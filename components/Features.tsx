@@ -1,45 +1,84 @@
 import { Clock, CreditCard, BarChart3, Shield, Printer, Users } from 'lucide-react'
 
-const features = [
+export type FeatureItem = {
+  name: string
+  description: string
+  icon: typeof Clock
+  color: string
+}
+
+export type FeaturesCopy = {
+  label: string
+  title: string
+  subtitle: string
+  items: Array<{ name: string; description: string }>
+  ctaPrompt: string
+  ctaButton: string
+}
+
+const defaultItems = [
   {
-    name: 'Reducción de Tiempos de Espera',
-    description: 'Optimiza el flujo de clientes con un proceso de autoservicio rápido e intuitivo que reduce significativamente los tiempos de espera en caja.',
+    name: 'Reducci?n de Tiempos de Espera',
+    description:
+      'Optimiza el flujo de clientes con un proceso de autoservicio r?pido e intuitivo que reduce significativamente los tiempos de espera en caja.',
     icon: Clock,
     color: 'bg-blue-500',
   },
   {
     name: 'Pagos Integrados',
-    description: 'Acepta múltiples métodos de pago incluyendo tarjetas de crédito, débito, transferencias y efectivo con nuestras integraciones POS.',
+    description:
+      'Acepta m?ltiples m?todos de pago incluyendo tarjetas de cr?dito, d?bito, transferencias y efectivo con nuestras integraciones POS.',
     icon: CreditCard,
     color: 'bg-green-500',
   },
   {
-    name: 'Analítica en Tiempo Real',
-    description: 'Monitorea ventas, productos populares y comportamiento de clientes con dashboards interactivos y reportes detallados.',
+    name: 'Anal?tica en Tiempo Real',
+    description:
+      'Monitorea ventas, productos populares y comportamiento de clientes con dashboards interactivos y reportes detallados.',
     icon: BarChart3,
     color: 'bg-purple-500',
   },
   {
     name: 'Sistema Seguro y Estable',
-    description: 'Infraestructura robusta con respaldo automático y protección de datos para garantizar la continuidad de tu negocio.',
+    description:
+      'Infraestructura robusta con respaldo autom?tico y protecci?n de datos para garantizar la continuidad de tu negocio.',
     icon: Shield,
     color: 'bg-red-500',
   },
   {
     name: 'Impresora de Recibo',
-    description: 'Impresión rápida y clara de recibos con personalización de ticket para incluir promociones y información de tu marca.',
+    description:
+      'Impresi?n r?pida y clara de recibos con personalizaci?n de ticket para incluir promociones e informaci?n de tu marca.',
     icon: Printer,
     color: 'bg-orange-500',
   },
   {
     name: 'Experiencia Intuitiva',
-    description: 'Interfaz de usuario diseñada para una experiencia fluida que tus clientes dominarán desde el primer uso.',
+    description:
+      'Interfaz de usuario dise?ada para una experiencia fluida que tus clientes dominar?n desde el primer uso.',
     icon: Users,
     color: 'bg-teal-500',
   },
 ]
 
-export default function Features() {
+const defaultCopy: FeaturesCopy = {
+  label: 'Beneficios',
+  title: '?Qu? hace Orkiosk por tu negocio?',
+  subtitle:
+    'Una soluci?n completa que combina hardware, software y anal?tica para transformar la experiencia de autoservicio en tu establecimiento.',
+  items: defaultItems.map(({ name, description }) => ({ name, description })),
+  ctaPrompt: '?Quieres conocer m?s sobre nuestras funcionalidades?',
+  ctaButton: 'Habla con un Asesor',
+}
+
+export default function Features({ copy = defaultCopy, locale = 'es' }: { copy?: FeaturesCopy; locale?: string }) {
+  const contactHref = `/${locale}#contact`
+  const features: FeatureItem[] = defaultItems.map((item, index) => ({
+    ...item,
+    name: copy.items[index]?.name ?? item.name,
+    description: copy.items[index]?.description ?? item.description,
+  }))
+
   return (
     <section
       id="benefits"
@@ -50,16 +89,16 @@ export default function Features() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <span className="text-primary-600 font-semibold text-sm uppercase tracking-wider mb-2 block">
-            Beneficios
+            {copy.label}
           </span>
           <h2
             id="features-heading"
             className="section-title"
           >
-            ¿Qué hace Orkiosk por tu negocio?
+            {copy.title}
           </h2>
           <p className="section-subtitle mt-4">
-            Una solución completa que combina hardware, software y analítica para transformar la experiencia de autoservicio en tu establecimiento.
+            {copy.subtitle}
           </p>
         </div>
 
@@ -92,10 +131,10 @@ export default function Features() {
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
           <p className="text-gray-600 mb-4">
-            ¿Quieres conocer más sobre nuestras funcionalidades?
+            {copy.ctaPrompt}
           </p>
-          <a href="/#contact" className="btn-primary">
-            Habla con un Asesor
+          <a href={contactHref} className="btn-primary">
+            {copy.ctaButton}
           </a>
         </div>
       </div>

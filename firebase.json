@@ -4,6 +4,23 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": true,
     "trailingSlash": true,
+    "redirects": [
+      {
+        "source": "/",
+        "destination": "/es/",
+        "type": 301
+      },
+      {
+        "source": "/blog",
+        "destination": "/es/blog/",
+        "type": 301
+      },
+      {
+        "source": "/blog/**",
+        "destination": "/es/blog/:splat/",
+        "type": 301
+      }
+    ],
     "headers": [
       {
         "source": "/admin/config.yml",

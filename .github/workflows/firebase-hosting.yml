@@ -25,6 +25,8 @@ jobs:
 
       - name: Build static site
         run: npm run build
+        env:
+          GOOGLE_TRANSLATE_API_KEY: ${{ secrets.GOOGLE_TRANSLATE_API_KEY }}
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2

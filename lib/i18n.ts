@@ -168,7 +168,12 @@ export type Translations = typeof baseCopy
 
 const copyCache = new Map<Locale, Promise<Translations>>()
 
-function collectStrings(value: unknown, paths: Array<(string | number)[]> = [], path: (string | number)[] = [], strings: string[] = []) {
+function collectStrings(
+  value: unknown,
+  paths: Array<(string | number)[]> = [],
+  path: (string | number)[] = [],
+  strings: string[] = [],
+) {
   if (typeof value === 'string') {
     paths.push(path)
     strings.push(value)
@@ -180,6 +185,9 @@ function collectStrings(value: unknown, paths: Array<(string | number)[]> = [], 
   }
   if (value && typeof value === 'object') {
     Object.entries(value).forEach(([key, val]) => {
+      if (key === 'href') {
+        return
+      }
       collectStrings(val, paths, [...path, key], strings)
     })
   }

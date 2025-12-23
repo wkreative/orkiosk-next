@@ -3,7 +3,65 @@
 import { useState } from 'react'
 import { Mail, MapPin, Send, CheckCircle } from 'lucide-react'
 
-export default function Contact() {
+export type ContactCopy = {
+  label: string
+  title: string
+  subtitle: string
+  whatsappLabel: string
+  emailLabel: string
+  locationLabel: string
+  locationValue: string
+  successTitle: string
+  successBody: string
+  successButton: string
+  form: {
+    nameLabel: string
+    companyLabel: string
+    emailLabel: string
+    phoneLabel: string
+    messageLabel: string
+    namePlaceholder: string
+    companyPlaceholder: string
+    emailPlaceholder: string
+    phonePlaceholder: string
+    messagePlaceholder: string
+    submitIdle: string
+    submitLoading: string
+    error: string
+  }
+}
+
+const defaultCopy: ContactCopy = {
+  label: 'Contacto',
+  title: '?Interesado en nuestros quioscos?',
+  subtitle:
+    'Cont?ctanos para agendar una demo personalizada y descubrir c?mo Orkiosk puede transformar la experiencia de autoservicio en tu negocio.',
+  whatsappLabel: 'WhatsApp',
+  emailLabel: 'Email',
+  locationLabel: 'Ubicaci?n',
+  locationValue: 'San Juan, Puerto Rico',
+  successTitle: '?Mensaje Enviado!',
+  successBody:
+    'Gracias por tu inter?s. Nos pondremos en contacto contigo dentro de las pr?ximas 24 horas.',
+  successButton: 'Enviar Otro Mensaje',
+  form: {
+    nameLabel: 'Nombre completo *',
+    companyLabel: 'Empresa',
+    emailLabel: 'Email *',
+    phoneLabel: 'Tel?fono',
+    messageLabel: 'Mensaje *',
+    namePlaceholder: 'Juan P?rez',
+    companyPlaceholder: 'Tu Empresa',
+    emailPlaceholder: 'juan@empresa.com',
+    phonePlaceholder: '+1-787-123-4567',
+    messagePlaceholder: 'Cu?ntanos sobre tu negocio y c?mo podemos ayudarte...',
+    submitIdle: 'Enviar Mensaje',
+    submitLoading: 'Enviando...',
+    error: 'Hubo un error al enviar el mensaje. Por favor intenta de nuevo.',
+  },
+}
+
+export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -14,7 +72,6 @@ export default function Contact() {
     const data = Object.fromEntries(formData)
 
     try {
-      // Enviar a Netlify Forms (funciona automáticamente con el atributo data-netlify="true")
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -42,16 +99,16 @@ export default function Contact() {
           {/* Left Content */}
           <div>
             <span className="text-primary-600 font-semibold text-sm uppercase tracking-wider mb-2 block">
-              Contacto
+              {copy.label}
             </span>
             <h2
               id="contact-heading"
               className="section-title"
             >
-              ¿Interesado en nuestros quioscos?
+              {copy.title}
             </h2>
             <p className="text-lg text-gray-600 mb-8">
-              Contáctanos para agendar una demo personalizada y descubrir cómo Orkiosk puede transformar la experiencia de autoservicio en tu negocio.
+              {copy.subtitle}
             </p>
 
             {/* Contact Info */}
@@ -75,7 +132,7 @@ export default function Contact() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">WhatsApp</p>
+                  <p className="text-sm text-gray-500">{copy.whatsappLabel}</p>
                   <p className="font-semibold">1-877-799-3720</p>
                 </div>
               </a>
@@ -88,7 +145,7 @@ export default function Contact() {
                   <Mail className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Email</p>
+                  <p className="text-sm text-gray-500">{copy.emailLabel}</p>
                   <p className="font-semibold">info@orkiosk.com</p>
                 </div>
               </a>
@@ -98,8 +155,8 @@ export default function Contact() {
                   <MapPin className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Ubicación</p>
-                  <p className="font-semibold">San Juan, Puerto Rico</p>
+                  <p className="text-sm text-gray-500">{copy.locationLabel}</p>
+                  <p className="font-semibold">{copy.locationValue}</p>
                 </div>
               </div>
             </div>
@@ -113,16 +170,16 @@ export default function Contact() {
                   <CheckCircle className="w-10 h-10 text-green-600" />
                 </div>
                 <h3 className="text-2xl font-heading font-bold text-gray-900 mb-2">
-                  ¡Mensaje Enviado!
+                  {copy.successTitle}
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Gracias por tu interés. Nos pondremos en contacto contigo dentro de las próximas 24 horas.
+                  {copy.successBody}
                 </p>
                 <button
                   onClick={() => setFormStatus('idle')}
                   className="btn-primary"
                 >
-                  Enviar Otro Mensaje
+                  {copy.successButton}
                 </button>
               </div>
             ) : (
@@ -142,7 +199,7 @@ export default function Contact() {
                       htmlFor="name"
                       className="block text-sm font-medium text-gray-700 mb-2"
                     >
-                      Nombre completo *
+                      {copy.form.nameLabel}
                     </label>
                     <input
                       type="text"
@@ -150,7 +207,7 @@ export default function Contact() {
                       name="name"
                       required
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                      placeholder="Juan Pérez"
+                      placeholder={copy.form.namePlaceholder}
                     />
                   </div>
 
@@ -159,14 +216,14 @@ export default function Contact() {
                       htmlFor="company"
                       className="block text-sm font-medium text-gray-700 mb-2"
                     >
-                      Empresa
+                      {copy.form.companyLabel}
                     </label>
                     <input
                       type="text"
                       id="company"
                       name="company"
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                      placeholder="Tu Empresa"
+                      placeholder={copy.form.companyPlaceholder}
                     />
                   </div>
                 </div>
@@ -177,7 +234,7 @@ export default function Contact() {
                       htmlFor="email"
                       className="block text-sm font-medium text-gray-700 mb-2"
                     >
-                      Email *
+                      {copy.form.emailLabel}
                     </label>
                     <input
                       type="email"
@@ -185,7 +242,7 @@ export default function Contact() {
                       name="email"
                       required
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                      placeholder="juan@empresa.com"
+                      placeholder={copy.form.emailPlaceholder}
                     />
                   </div>
 
@@ -194,14 +251,14 @@ export default function Contact() {
                       htmlFor="phone"
                       className="block text-sm font-medium text-gray-700 mb-2"
                     >
-                      Teléfono
+                      {copy.form.phoneLabel}
                     </label>
                     <input
                       type="tel"
                       id="phone"
                       name="phone"
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                      placeholder="+1-787-123-4567"
+                      placeholder={copy.form.phonePlaceholder}
                     />
                   </div>
                 </div>
@@ -211,7 +268,7 @@ export default function Contact() {
                     htmlFor="message"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Mensaje *
+                    {copy.form.messageLabel}
                   </label>
                   <textarea
                     id="message"
@@ -219,7 +276,7 @@ export default function Contact() {
                     required
                     rows={4}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200 resize-none"
-                    placeholder="Cuéntanos sobre tu negocio y cómo podemos ayudarte..."
+                    placeholder={copy.form.messagePlaceholder}
                   />
                 </div>
 
@@ -234,11 +291,11 @@ export default function Contact() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Enviando...
+                      {copy.form.submitLoading}
                     </span>
                   ) : (
                     <span className="flex items-center justify-center">
-                      <span>Enviar Mensaje</span>
+                      <span>{copy.form.submitIdle}</span>
                       <Send className="w-5 h-5 ml-2" />
                     </span>
                   )}
@@ -246,7 +303,7 @@ export default function Contact() {
 
                 {formStatus === 'error' && (
                   <p className="text-red-600 text-sm text-center">
-                    Hubo un error al enviar el mensaje. Por favor intenta de nuevo.
+                    {copy.form.error}
                   </p>
                 )}
               </form>
