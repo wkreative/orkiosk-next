@@ -8,6 +8,7 @@ const navigation = [
   { name: 'Inicio', href: '/' },
   { name: 'Beneficios', href: '/#benefits' },
   { name: 'Blog', href: '/blog' },
+  { name: 'Client Admin Panel', href: 'https://orkiosk.com/admin/' },
   { name: 'Contacto', href: '/#contact' },
 ]
 
