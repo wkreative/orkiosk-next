@@ -170,9 +170,7 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   const renderContent = (content: string) => {
-    const paragraphs = content.split('
-
-').filter((p) => p.trim())
+    const paragraphs = content.split('\n\n').filter((p) => p.trim())
     return paragraphs.map((paragraph, index) => {
       if (paragraph.startsWith('# ')) {
         return <h1 key={index} className="text-3xl font-bold mt-8 mb-4">{paragraph.slice(2)}</h1>
@@ -184,8 +182,7 @@ export default async function BlogPostPage({ params }: Props) {
         return <h3 key={index} className="text-xl font-bold mt-6 mb-2">{paragraph.slice(4)}</h3>
       }
       if (paragraph.startsWith('- ')) {
-        const items = paragraph.split('
-').filter((p) => p.trim())
+        const items = paragraph.split('\n').filter((p) => p.trim())
         return (
           <ul key={index} className="list-disc list-inside space-y-2 my-4">
             {items.map((item, i) => (
