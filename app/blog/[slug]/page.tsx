@@ -17,6 +17,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPostBySlug(params.slug)
+  const shareUrl = `https://orkiosk.com/blog/${params.slug}`
 
   if (!post) {
     return {
@@ -152,22 +153,38 @@ export default function BlogPostPage({ params }: Props) {
           <p className="text-gray-600 mb-4">
             ¿Te gustó este artículo? Compártelo con otros
           </p>
-          <div className="flex justify-center space-x-4">
+          <div className="flex flex-wrap justify-center gap-3">
             <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://orkioskweb.netlify.app/blog/${params.slug}`)}`}
+              href={`https://x.com/intent/post?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(shareUrl)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary text-sm"
             >
-              Compartir en Twitter
+              Compartir en X
             </a>
             <a
-              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://orkioskweb.netlify.app/blog/${params.slug}`)}`}
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary text-sm"
+            >
+              Compartir en Facebook
+            </a>
+            <a
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary text-sm"
             >
               Compartir en LinkedIn
+            </a>
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(`${post.title} ${shareUrl}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary text-sm"
+            >
+              Compartir en WhatsApp
             </a>
           </div>
         </div>
