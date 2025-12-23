@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from 'lucide-react'
+import { Monitor, Mail, Phone, MapPin, Facebook, Instagram, Youtube } from 'lucide-react'
 
 const currentYear = new Date().getFullYear()
 
@@ -31,9 +31,9 @@ const navigation = {
       icon: Instagram,
     },
     {
-      name: 'LinkedIn',
-      href: 'https://linkedin.com/company/orkiosk',
-      icon: Linkedin,
+      name: 'YouTube',
+      href: 'https://www.youtube.com/@orkiosk',
+      icon: Youtube,
     },
   ],
 }
@@ -47,7 +47,7 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center mb-6" aria-label="Ir al inicio">
-              <span className="font-logo text-2xl tracking-tight text-white">
+              <span className="font-logo text-lg md:text-xl tracking-tight text-white">
                 Orkiosk
               </span>
             </Link>
@@ -57,9 +57,10 @@ export default function Footer() {
 
             {/* Contact Info */}
             <div className="space-y-3">
-              <a href="tel:+573000000000" className="flex items-center space-x-3 text-gray-400 hover:text-white transition-colors">
+              <a href="tel:+18777993720git pull origin main
+              " className="flex items-center space-x-3 text-gray-400 hover:text-white transition-colors">
                 <Phone className="w-5 h-5" />
-                <span>+57 300 000 0000</span>
+                <span>+1-877-799-3720</span>
               </a>
               <a href="mailto:info@orkiosk.com" className="flex items-center space-x-3 text-gray-400 hover:text-white transition-colors">
                 <Mail className="w-5 h-5" />
@@ -67,7 +68,7 @@ export default function Footer() {
               </a>
               <div className="flex items-center space-x-3 text-gray-400">
                 <MapPin className="w-5 h-5" />
-                <span>Bogotá, Colombia</span>
+                <span>San Juan, Puerto Rico</span>
               </div>
             </div>
           </div>
@@ -117,7 +118,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-500 text-sm">
-              © {currentYear} Orkiosk. Todos los derechos reservados.
+              © {currentYear} Orkiosk. Todos los derechos reservados. Hecho con ❤️ en Puerto Rico.
             </p>
 
             {/* Social Links */}

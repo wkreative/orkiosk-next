@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, Zap, Shield, BarChart3 } from 'lucide-react'
+import HeroKiosk from './HeroKiosk'
 
 export default function Hero() {
   return (
@@ -63,73 +64,9 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right Content - Visual Element */}
+          {/* Right Content - Kiosk Image */}
           <div className="relative animate-fade-in animate-delay-200">
-            {/* Main Card */}
-            <div className="relative bg-white rounded-3xl shadow-2xl shadow-gray-200/50 p-8 md:p-12 overflow-hidden">
-              {/* Decorative Elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-primary-100 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2" />
-
-              {/* Kiosk Mockup */}
-              <div className="relative z-10">
-                {/* Screen */}
-                <div className="bg-gray-900 rounded-2xl p-6 shadow-2xl">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                      <div className="w-3 h-3 rounded-full bg-green-500" />
-                    </div>
-                    <div className="text-gray-400 text-sm">ORD-001</div>
-                  </div>
-
-                  {/* App Interface */}
-                  <div className="bg-white rounded-xl p-4 min-h-[200px]">
-                    <div className="flex justify-between items-center mb-6">
-                      <div className="h-8 bg-primary-100 rounded-lg w-24" />
-                      <div className="flex space-x-2">
-                        <div className="h-8 w-8 bg-accent-100 rounded-full" />
-                        <div className="h-8 w-8 bg-gray-100 rounded-full" />
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="h-12 bg-gray-50 rounded-lg w-full" />
-                      <div className="h-12 bg-gray-50 rounded-lg w-full" />
-                      <div className="h-12 bg-gray-50 rounded-lg w-full" />
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="h-12 bg-primary-600 rounded-lg" />
-                        <div className="h-12 bg-gray-200 rounded-lg" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Stats Cards */}
-                <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4 animate-float">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
-                      <BarChart3 className="w-5 h-5 text-accent-600" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-gray-900">+35%</p>
-                      <p className="text-sm text-gray-500">Ventas</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl p-4 animate-float animate-delay-200">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                      <Zap className="w-5 h-5 text-primary-600" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-gray-900">-50%</p>
-                      <p className="text-sm text-gray-500">Tiempo espera</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <HeroKiosk />
           </div>
         </div>
       </div>

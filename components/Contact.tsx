@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react'
+import { Mail, MapPin, Send, CheckCircle } from 'lucide-react'
 
 export default function Contact() {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
@@ -57,15 +57,26 @@ export default function Contact() {
             {/* Contact Info */}
             <div className="space-y-6">
               <a
-                href="tel:+573000000000"
+                href="https://wa.me/18777993720"
                 className="flex items-center space-x-4 text-gray-600 hover:text-primary-600 transition-colors group"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center group-hover:bg-primary-100 transition-colors">
-                  <Phone className="w-6 h-6 text-primary-600" />
+                  <svg
+                    className="w-6 h-6 text-primary-600"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M16 3C9.383 3 4 8.383 4 15c0 2.348.737 4.643 2.117 6.56L4 29l7.622-2.078A12.92 12.92 0 0 0 16 27c6.617 0 12-5.383 12-12S22.617 3 16 3zm0 2c5.514 0 10 4.486 10 10s-4.486 10-10 10a10.9 10.9 0 0 1-4.1-.8l-.6-.24-4.53 1.23 1.24-4.42-.27-.63A9.9 9.9 0 0 1 6 15c0-5.514 4.486-10 10-10zm-4.1 5.7c-.2 0-.4.08-.54.22-.46.46-1.2 1.24-1.2 2.5 0 1.26.92 2.48 1.05 2.66.13.18 1.79 2.87 4.34 3.92 2.14.9 2.58.72 3.05.67.46-.05 1.5-.61 1.71-1.2.21-.59.21-1.09.15-1.2-.05-.1-.2-.16-.41-.26-.2-.1-1.2-.6-1.38-.67-.18-.07-.31-.1-.44.1-.13.2-.5.67-.62.8-.12.13-.23.15-.44.05-.2-.1-.86-.32-1.64-1.02-.6-.54-1-1.21-1.12-1.41-.12-.2-.01-.32.09-.42.1-.1.2-.23.3-.35.1-.12.13-.2.2-.33.07-.13.03-.25-.01-.35-.05-.1-.44-1.07-.6-1.47-.16-.38-.33-.33-.44-.33z"
+                    />
+                  </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Teléfono</p>
-                  <p className="font-semibold">+57 300 000 0000</p>
+                  <p className="text-sm text-gray-500">WhatsApp</p>
+                  <p className="font-semibold">1-877-799-3720</p>
                 </div>
               </a>
 
@@ -190,7 +201,7 @@ export default function Contact() {
                       id="phone"
                       name="phone"
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                      placeholder="+57 300 000 0000"
+                      placeholder="+1-787-123-4567"
                     />
                   </div>
                 </div>
