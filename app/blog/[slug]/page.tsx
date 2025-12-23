@@ -8,6 +8,60 @@ interface Props {
   params: { slug: string }
 }
 
+const STOP_WORDS = new Set([
+  'a', 'al', 'algo', 'ante', 'antes', 'bajo', 'bien', 'cada', 'como', 'con',
+  'contra', 'cual', 'cuales', 'cuando', 'de', 'del', 'desde', 'donde', 'dos',
+  'el', 'ella', 'ellas', 'ellos', 'en', 'entre', 'era', 'eramos', 'es', 'esa',
+  'esas', 'ese', 'eso', 'esos', 'esta', 'estas', 'este', 'esto', 'estos',
+  'fue', 'fueron', 'ha', 'hasta', 'hay', 'la', 'las', 'le', 'les', 'lo', 'los',
+  'mas', 'me', 'mi', 'mientras', 'muy', 'no', 'nos', 'o', 'otra', 'otras',
+  'otro', 'otros', 'para', 'pero', 'por', 'porque', 'que', 'se', 'sin', 'sobre',
+  'su', 'sus', 'tambien', 'tan', 'tanto', 'te', 'tu', 'tus', 'un', 'una', 'uno',
+  'unos', 'unas', 'y', 'ya',
+])
+
+function normalizeToken(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+function extractKeywords(text: string): string[] {
+  const normalized = normalizeToken(text)
+  if (!normalized) {
+    return []
+  }
+  const counts = new Map<string, number>()
+  normalized.split(' ').forEach((word) => {
+    if (word.length < 3 || STOP_WORDS.has(word)) {
+      return
+    }
+    counts.set(word, (counts.get(word) ?? 0) + 1)
+  })
+  return Array.from(counts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([word]) => word)
+}
+
+function buildKeywords(post: ReturnType<typeof getPostBySlug>): string[] {
+  if (!post) {
+    return []
+  }
+  const parts = [
+    post.title,
+    post.excerpt,
+    post.category ?? '',
+    post.content,
+  ]
+  const keywords = parts.flatMap((part) => extractKeywords(part))
+  const unique = Array.from(new Set(keywords))
+  return unique.slice(0, 20)
+}
+
 export async function generateStaticParams() {
   const posts = getAllPosts()
   return posts.map((post) => ({
@@ -23,6 +77,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? post.image
       : `https://orkiosk.com${post.image}`
     : undefined
+  const keywords = buildKeywords(post)
 
   if (!post) {
     return {
@@ -33,6 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.title,
     description: post.excerpt,
+    keywords,
     alternates: {
       canonical: shareUrl,
     },
@@ -71,6 +127,7 @@ export default function BlogPostPage({ params }: Props) {
       ? post.image
       : `https://orkiosk.com${post.image}`
     : undefined
+  const keywords = buildKeywords(post)
   const relatedPosts = getAllPosts()
     .filter((item) => item.slug !== post?.slug)
     .slice(0, 3)
@@ -95,6 +152,7 @@ export default function BlogPostPage({ params }: Props) {
     url: shareUrl,
     mainEntityOfPage: shareUrl,
     image: imageUrl ? [imageUrl] : undefined,
+    keywords,
   }
 
   if (!post) {
