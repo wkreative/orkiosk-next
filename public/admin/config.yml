@@ -1,9 +1,13 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: wkreative/orkiosk-next
   branch: main
 
 media_folder: "public/images"
 public_folder: "/images"
+
+# Configuración de GitHub OAuth
+local_backend: true
 
 collections:
   # Blog Posts
