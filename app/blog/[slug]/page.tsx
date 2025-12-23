@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? post.image.startsWith('http')
       ? post.image
       : `https://orkiosk.com${post.image}`
-    : undefined
+    : 'https://orkiosk.com/images/logo.png'
   const keywords = buildKeywords(post)
 
   if (!post) {
@@ -126,7 +126,7 @@ export default function BlogPostPage({ params }: Props) {
     ? post.image.startsWith('http')
       ? post.image
       : `https://orkiosk.com${post.image}`
-    : undefined
+    : 'https://orkiosk.com/images/logo.png'
   const keywords = buildKeywords(post)
   const relatedPosts = getAllPosts()
     .filter((item) => item.slug !== post?.slug)
