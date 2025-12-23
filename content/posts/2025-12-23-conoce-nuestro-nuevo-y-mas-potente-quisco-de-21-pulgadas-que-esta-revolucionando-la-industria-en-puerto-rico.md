@@ -6,6 +6,7 @@ excerpt: Conoce Nuestro nuevo y mas potente quisco de 21 pulgadas que esta
 date: 2025-12-23T10:27:00.000-04:00
 author: Orkiosk Team
 category: Quioscos
+image: /images/logo.png
 ---
 ## What is Lorem Ipsum?
 
