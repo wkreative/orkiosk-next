@@ -2,34 +2,33 @@ backend:
   name: github
   repo: wkreative/orkiosk-next
   branch: main
+  base_url: https://us-central1-orkiosk-web.cloudfunctions.net
+  auth_endpoint: /oauth/auth
 
-media_folder: "public/images"
-public_folder: "/images"
+site_url: https://orkiosk-web.web.app
 
-# Configuración de GitHub OAuth
-local_backend: true
+media_folder: "public/uploads"
+public_folder: "/uploads"
 
 collections:
-  # Blog Posts
   - name: "posts"
-    label: "Artículos"
+    label: "Articulos"
     folder: "content/posts"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
-      - { label: "Título", name: "title", widget: "string", required: true }
+      - { label: "Titulo", name: "title", widget: "string", required: true }
       - { label: "Excerpt", name: "excerpt", widget: "text", required: true }
       - { label: "Fecha", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, required: true }
       - { label: "Autor", name: "author", widget: "string", required: false }
-      - { label: "Categoría", name: "category", widget: "select", options: ["Transformación Digital", "Restaurantes", "Retail", "Optimización", "Noticias"], required: false }
+      - { label: "Categoria", name: "category", widget: "select", options: ["Transformacion Digital", "Restaurantes", "Retail", "Optimizacion", "Noticias"], required: false }
       - { label: "Imagen Destacada", name: "image", widget: "image", required: false }
       - { label: "Contenido", name: "body", widget: "markdown", required: true }
 
-  # Página Principal
   - name: "home"
-    label: "Página Principal"
+    label: "Pagina Principal"
     folder: "content/home"
     create: false
     fields:
-      - { label: "Título Hero", name: "hero_title", widget: "string", required: false }
-      - { label: "Subtítulo Hero", name: "hero_subtitle", widget: "text", required: false }
+      - { label: "Titulo Hero", name: "hero_title", widget: "string", required: false }
+      - { label: "Subtitulo Hero", name: "hero_subtitle", widget: "text", required: false }

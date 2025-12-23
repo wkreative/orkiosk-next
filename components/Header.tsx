@@ -27,6 +27,7 @@ const defaultCopy: HeaderCopy = {
     { name: 'Inicio', href: '/' },
     { name: 'Beneficios', href: '/#benefits' },
     { name: 'Blog', href: '/blog' },
+    { name: 'Client Portal', href: 'https://orkiosk.com/admin/', external: true },
     { name: 'Contacto', href: '/#contact' },
   ],
   ctaLabel: 'Agendar Demo',
