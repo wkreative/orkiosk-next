@@ -4,6 +4,20 @@ import matter from 'gray-matter'
 
 const postsDirectory = path.join(process.cwd(), 'content/posts')
 
+function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+function resolvePostSlug(data: Record<string, unknown>, fileName: string): string {
+  const rawSlug = typeof data.slug === 'string' ? data.slug : fileName.replace(/\.md$/, '')
+  return slugify(rawSlug)
+}
+
 export interface Post {
   slug: string
   title: string
@@ -30,8 +44,8 @@ export function getAllPosts(): Post[] {
       const { data, content } = matter(fileContents)
 
       return {
-        slug: fileName.replace(/\.md$/, ''),
-        title: data.title || 'Sin título',
+        slug: resolvePostSlug(data, fileName),
+        title: data.title || 'Sin titulo',
         excerpt: data.excerpt || '',
         date: data.date || new Date().toISOString(),
         content,
@@ -49,13 +63,29 @@ export function getAllPosts(): Post[] {
 
 export function getPostBySlug(slug: string): Post | null {
   try {
-    const fullPath = path.join(postsDirectory, `${slug}.md`)
+    const normalizedSlug = slugify(slug)
+    const fileNames = fs.readdirSync(postsDirectory)
+    const match = fileNames.find((fileName) => {
+      if (!fileName.endsWith('.md')) {
+        return false
+      }
+      const fullPath = path.join(postsDirectory, fileName)
+      const fileContents = fs.readFileSync(fullPath, 'utf8')
+      const { data } = matter(fileContents)
+      return resolvePostSlug(data, fileName) === normalizedSlug
+    })
+
+    if (!match) {
+      return null
+    }
+
+    const fullPath = path.join(postsDirectory, match)
     const fileContents = fs.readFileSync(fullPath, 'utf8')
     const { data, content } = matter(fileContents)
 
     return {
-      slug,
-      title: data.title || 'Sin título',
+      slug: resolvePostSlug(data, match),
+      title: data.title || 'Sin titulo',
       excerpt: data.excerpt || '',
       date: data.date || new Date().toISOString(),
       content,
