@@ -4,15 +4,42 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 
-const navigation = [
-  { name: 'Inicio', href: '/' },
-  { name: 'Beneficios', href: '/#benefits' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Client Portal', href: 'https://orkiosk.com/admin/', external: true },
-  { name: 'Contacto', href: '/#contact' },
-]
+export type NavItem = {
+  name: string
+  href: string
+  external?: boolean
+}
 
-export default function Header() {
+export type HeaderCopy = {
+  nav: NavItem[]
+  ctaLabel: string
+  homeHref?: string
+  ctaHref?: string
+  aria: {
+    navLabel: string
+    openMenu: string
+    closeMenu: string
+  }
+}
+
+const defaultCopy: HeaderCopy = {
+  nav: [
+    { name: 'Inicio', href: '/' },
+    { name: 'Beneficios', href: '/#benefits' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'Contacto', href: '/#contact' },
+  ],
+  ctaLabel: 'Agendar Demo',
+  homeHref: '/',
+  ctaHref: '/#contact',
+  aria: {
+    navLabel: 'Navegaci?n principal',
+    openMenu: 'Abrir men?',
+    closeMenu: 'Cerrar men?',
+  },
+}
+
+export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -33,10 +60,10 @@ export default function Header() {
           : 'bg-transparent'
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Navegación principal">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label={copy.aria.navLabel}>
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center group" aria-label="Ir al inicio">
+          <Link href={copy.homeHref ?? '/'} className="flex items-center group" aria-label="Ir al inicio">
             <span className="font-logo text-2xl md:text-3xl tracking-tight text-gray-900 group-hover:text-primary-600 transition-colors">
               Orkiosk
             </span>
@@ -44,7 +71,7 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            {navigation.map((item) => (
+            {copy.nav.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
@@ -60,10 +87,10 @@ export default function Header() {
           {/* CTA Button */}
           <div className="hidden md:flex items-center">
             <Link
-              href="/#contact"
+              href={copy.ctaHref ?? '/#contact'}
               className="btn-primary text-sm"
             >
-              Agendar Demo
+              {copy.ctaLabel}
             </Link>
           </div>
 
@@ -74,7 +101,7 @@ export default function Header() {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
-            aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-label={isMobileMenuOpen ? copy.aria.closeMenu : copy.aria.openMenu}
           >
             {isMobileMenuOpen ? (
               <X className="w-6 h-6" />
@@ -92,7 +119,7 @@ export default function Header() {
           }`}
         >
           <div className="py-4 space-y-2">
-            {navigation.map((item) => (
+            {copy.nav.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
@@ -106,11 +133,11 @@ export default function Header() {
             ))}
             <div className="pt-4">
               <Link
-                href="/#contact"
+                href={copy.ctaHref ?? '/#contact'}
                 className="btn-primary w-full text-center"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Agendar Demo
+                {copy.ctaLabel}
               </Link>
             </div>
           </div>

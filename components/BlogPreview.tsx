@@ -1,26 +1,49 @@
 import Link from 'next/link'
 import { Calendar, ArrowRight } from 'lucide-react'
-import { getRecentPosts, type Post } from '@/lib/posts'
+import { type Post } from '@/lib/posts'
 
-function formatDate(dateString: string): string {
+export type BlogPreviewCopy = {
+  label: string
+  title: string
+  subtitle: string
+  readMore: string
+  emptyMessage: string
+  emptyButton: string
+  viewAll: string
+}
+
+const defaultCopy: BlogPreviewCopy = {
+  label: 'Blog',
+  title: '?ltimos Art?culos',
+  subtitle:
+    'Descubre consejos, tendencias y novedades sobre optimizaci?n de negocios, transformaci?n digital y tecnolog?a de autoservicio.',
+  readMore: 'Leer m?s',
+  emptyMessage: 'No hay art?culos publicados a?n.',
+  emptyButton: 'Crear Primer Art?culo',
+  viewAll: 'Ver Todos los Art?culos',
+}
+
+function formatDate(dateString: string, locale: string): string {
   const date = new Date(dateString)
-  return date.toLocaleDateString('es-ES', {
+  return date.toLocaleDateString(locale === 'en' ? 'en-US' : 'es-ES', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   })
 }
 
-function PostCard({ post }: { post: Post }) {
+function PostCard({ post, locale, copy }: { post: Post; locale: string; copy: BlogPreviewCopy }) {
+  const blogHref = `/${locale}/blog/${post.slug}`
+
   return (
     <article className="card group h-full flex flex-col">
       {/* Date Badge */}
       <div className="flex items-center space-x-2 text-sm text-gray-500 mb-4">
         <Calendar className="w-4 h-4" />
-        <time dateTime={post.date}>{formatDate(post.date)}</time>
+        <time dateTime={post.date}>{formatDate(post.date, locale)}</time>
         {post.category && (
           <>
-            <span className="text-gray-300">•</span>
+            <span className="text-gray-300">|</span>
             <span className="text-primary-600 font-medium">{post.category}</span>
           </>
         )}
@@ -28,7 +51,7 @@ function PostCard({ post }: { post: Post }) {
 
       {/* Title */}
       <h3 className="text-xl font-heading font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
-        <Link href={`/blog/${post.slug}`} className="before:absolute before:inset-0">
+        <Link href={blogHref}>
           {post.title}
         </Link>
       </h3>
@@ -40,18 +63,27 @@ function PostCard({ post }: { post: Post }) {
 
       {/* Read More Link */}
       <Link
-        href={`/blog/${post.slug}`}
+        href={blogHref}
         className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors"
       >
-        <span>Leer más</span>
+        <span>{copy.readMore}</span>
         <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
       </Link>
     </article>
   )
 }
 
-export default function BlogPreview() {
-  const recentPosts = getRecentPosts(3)
+export default function BlogPreview({
+  posts,
+  copy = defaultCopy,
+  locale = 'es',
+}: {
+  posts: Post[]
+  copy?: BlogPreviewCopy
+  locale?: string
+}) {
+  const blogIndexHref = `/${locale}/blog`
+  const adminHref = 'https://orkiosk-web.web.app/admin'
 
   return (
     <section
@@ -63,46 +95,46 @@ export default function BlogPreview() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <span className="text-primary-600 font-semibold text-sm uppercase tracking-wider mb-2 block">
-            Blog
+            {copy.label}
           </span>
           <h2
             id="blog-heading"
             className="section-title"
           >
-            Últimos Artículos
+            {copy.title}
           </h2>
           <p className="section-subtitle mt-4">
-            Descubre consejos, tendencias y novedades sobre optimización de negocios, transformación digital y tecnología de autoservicio.
+            {copy.subtitle}
           </p>
         </div>
 
         {/* Posts Grid */}
-        {recentPosts.length > 0 ? (
+        {posts.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {recentPosts.map((post) => (
-              <PostCard key={post.slug} post={post} />
+            {posts.map((post) => (
+              <PostCard key={post.slug} post={post} locale={locale} copy={copy} />
             ))}
           </div>
         ) : (
           /* Empty State */
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg mb-4">
-              No hay artículos publicados aún.
+              {copy.emptyMessage}
             </p>
-            <Link href="/admin" className="btn-primary">
-              Crear Primer Artículo
+            <Link href={adminHref} className="btn-primary">
+              {copy.emptyButton}
             </Link>
           </div>
         )}
 
         {/* View All Link */}
-        {recentPosts.length > 0 && (
+        {posts.length > 0 && (
           <div className="mt-12 text-center">
             <Link
-              href="/blog"
+              href={blogIndexHref}
               className="btn-secondary"
             >
-              Ver Todos los Artículos
+              {copy.viewAll}
             </Link>
           </div>
         )}
