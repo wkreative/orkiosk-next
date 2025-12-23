@@ -23,10 +23,7 @@ const defaultCopy: HeroCopy = {
   trustSecondary: 'Anal?tica en Tiempo Real',
 }
 
-export default function Hero({ copy = defaultCopy, locale = 'es' }: { copy?: HeroCopy; locale?: string }) {
-  const contactHref = `/${locale}#contact`
-  const benefitsHref = `/${locale}#benefits`
-
+export default function Hero({ copy = defaultCopy }: { copy?: HeroCopy }) {
   return (
     <section
       id="home"
@@ -64,13 +61,13 @@ export default function Hero({ copy = defaultCopy, locale = 'es' }: { copy?: Her
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-12 animate-slide-up animate-delay-200">
-              <Link href={contactHref} className="btn-primary group">
+              <a href="#contact" className="btn-primary group">
                 <span>{copy.ctaPrimary}</span>
                 <ArrowRight className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link href={benefitsHref} className="btn-secondary">
+              </a>
+              <a href="#benefits" className="btn-secondary">
                 {copy.ctaSecondary}
-              </Link>
+              </a>
             </div>
 
             {/* Trust Indicators */}
