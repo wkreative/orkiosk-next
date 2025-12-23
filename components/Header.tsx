@@ -8,7 +8,7 @@ const navigation = [
   { name: 'Inicio', href: '/' },
   { name: 'Beneficios', href: '/#benefits' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Client Admin Panel', href: 'https://orkiosk.com/admin/' },
+  { name: 'Client Portal', href: 'https://orkiosk.com/admin/', external: true },
   { name: 'Contacto', href: '/#contact' },
 ]
 
@@ -49,6 +49,8 @@ export default function Header() {
                 key={item.name}
                 href={item.href}
                 className="px-4 py-2 text-gray-600 hover:text-primary-600 font-medium transition-colors duration-200 rounded-lg hover:bg-primary-50"
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noopener noreferrer' : undefined}
               >
                 {item.name}
               </Link>
@@ -96,6 +98,8 @@ export default function Header() {
                 href={item.href}
                 className="block px-4 py-3 text-gray-600 hover:text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noopener noreferrer' : undefined}
               >
                 {item.name}
               </Link>
