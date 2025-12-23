@@ -4,6 +4,15 @@ import matter from 'gray-matter'
 
 const postsDirectory = path.join(process.cwd(), 'content/posts')
 
+export interface PostSeo {
+  metaTitle?: string
+  metaDescription?: string
+  keywords?: string[]
+  ogImage?: string
+  ogImageAlt?: string
+  canonical?: string
+}
+
 export interface Post {
   slug: string
   title: string
@@ -13,6 +22,21 @@ export interface Post {
   author?: string
   category?: string
   image?: string
+  seo?: PostSeo
+}
+
+function normalizeKeywords(value: unknown): string[] | undefined {
+  if (!value) return undefined
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item)).filter(Boolean)
+  }
+  if (typeof value === 'string') {
+    return value
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
+  return undefined
 }
 
 export function getAllPosts(): Post[] {
@@ -38,6 +62,16 @@ export function getAllPosts(): Post[] {
         author: data.author,
         category: data.category,
         image: data.image,
+        seo: data.seo
+          ? {
+              metaTitle: data.seo.metaTitle,
+              metaDescription: data.seo.metaDescription,
+              keywords: normalizeKeywords(data.seo.keywords),
+              ogImage: data.seo.ogImage,
+              ogImageAlt: data.seo.ogImageAlt,
+              canonical: data.seo.canonical,
+            }
+          : undefined,
       }
     })
 
@@ -62,6 +96,16 @@ export function getPostBySlug(slug: string): Post | null {
       author: data.author,
       category: data.category,
       image: data.image,
+      seo: data.seo
+        ? {
+            metaTitle: data.seo.metaTitle,
+            metaDescription: data.seo.metaDescription,
+            keywords: normalizeKeywords(data.seo.keywords),
+            ogImage: data.seo.ogImage,
+            ogImageAlt: data.seo.ogImageAlt,
+            canonical: data.seo.canonical,
+          }
+        : undefined,
     }
   } catch {
     return null

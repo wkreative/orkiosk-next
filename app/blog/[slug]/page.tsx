@@ -20,26 +20,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!post) {
     return {
-      title: 'Artículo no encontrado',
+      title: 'ArtA-culo no encontrado',
     }
   }
 
+  const metaTitle = post.seo?.metaTitle || post.title
+  const metaDescription = post.seo?.metaDescription || post.excerpt
+  const ogImage = post.seo?.ogImage || post.image
+  const ogImageAlt = post.seo?.ogImageAlt
+
   return {
-    title: post.title,
-    description: post.excerpt,
+    title: metaTitle,
+    description: metaDescription,
+    keywords: post.seo?.keywords,
+    alternates: {
+      canonical: post.seo?.canonical || `/blog/${params.slug}/`,
+    },
     openGraph: {
-      title: post.title,
-      description: post.excerpt,
+      title: metaTitle,
+      description: metaDescription,
       type: 'article',
       publishedTime: post.date,
       authors: post.author ? [post.author] : ['Orkiosk'],
-      images: post.image ? [{ url: post.image }] : [],
+      images: ogImage ? [{ url: ogImage, alt: ogImageAlt }] : [],
     },
     twitter: {
       card: 'summary_large_image',
-      title: post.title,
-      description: post.excerpt,
-      images: post.image ? [post.image] : [],
+      title: metaTitle,
+      description: metaDescription,
+      images: ogImage ? [ogImage] : [],
     },
   }
 }
@@ -62,21 +71,33 @@ export default function BlogPostPage({ params }: Props) {
 
   // Simple markdown rendering (for production, use @tailwindcss/typography)
   const renderContent = (content: string) => {
-    const paragraphs = content.split('\n\n').filter(p => p.trim())
+    const paragraphs = content.split('\n\n').filter((p) => p.trim())
     return paragraphs.map((paragraph, index) => {
       // Headers
       if (paragraph.startsWith('# ')) {
-        return <h1 key={index} className="text-3xl font-bold mt-8 mb-4">{paragraph.slice(2)}</h1>
+        return (
+          <h1 key={index} className="text-3xl font-bold mt-8 mb-4">
+            {paragraph.slice(2)}
+          </h1>
+        )
       }
       if (paragraph.startsWith('## ')) {
-        return <h2 key={index} className="text-2xl font-bold mt-8 mb-3">{paragraph.slice(3)}</h2>
+        return (
+          <h2 key={index} className="text-2xl font-bold mt-8 mb-3">
+            {paragraph.slice(3)}
+          </h2>
+        )
       }
       if (paragraph.startsWith('### ')) {
-        return <h3 key={index} className="text-xl font-bold mt-6 mb-2">{paragraph.slice(4)}</h3>
+        return (
+          <h3 key={index} className="text-xl font-bold mt-6 mb-2">
+            {paragraph.slice(4)}
+          </h3>
+        )
       }
       // Lists
       if (paragraph.startsWith('- ')) {
-        const items = paragraph.split('\n').filter(p => p.trim())
+        const items = paragraph.split('\n').filter((p) => p.trim())
         return (
           <ul key={index} className="list-disc list-inside space-y-2 my-4">
             {items.map((item, i) => (
@@ -86,7 +107,11 @@ export default function BlogPostPage({ params }: Props) {
         )
       }
       // Paragraphs
-      return <p key={index} className="mb-4 leading-relaxed">{paragraph}</p>
+      return (
+        <p key={index} className="mb-4 leading-relaxed">
+          {paragraph}
+        </p>
+      )
     })
   }
 
@@ -141,20 +166,18 @@ export default function BlogPostPage({ params }: Props) {
 
       {/* Content */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="prose prose-lg max-w-none">
-          {renderContent(post.content)}
-        </div>
+        <div className="prose prose-lg max-w-none">{renderContent(post.content)}</div>
       </div>
 
       {/* Share Section */}
       <section className="py-12 bg-gray-50 border-t border-gray-200">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gray-600 mb-4">
-            ¿Te gustó este artículo? Compártelo con otros
+            A¨Te gustA3 este artA-culo? CompA­rtelo con otros
           </p>
           <div className="flex justify-center space-x-4">
             <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://orkioskweb.netlify.app/blog/${params.slug}`)}`}
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://orkiosk.com/blog/${params.slug}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary text-sm"
@@ -162,7 +185,7 @@ export default function BlogPostPage({ params }: Props) {
               Compartir en Twitter
             </a>
             <a
-              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://orkioskweb.netlify.app/blog/${params.slug}`)}`}
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://orkiosk.com/blog/${params.slug}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary text-sm"
