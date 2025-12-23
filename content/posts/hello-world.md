@@ -5,6 +5,7 @@ excerpt: Presentamos nuestra nueva plataforma web con diseño moderno y las
 date: 2025-12-22T12:00:00.000Z
 author: Equipo Orkiosk
 category: Noticias
+image: /images/icon-192.svg
 ---
 ## Una Nueva Era para Orkiosk
 
