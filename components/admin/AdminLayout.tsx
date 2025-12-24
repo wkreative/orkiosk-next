@@ -46,6 +46,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { name: 'Dashboard', href: `/${locale}/admin1/dashboard`, icon: LayoutDashboard },
         { name: 'Posts', href: `/${locale}/admin1/dashboard`, icon: FileText },
         { name: 'Nuevo Post', href: `/${locale}/admin1/posts/new`, icon: PlusCircle },
+        { name: 'Páginas', href: `/${locale}/admin1/pages`, icon: FileText },
     ];
 
     return (
