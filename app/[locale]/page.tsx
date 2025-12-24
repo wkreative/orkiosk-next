@@ -45,7 +45,7 @@ export default async function HomePage({ params }: PageProps) {
 
   return (
     <SiteShell locale={params.locale} copy={copy}>
-      <Hero copy={copy.hero} locale={params.locale} />
+      <Hero copy={copy.hero} />
       <Features copy={copy.features} locale={params.locale} />
       <BlogPreview posts={posts} copy={copy.blogPreview} locale={params.locale} />
       <Contact copy={copy.contact} />
