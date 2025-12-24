@@ -8,6 +8,7 @@ const nextConfig = {
   // Optimización para SEO
   compress: true,
   // Headers de seguridad
+  /*
   async headers() {
     return [
       {
@@ -29,6 +30,7 @@ const nextConfig = {
       },
     ]
   },
+  */
 }
 
 module.exports = nextConfig
