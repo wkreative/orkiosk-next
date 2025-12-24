@@ -1,10 +1,10 @@
 import { MetadataRoute } from 'next'
 import { getAllPosts } from '@/lib/posts'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://orkiosk.com'
   const locales = ['es', 'en']
-  const posts = getAllPosts()
+  const posts = await getAllPosts()
 
   // Static pages
   const staticPages = locales.flatMap((locale) => [

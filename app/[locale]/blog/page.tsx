@@ -69,7 +69,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const copy = await getTranslations(params.locale)
   const url = `https://orkiosk.com/${params.locale}/blog`
-  const posts = getAllPosts()
+  const posts = await getAllPosts()
   const translated = await Promise.all(
     posts.map((post) => translatePost(post, params.locale, false)),
   )
@@ -95,7 +95,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogPage({ params }: PageProps) {
   const copy = await getTranslations(params.locale)
-  const posts = getAllPosts()
+  const posts = await getAllPosts()
   const translatedPosts = await Promise.all(
     posts.map((post) => translatePost(post, params.locale, false)),
   )

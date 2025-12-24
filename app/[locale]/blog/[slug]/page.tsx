@@ -55,7 +55,7 @@ function buildKeywords(texts: string[]): string[] {
 }
 
 export async function generateStaticParams() {
-  const posts = getAllPosts()
+  const posts = await getAllPosts()
   return locales.flatMap((locale) =>
     posts.map((post) => ({
       locale,
@@ -65,7 +65,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = getPostBySlug(params.slug)
+  const post = await getPostBySlug(params.slug)
   if (!post) {
     return {
       title: 'Articulo no encontrado',
@@ -120,7 +120,7 @@ function formatDate(dateString: string, locale: Locale): string {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const post = getPostBySlug(params.slug)
+  const post = await getPostBySlug(params.slug)
   const copy = await getTranslations(params.locale)
 
   if (!post) {
@@ -134,8 +134,9 @@ export default async function BlogPostPage({ params }: Props) {
       ? translated.image
       : `https://orkiosk.com${translated.image}`
     : 'https://orkiosk.com/images/logo.png'
+  const allPosts = await getAllPosts()
   const relatedPosts = await Promise.all(
-    getAllPosts()
+    allPosts
       .filter((item) => item.slug !== post.slug)
       .slice(0, 3)
       .map((item) => translatePost(item, params.locale, false)),

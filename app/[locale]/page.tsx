@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function HomePage({ params }: PageProps) {
   const copy = await getTranslations(params.locale)
-  const recentPosts = getRecentPosts(3)
+  const recentPosts = await getRecentPosts(3)
   const posts = await Promise.all(
     recentPosts.map((post) => translatePost(post, params.locale, false)),
   )
