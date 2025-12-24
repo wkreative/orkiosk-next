@@ -1,5 +1,6 @@
 node_modules/
 .next/
+out/
 .env.local
 serviceAccountKey.json
 .env.*.local
@@ -8,3 +9,7 @@ yarn-debug.log*
 yarn-error.log*
 .DS_Store
 Thumbs.db
+.vercel
+.env*.local
+.firebase/
+firebase-debug.log
