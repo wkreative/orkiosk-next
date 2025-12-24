@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown } from 'lucide-react'
@@ -45,6 +45,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLangOpen, setIsLangOpen] = useState(false)
+  const langRef = useRef<HTMLDivElement>(null)
   const [hash, setHash] = useState('')
   const pathname = usePathname() ?? '/'
   const segments = pathname.split('/').filter(Boolean)
@@ -71,13 +72,29 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
     setHash(window.location.hash)
   }, [pathname])
 
+  // Close language dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(event.target as Node)) {
+        setIsLangOpen(false)
+      }
+    }
+
+    if (isLangOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isLangOpen])
+
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/90 backdrop-blur-lg shadow-lg'
-          : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+        ? 'bg-white/90 backdrop-blur-lg shadow-lg'
+        : 'bg-transparent'
+        }`}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label={copy.aria.navLabel}>
         <div className="flex items-center justify-between h-16 md:h-20">
@@ -104,7 +121,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
           </div>
 
           {/* Language Switcher */}
-          <div className="hidden md:flex items-center relative">
+          <div ref={langRef} className="hidden md:flex items-center relative">
             <button
               type="button"
               className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors"
@@ -165,9 +182,8 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
         {/* Mobile Navigation */}
         <div
           id="mobile-menu"
-          className={`md:hidden overflow-hidden transition-all duration-300 ${
-            isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-          }`}
+          className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+            }`}
         >
           <div className="py-4 space-y-2">
             <div className="px-4">
