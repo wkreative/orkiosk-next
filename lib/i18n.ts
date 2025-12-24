@@ -207,27 +207,170 @@ function setValue(target: Record<string, unknown>, path: (string | number)[], va
   }
 }
 
+// Manual English translations
+const enCopy: Translations = {
+  header: {
+    nav: [
+      { name: 'Home', href: '/' },
+      { name: 'Benefits', href: '/#benefits' },
+      { name: 'Blog', href: '/blog' },
+      { name: 'Client Portal', href: 'https://orkiosk.com/admin/', external: true },
+      { name: 'Contact', href: '/#contact' },
+    ],
+    ctaLabel: 'Schedule Demo',
+    aria: {
+      navLabel: 'Main navigation',
+      openMenu: 'Open menu',
+      closeMenu: 'Close menu',
+    },
+  },
+  hero: {
+    badge: 'Cutting-edge technology',
+    heading: 'Smart Self-Service Kiosks',
+    subheading:
+      'Transform your customers experience with self-service kiosks that reduce wait times, integrate payments, and offer real-time analytics.',
+    ctaPrimary: 'Schedule Free Demo',
+    ctaSecondary: 'See Benefits',
+    trustPrimary: '99.9% Uptime Guaranteed',
+    trustSecondary: 'Real-Time Analytics',
+  },
+  features: {
+    label: 'Benefits',
+    title: 'What does Orkiosk do for your business?',
+    subtitle:
+      'A complete solution that combines hardware, software, and analytics to transform the self-service experience in your establishment.',
+    items: [
+      {
+        name: 'Reduced Wait Times',
+        description:
+          'Optimize customer flow with a fast and intuitive self-service process that significantly reduces checkout wait times.',
+      },
+      {
+        name: 'Integrated Payments',
+        description:
+          'Accept multiple payment methods including credit cards, debit cards, transfers, and cash with our POS integrations.',
+      },
+      {
+        name: 'Real-Time Analytics',
+        description:
+          'Monitor sales, popular products, and customer behavior with interactive dashboards and detailed reports.',
+      },
+      {
+        name: 'Secure and Stable System',
+        description:
+          'Robust infrastructure with automatic backup and data protection to ensure business continuity.',
+      },
+      {
+        name: 'Receipt Printer',
+        description:
+          'Fast and clear receipt printing with ticket customization to include promotions and your brand information.',
+      },
+      {
+        name: 'Intuitive Experience',
+        description:
+          'User interface designed for a smooth experience that your customers will master from the first use.',
+      },
+    ],
+    ctaPrompt: 'Want to learn more about our features?',
+    ctaButton: 'Talk to an Advisor',
+  },
+  blogPreview: {
+    label: 'Blog',
+    title: 'Latest Articles',
+    subtitle:
+      'Discover tips, trends, and news about business optimization, digital transformation, and self-service technology.',
+    readMore: 'Read more',
+    emptyMessage: 'No articles published yet.',
+    emptyButton: 'Create First Article',
+    viewAll: 'View All Articles',
+  },
+  blogPage: {
+    title: 'Blog',
+    description:
+      'Blog about self-service technology, resource optimization, and the best practices to grow your business.',
+    heroTitle: 'Orkiosk Blog',
+    heroSubtitle:
+      'Tips, trends, and news to optimize your business and stay up to date with self-service technology.',
+    readMore: 'Read more',
+    emptyMessage: 'No articles published yet.',
+    emptyButton: 'Start Writing',
+    ctaTitle: 'Ready to transform your business?',
+    ctaBody: 'Schedule a personalized demo and discover how our kiosks can optimize your operations.',
+    ctaButton: 'Schedule Demo',
+  },
+  blogPost: {
+    sharePrompt: 'Did you like this article? Share it with others',
+    shareX: 'Share on X',
+    shareFacebook: 'Share on Facebook',
+    shareLinkedIn: 'Share on LinkedIn',
+    shareWhatsapp: 'Share on WhatsApp',
+    recommendedTitle: 'Recommended posts',
+  },
+  contact: {
+    label: 'Contact',
+    title: 'Interested in our kiosks?',
+    subtitle:
+      'Contact us to schedule a personalized demo and discover how Orkiosk can transform the self-service experience in your business.',
+    whatsappLabel: 'WhatsApp',
+    emailLabel: 'Email',
+    locationLabel: 'Location',
+    locationValue: 'San Juan, Puerto Rico',
+    successTitle: 'Message Sent!',
+    successBody:
+      'Thank you for your interest. We will contact you within the next 24 hours.',
+    successButton: 'Send Another Message',
+    form: {
+      nameLabel: 'Full name *',
+      companyLabel: 'Company',
+      emailLabel: 'Email *',
+      phoneLabel: 'Phone',
+      messageLabel: 'Message *',
+      namePlaceholder: 'John Doe',
+      companyPlaceholder: 'Your Company',
+      emailPlaceholder: 'john@company.com',
+      phonePlaceholder: '+1-787-123-4567',
+      messagePlaceholder:
+        'Tell us about your business and how we can help...',
+      submitIdle: 'Send Message',
+      submitLoading: 'Sending...',
+      error: 'There was an error sending the message. Please try again.',
+    },
+  },
+  footer: {
+    description:
+      'Smart self-service kiosks with software, hardware, and real-time analytics to optimize your business.',
+    navigationTitle: 'Navigation',
+    companyTitle: 'Company',
+    legalTitle: 'Legal',
+    copyright:
+      '(c) {year} Orkiosk. All rights reserved. Made with ❤️ in Puerto Rico.',
+    ariaSocial: 'Follow us on {name}',
+    nav: {
+      main: [
+        { name: 'Home', href: '/' },
+        { name: 'Benefits', href: '/#benefits' },
+        { name: 'Blog', href: '/blog' },
+        { name: 'Client Portal', href: 'https://orkiosk.com/admin/', external: true },
+        { name: 'Contact', href: '/#contact' },
+      ],
+      company: [
+        { name: 'About Us', href: '/#about' },
+        { name: 'Products', href: '/#products' },
+        { name: 'Integrations', href: '/#integrations' },
+      ],
+      legal: [
+        { name: 'Privacy Policy', href: '/privacy' },
+        { name: 'Terms and Conditions', href: '/terms' },
+      ],
+    },
+  },
+}
+
 export async function getTranslations(locale: Locale): Promise<Translations> {
-  if (locale === 'es') {
-    return baseCopy
+  if (locale === 'en') {
+    return enCopy
   }
-  if (copyCache.has(locale)) {
-    return copyCache.get(locale) as Promise<Translations>
-  }
-
-  const pending = (async () => {
-    const copy = JSON.parse(JSON.stringify(baseCopy)) as Translations
-    const { paths, strings } = collectStrings(copy)
-    const translated = await translateStrings(strings, locale, 'es')
-    translated.forEach((value, index) => {
-      const path = paths[index]
-      setValue(copy as unknown as Record<string, unknown>, path, value)
-    })
-    return copy
-  })()
-
-  copyCache.set(locale, pending)
-  return pending
+  return baseCopy
 }
 
 export async function translatePost(post: Post, locale: Locale, includeContent: boolean): Promise<Post> {
