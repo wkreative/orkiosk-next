@@ -374,20 +374,18 @@ export async function getTranslations(locale: Locale): Promise<Translations> {
 }
 
 export async function translatePost(post: Post, locale: Locale, includeContent: boolean): Promise<Post> {
+  // Return Spanish post as-is
   if (locale === 'es') {
     return post
   }
-  const fields = [post.title, post.excerpt, post.category ?? '']
-  if (includeContent) {
-    fields.push(post.content)
-  }
-  const [title, excerpt, category, content] = await translateStrings(fields, locale, 'es')
+
+  // For English, use manual translations if available, otherwise fallback to Spanish
   return {
     ...post,
-    title,
-    excerpt,
-    category: category || undefined,
-    content: includeContent ? content ?? post.content : post.content,
+    title: post.titleEn || post.title,
+    excerpt: post.excerptEn || post.excerpt,
+    category: post.categoryEn || post.category,
+    content: includeContent ? (post.contentEn || post.content) : post.content,
   }
 }
 

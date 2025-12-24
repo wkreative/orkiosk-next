@@ -31,6 +31,11 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
         focalKeyword: '',
         metaDescription: '',
         seoTitle: '',
+        // English translations
+        titleEn: '',
+        excerptEn: '',
+        contentEn: '',
+        categoryEn: '',
     });
 
     const [loading, setLoading] = useState(false);
@@ -146,10 +151,62 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Contenido</label>
+                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Contenido (Español)</label>
                             <RichTextEditor
                                 content={formData.content}
                                 onChange={(content) => setFormData({ ...formData, content })}
+                            />
+                        </div>
+                    </div>
+
+                    {/* English Translation Section */}
+                    <div className="bg-white p-8 rounded-2xl border border-blue-200 shadow-sm space-y-6">
+                        <div className="flex items-center space-x-2 border-b border-blue-100 pb-4">
+                            <span className="text-2xl">🇺🇸</span>
+                            <h2 className="font-bold text-blue-800">English Translation</h2>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Title (English)</label>
+                            <input
+                                type="text"
+                                name="titleEn"
+                                value={formData.titleEn}
+                                onChange={handleChange}
+                                placeholder="Ex: How to optimize your business with kiosks"
+                                className="w-full px-4 py-3 text-xl font-bold border-0 border-b-2 border-blue-100 focus:border-blue-500 outline-none transition-all placeholder:text-gray-300"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Content (English)</label>
+                            <RichTextEditor
+                                content={formData.contentEn}
+                                onChange={(contentEn) => setFormData({ ...formData, contentEn })}
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Excerpt (English)</label>
+                            <textarea
+                                name="excerptEn"
+                                value={formData.excerptEn}
+                                onChange={handleChange}
+                                rows={3}
+                                placeholder="A brief description for blog listings..."
+                                className="w-full px-4 py-3 bg-blue-50 border border-transparent rounded-xl text-sm leading-relaxed focus:bg-white focus:border-blue-200 outline-none transition-all"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Category (English)</label>
+                            <input
+                                type="text"
+                                name="categoryEn"
+                                value={formData.categoryEn}
+                                onChange={handleChange}
+                                placeholder="Ex: Technology"
+                                className="w-full px-4 py-2 bg-blue-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-blue-200 outline-none"
                             />
                         </div>
                     </div>

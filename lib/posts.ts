@@ -14,6 +14,11 @@ export interface Post {
   focalKeyword?: string;
   metaDescription?: string;
   seoTitle?: string;
+  // English translations
+  titleEn?: string;
+  excerptEn?: string;
+  contentEn?: string;
+  categoryEn?: string;
 }
 
 const BUILD_TIMEOUT = 5000; // 5 seconds timeout for build-time data fetching
@@ -45,6 +50,14 @@ export async function getAllPosts(): Promise<Post[]> {
           author: data.author,
           category: data.category,
           image: data.image,
+          focalKeyword: data.focalKeyword,
+          metaDescription: data.metaDescription,
+          seoTitle: data.seoTitle,
+          // English translations
+          titleEn: data.titleEn,
+          excerptEn: data.excerptEn,
+          contentEn: data.contentEn,
+          categoryEn: data.categoryEn,
         } as Post;
       });
     });
@@ -75,6 +88,13 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
         author: data.author,
         category: data.category,
         image: data.image,
+        focalKeyword: data.focalKeyword,
+        metaDescription: data.metaDescription,
+        seoTitle: data.seoTitle,
+        titleEn: data.titleEn,
+        excerptEn: data.excerptEn,
+        contentEn: data.contentEn,
+        categoryEn: data.categoryEn,
       } as Post;
     });
 
@@ -101,6 +121,13 @@ export async function getRecentPosts(count: number = 3): Promise<Post[]> {
           author: data.author,
           category: data.category,
           image: data.image,
+          focalKeyword: data.focalKeyword,
+          metaDescription: data.metaDescription,
+          seoTitle: data.seoTitle,
+          titleEn: data.titleEn,
+          excerptEn: data.excerptEn,
+          contentEn: data.contentEn,
+          categoryEn: data.categoryEn,
         } as Post;
       });
     });
