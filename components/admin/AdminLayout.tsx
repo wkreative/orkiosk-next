@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { LayoutDashboard, FileText, PlusCircle, LogOut, Loader2 } from 'lucide-react';
+import { LayoutDashboard, FileText, LogOut, Loader2 } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
@@ -45,7 +45,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const navItems = [
         { name: 'Dashboard', href: `/${locale}/admin1/dashboard`, icon: LayoutDashboard },
         { name: 'Posts', href: `/${locale}/admin1/dashboard`, icon: FileText },
-        { name: 'Nuevo Post', href: `/${locale}/admin1/posts/new`, icon: PlusCircle },
         { name: 'Páginas', href: `/${locale}/admin1/pages`, icon: FileText },
     ];
 
@@ -53,10 +52,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="min-h-screen bg-gray-50 flex">
             {/* Sidebar */}
             <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
-                <div className="p-6 border-b border-gray-100">
+                <div className="p-6 border-b border-gray-100 flex items-center justify-between">
                     <Link href={`/${locale}/admin1/dashboard`} className="text-xl font-bold text-primary-600">
                         Orkiosk Admin
                     </Link>
+                    <button
+                        onClick={handleLogout}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Cerrar Sesión"
+                    >
+                        <LogOut className="w-5 h-5" />
+                    </button>
                 </div>
                 <nav className="flex-1 p-4 space-y-2">
                     {navItems.map((item) => {
@@ -77,15 +83,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         );
                     })}
                 </nav>
-                <div className="p-4 border-t border-gray-100">
-                    <button
-                        onClick={handleLogout}
-                        className="flex items-center space-x-3 px-4 py-3 w-full text-left text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                    >
-                        <LogOut className="w-5 h-5" />
-                        <span className="font-medium">Cerrar Sesión</span>
-                    </button>
-                </div>
             </aside>
 
             {/* Main Content */}

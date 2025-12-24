@@ -69,8 +69,8 @@ export default function EditPagePage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.title || !formData.slug || !formData.content) {
-            setError('Título, URL y contenido son requeridos');
+        if (!formData.title || !formData.slug) {
+            setError('Título y URL son requeridos');
             return;
         }
 

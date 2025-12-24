@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Calendar, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { type Post } from '@/lib/posts'
 
 export type BlogPreviewCopy = {
@@ -37,17 +37,12 @@ function PostCard({ post, locale, copy }: { post: Post; locale: string; copy: Bl
 
   return (
     <article className="card group h-full flex flex-col">
-      {/* Date Badge */}
-      <div className="flex items-center space-x-2 text-sm text-gray-500 mb-4">
-        <Calendar className="w-4 h-4" />
-        <time dateTime={post.date}>{formatDate(post.date, locale)}</time>
-        {post.category && (
-          <>
-            <span className="text-gray-300">|</span>
-            <span className="text-primary-600 font-medium">{post.category}</span>
-          </>
-        )}
-      </div>
+      {/* Category Badge */}
+      {post.category && (
+        <div className="mb-4">
+          <span className="text-primary-600 font-medium text-sm">{post.category}</span>
+        </div>
+      )}
 
       {/* Title */}
       <h3 className="text-xl font-heading font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
