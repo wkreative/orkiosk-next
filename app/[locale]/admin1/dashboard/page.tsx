@@ -19,6 +19,11 @@ export default function DashboardPage() {
     const tabFromUrl = searchParams.get('tab');
     const [activeTab, setActiveTab] = useState<'overview' | 'posts'>(tabFromUrl === 'posts' ? 'posts' : 'overview');
 
+    // Update tab when URL changes
+    useEffect(() => {
+        setActiveTab(tabFromUrl === 'posts' ? 'posts' : 'overview');
+    }, [tabFromUrl]);
+
     useEffect(() => {
         fetchData();
     }, []);
