@@ -5,7 +5,7 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import { db } from '@/lib/firebase';
 import { collection, query, orderBy, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { Edit2, Trash2, Plus, Search, Calendar, User, Eye, Loader2, FileText } from 'lucide-react';
-import Link from 'next/navigation';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 export default function DashboardPage() {
@@ -135,13 +135,13 @@ export default function DashboardPage() {
                                                     >
                                                         <Eye className="w-5 h-5" />
                                                     </button>
-                                                    <button
-                                                        onClick={() => window.location.href = `/${locale}/admin1/posts/${post.id}`}
+                                                    <Link
+                                                        href={`/${locale}/admin1/posts/edit?id=${post.id}`}
                                                         className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
                                                         title="Editar"
                                                     >
                                                         <Edit2 className="w-5 h-5" />
-                                                    </button>
+                                                    </Link>
                                                     <button
                                                         onClick={() => handleDelete(post.id, post.title)}
                                                         className="p-2 text-gray-400 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"

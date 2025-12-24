@@ -12,24 +12,40 @@ export interface Post {
   image?: string;
 }
 
+const BUILD_TIMEOUT = 5000; // 5 seconds timeout for build-time data fetching
+
+async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, fallback: T): Promise<T> {
+  const timeoutPromise = new Promise<T>((resolve) => {
+    setTimeout(() => {
+      console.warn(`Fetch timed out after ${timeoutMs}ms. Using fallback.`);
+      resolve(fallback);
+    }, timeoutMs);
+  });
+  return Promise.race([promise, timeoutPromise]);
+}
+
 export async function getAllPosts(): Promise<Post[]> {
   try {
     const q = query(collection(db, 'posts'), orderBy('date', 'desc'));
-    const querySnapshot = await getDocs(q);
 
-    return querySnapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        slug: data.slug || doc.id,
-        title: data.title || 'Sin título',
-        excerpt: data.excerpt || '',
-        date: data.date || new Date().toISOString(),
-        content: data.content || '',
-        author: data.author,
-        category: data.category,
-        image: data.image,
-      } as Post;
+    // During build, we want to fail fast if Firestore is unreachable
+    const fetchPromise = getDocs(q).then(querySnapshot => {
+      return querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          slug: data.slug || doc.id,
+          title: data.title || 'Sin título',
+          excerpt: data.excerpt || '',
+          date: data.date || new Date().toISOString(),
+          content: data.content || '',
+          author: data.author,
+          category: data.category,
+          image: data.image,
+        } as Post;
+      });
     });
+
+    return await withTimeout(fetchPromise, BUILD_TIMEOUT, []);
   } catch (error) {
     console.error('Error getting all posts:', error);
     return [];
@@ -39,38 +55,15 @@ export async function getAllPosts(): Promise<Post[]> {
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
     const q = query(collection(db, 'posts'), where('slug', '==', slug), limit(1));
-    const querySnapshot = await getDocs(q);
 
-    if (querySnapshot.empty) {
-      return null;
-    }
+    const fetchPromise = getDocs(q).then(querySnapshot => {
+      if (querySnapshot.empty) {
+        return null;
+      }
 
-    const data = querySnapshot.docs[0].data();
-    return {
-      slug: data.slug || querySnapshot.docs[0].id,
-      title: data.title || 'Sin título',
-      excerpt: data.excerpt || '',
-      date: data.date || new Date().toISOString(),
-      content: data.content || '',
-      author: data.author,
-      category: data.category,
-      image: data.image,
-    } as Post;
-  } catch (error) {
-    console.error(`Error getting post by slug ${slug}:`, error);
-    return null;
-  }
-}
-
-export async function getRecentPosts(count: number = 3): Promise<Post[]> {
-  try {
-    const q = query(collection(db, 'posts'), orderBy('date', 'desc'), limit(count));
-    const querySnapshot = await getDocs(q);
-
-    return querySnapshot.docs.map(doc => {
-      const data = doc.data();
+      const data = querySnapshot.docs[0].data();
       return {
-        slug: data.slug || doc.id,
+        slug: data.slug || querySnapshot.docs[0].id,
         title: data.title || 'Sin título',
         excerpt: data.excerpt || '',
         date: data.date || new Date().toISOString(),
@@ -80,6 +73,35 @@ export async function getRecentPosts(count: number = 3): Promise<Post[]> {
         image: data.image,
       } as Post;
     });
+
+    return await withTimeout(fetchPromise, BUILD_TIMEOUT, null);
+  } catch (error) {
+    console.error(`Error getting post by slug ${slug}:`, error);
+    return null;
+  }
+}
+
+export async function getRecentPosts(count: number = 3): Promise<Post[]> {
+  try {
+    const q = query(collection(db, 'posts'), orderBy('date', 'desc'), limit(count));
+
+    const fetchPromise = getDocs(q).then(querySnapshot => {
+      return querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          slug: data.slug || doc.id,
+          title: data.title || 'Sin título',
+          excerpt: data.excerpt || '',
+          date: data.date || new Date().toISOString(),
+          content: data.content || '',
+          author: data.author,
+          category: data.category,
+          image: data.image,
+        } as Post;
+      });
+    });
+
+    return await withTimeout(fetchPromise, BUILD_TIMEOUT, []);
   } catch (error) {
     console.error('Error getting recent posts:', error);
     return [];

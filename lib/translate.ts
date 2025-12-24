@@ -57,6 +57,7 @@ export async function translateStrings(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(5000), // Timeout after 5 seconds
     })
 
     if (!response.ok) {

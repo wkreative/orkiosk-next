@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import AdminLayout from '@/components/admin/AdminLayout';
 import PostForm from '@/components/admin/PostForm';
 import { db } from '@/lib/firebase';
@@ -9,20 +9,20 @@ import { doc, getDoc } from 'firebase/firestore';
 import { Loader2 } from 'lucide-react';
 
 export default function EditPostPage() {
-    const params = useParams();
-    const id = params?.id as string;
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
     const [post, setPost] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (id) {
-            fetchPost();
+            fetchPost(id);
         }
     }, [id]);
 
-    const fetchPost = async () => {
+    const fetchPost = async (postId: string) => {
         try {
-            const docRef = doc(db, 'posts', id);
+            const docRef = doc(db, 'posts', postId);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 setPost({ id: docSnap.id, ...docSnap.data() });

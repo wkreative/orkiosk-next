@@ -1,4 +1,4 @@
-import EditPostPage from '@/app/[locale]/admin1/posts/[id]/page'
+import EditPostPage from '@/app/[locale]/admin1/posts/edit/page'
 
 export default function RootAdminEditPostPage() {
     return <EditPostPage />
