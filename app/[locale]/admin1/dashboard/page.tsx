@@ -3,12 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { db } from '@/lib/firebase';
-import { collection, query, orderBy, getDocs, deleteDoc, doc, limit } from 'firebase/firestore';
-import {
-    Edit2, Trash2, Plus, Search, Eye, Loader2, FileText,
-    TrendingUp, Users, BarChart3, Globe, ArrowUpRight, ArrowDownRight,
-    Clock, Zap
-} from 'lucide-react';
+import { collection, query, orderBy, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { Edit2, Trash2, Plus, Search, Eye, Loader2, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
@@ -37,13 +33,17 @@ export default function DashboardPage() {
             setPosts(postsData);
 
             // Fetch pages
-            const pagesQuery = query(collection(db, 'pages'), orderBy('createdAt', 'desc'));
-            const pagesSnapshot = await getDocs(pagesQuery);
-            const pagesData = pagesSnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-            setPages(pagesData);
+            try {
+                const pagesQuery = query(collection(db, 'pages'), orderBy('createdAt', 'desc'));
+                const pagesSnapshot = await getDocs(pagesQuery);
+                const pagesData = pagesSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setPages(pagesData);
+            } catch (e) {
+                console.log('No pages collection yet');
+            }
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
@@ -74,16 +74,7 @@ export default function DashboardPage() {
     const publishedPages = pages.filter(p => p.published).length;
     const postsWithEnglish = posts.filter(p => p.titleEn).length;
     const recentPosts = posts.slice(0, 5);
-
-    // Get categories count
-    const categoriesCount: Record<string, number> = {};
-    posts.forEach(post => {
-        const cat = post.category || 'Sin categoría';
-        categoriesCount[cat] = (categoriesCount[cat] || 0) + 1;
-    });
-    const topCategories = Object.entries(categoriesCount)
-        .sort(([, a], [, b]) => b - a)
-        .slice(0, 5);
+    const recentPages = pages.slice(0, 3);
 
     if (loading) {
         return (
@@ -133,85 +124,39 @@ export default function DashboardPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             {/* Total Posts */}
                             <div className="bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl p-6 text-white shadow-xl shadow-primary-200">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-primary-100 text-sm font-medium">Total Posts</p>
-                                        <p className="text-4xl font-bold mt-2">{totalPosts}</p>
-                                    </div>
-                                    <div className="bg-white/20 p-3 rounded-xl">
-                                        <FileText className="w-8 h-8" />
-                                    </div>
-                                </div>
-                                <div className="flex items-center mt-4 text-sm text-primary-100">
-                                    <TrendingUp className="w-4 h-4 mr-1" />
-                                    <span>Publicaciones del blog</span>
-                                </div>
+                                <p className="text-primary-100 text-sm font-medium">Total Posts</p>
+                                <p className="text-4xl font-bold mt-2">{totalPosts}</p>
+                                <p className="text-sm text-primary-100 mt-4">Publicaciones del blog</p>
                             </div>
 
                             {/* Total Pages */}
                             <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-gray-500 text-sm font-medium">Páginas</p>
-                                        <p className="text-4xl font-bold mt-2 text-gray-900">{totalPages}</p>
-                                    </div>
-                                    <div className="bg-blue-50 p-3 rounded-xl">
-                                        <Globe className="w-8 h-8 text-blue-600" />
-                                    </div>
-                                </div>
-                                <div className="flex items-center mt-4 text-sm">
-                                    <span className="text-green-600 flex items-center">
-                                        <ArrowUpRight className="w-4 h-4 mr-1" />
-                                        {publishedPages} publicadas
-                                    </span>
-                                </div>
+                                <p className="text-gray-500 text-sm font-medium">Páginas</p>
+                                <p className="text-4xl font-bold mt-2 text-gray-900">{totalPages}</p>
+                                <p className="text-sm text-green-600 mt-4">{publishedPages} publicadas</p>
                             </div>
 
                             {/* Bilingual Content */}
                             <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-gray-500 text-sm font-medium">Bilingües</p>
-                                        <p className="text-4xl font-bold mt-2 text-gray-900">{postsWithEnglish}</p>
-                                    </div>
-                                    <div className="bg-amber-50 p-3 rounded-xl">
-                                        <span className="text-2xl">🌍</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-center mt-4 text-sm">
-                                    <span className="text-gray-500">
-                                        Posts con traducción EN
-                                    </span>
-                                </div>
+                                <p className="text-gray-500 text-sm font-medium">Bilingües</p>
+                                <p className="text-4xl font-bold mt-2 text-gray-900">{postsWithEnglish}</p>
+                                <p className="text-sm text-gray-500 mt-4">Posts con traducción EN</p>
                             </div>
 
                             {/* Analytics Placeholder */}
                             <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 text-white shadow-xl">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-gray-400 text-sm font-medium">Analytics</p>
-                                        <p className="text-lg font-bold mt-2">Próximamente</p>
-                                    </div>
-                                    <div className="bg-white/10 p-3 rounded-xl">
-                                        <BarChart3 className="w-8 h-8" />
-                                    </div>
-                                </div>
-                                <div className="flex items-center mt-4 text-sm text-gray-400">
-                                    <Zap className="w-4 h-4 mr-1" />
-                                    <span>Google Analytics</span>
-                                </div>
+                                <p className="text-gray-400 text-sm font-medium">Analytics</p>
+                                <p className="text-4xl font-bold mt-2">—</p>
+                                <p className="text-sm text-gray-400 mt-4">Google Analytics</p>
                             </div>
                         </div>
 
                         {/* Content Grid */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            {/* Recent Posts */}
+                            {/* Recent Posts - takes 2 columns */}
                             <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 shadow-sm">
                                 <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-                                    <h2 className="font-bold text-gray-900 flex items-center">
-                                        <Clock className="w-5 h-5 mr-2 text-primary-600" />
-                                        Publicaciones Recientes
-                                    </h2>
+                                    <h2 className="font-bold text-gray-900">Publicaciones Recientes</h2>
                                     <Link
                                         href={`/${locale}/admin1/posts/new`}
                                         className="text-sm text-primary-600 font-medium hover:text-primary-700"
@@ -255,26 +200,43 @@ export default function DashboardPage() {
                                 </div>
                             </div>
 
-                            {/* Categories & Quick Actions */}
+                            {/* Right Column */}
                             <div className="space-y-6">
-                                {/* Categories */}
+                                {/* Recent Pages */}
                                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
-                                    <div className="p-6 border-b border-gray-100">
-                                        <h2 className="font-bold text-gray-900 flex items-center">
-                                            <BarChart3 className="w-5 h-5 mr-2 text-primary-600" />
-                                            Categorías
-                                        </h2>
+                                    <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                                        <h2 className="font-bold text-gray-900">Páginas Recientes</h2>
+                                        <Link
+                                            href={`/${locale}/admin1/pages/new`}
+                                            className="text-sm text-primary-600 font-medium hover:text-primary-700"
+                                        >
+                                            + Nueva
+                                        </Link>
                                     </div>
-                                    <div className="p-4">
-                                        {topCategories.length > 0 ? topCategories.map(([cat, count]) => (
-                                            <div key={cat} className="flex items-center justify-between py-2">
-                                                <span className="text-gray-700 text-sm">{cat}</span>
-                                                <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs font-bold">
-                                                    {count}
-                                                </span>
+                                    <div className="divide-y divide-gray-50">
+                                        {recentPages.length > 0 ? recentPages.map((page) => (
+                                            <div key={page.id} className="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between">
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="font-medium text-gray-900 truncate">{page.title}</p>
+                                                    <div className="flex items-center space-x-2 mt-1">
+                                                        <span className={`text-xs px-2 py-0.5 rounded-full ${page.published ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                                                            {page.published ? 'Publicada' : 'Borrador'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center space-x-1 ml-4">
+                                                    <Link
+                                                        href={`/${locale}/admin1/pages/edit?slug=${page.slug}`}
+                                                        className="p-2 text-gray-400 hover:text-amber-600 transition-colors"
+                                                    >
+                                                        <Edit2 className="w-4 h-4" />
+                                                    </Link>
+                                                </div>
                                             </div>
                                         )) : (
-                                            <p className="text-gray-500 text-sm py-4 text-center">Sin categorías</p>
+                                            <div className="p-6 text-center text-gray-500">
+                                                <p className="text-sm">No hay páginas aún</p>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -312,9 +274,8 @@ export default function DashboardPage() {
                         </div>
                     </>
                 ) : (
-                    /* Posts Tab */
+                    /* Posts Tab - Full posts list with search */
                     <>
-                        {/* Header */}
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="relative flex-1 max-w-md">
                                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -326,13 +287,19 @@ export default function DashboardPage() {
                                     className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 outline-none transition-all bg-white"
                                 />
                             </div>
-                            <button
-                                onClick={() => window.location.href = `/${locale}/admin1/posts/new`}
-                                className="inline-flex items-center space-x-2 bg-primary-600 text-white px-6 py-3 rounded-xl hover:bg-primary-700 transition-all shadow-lg shadow-primary-100"
-                            >
-                                <Plus className="w-5 h-5" />
-                                <span className="font-bold">Nueva Entrada</span>
-                            </button>
+                            <div className="flex items-center space-x-4">
+                                <div className="bg-white border border-gray-200 px-6 py-3 rounded-xl flex items-center space-x-3">
+                                    <span className="text-gray-500 font-medium">Total:</span>
+                                    <span className="text-primary-600 font-bold text-lg">{filteredPosts.length}</span>
+                                </div>
+                                <button
+                                    onClick={() => window.location.href = `/${locale}/admin1/posts/new`}
+                                    className="inline-flex items-center space-x-2 bg-primary-600 text-white px-6 py-3 rounded-xl hover:bg-primary-700 transition-all shadow-lg shadow-primary-100"
+                                >
+                                    <Plus className="w-5 h-5" />
+                                    <span className="font-bold">Nueva Entrada</span>
+                                </button>
+                            </div>
                         </div>
 
                         {/* Posts Table */}
