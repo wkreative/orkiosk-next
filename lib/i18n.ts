@@ -148,7 +148,7 @@ export const baseCopy = {
         { name: 'Inicio', href: '/' },
         { name: 'Beneficios', href: '/#benefits' },
         { name: 'Blog', href: '/blog' },
-      { name: 'Client Portal', href: 'https://orkiosk.com/admin/', external: true },
+        { name: 'Client Portal', href: 'https://orkiosk.com/admin/', external: true },
         { name: 'Contacto', href: '/#contact' },
       ],
       company: [
@@ -193,15 +193,18 @@ function collectStrings(
   }
   return { paths, strings }
 }
-
 function setValue(target: Record<string, unknown>, path: (string | number)[], value: string) {
-  let ref: Record<string, unknown> | unknown[] = target
+  let ref: any = target
   for (let i = 0; i < path.length - 1; i += 1) {
     const key = path[i]
-    ref = (ref as Record<string, unknown>)[key as string]
+    if (ref && typeof ref === 'object') {
+      ref = ref[key]
+    }
   }
   const lastKey = path[path.length - 1]
-  ;(ref as Record<string, unknown>)[lastKey as string] = value
+  if (ref && typeof ref === 'object') {
+    ref[lastKey] = value
+  }
 }
 
 export async function getTranslations(locale: Locale): Promise<Translations> {
