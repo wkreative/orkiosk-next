@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
 import { getAllPosts } from '@/lib/posts'
 import { getTranslations, locales, type Locale, translatePost } from '@/lib/i18n'
 import SiteShell from '@/components/SiteShell'
+import BlogPostsGrid from '@/components/BlogPostsGrid'
 
 interface PageProps {
   params: { locale: Locale }
@@ -121,42 +121,12 @@ export default async function BlogPage({ params }: PageProps) {
         <section className="py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {translatedPosts.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {translatedPosts.map((post) => (
-                  <article
-                    key={post.slug}
-                    className="card group h-full flex flex-col"
-                  >
-                    {/* Category Badge */}
-                    {post.category && (
-                      <div className="mb-4">
-                        <span className="text-primary-600 font-medium text-sm">{post.category}</span>
-                      </div>
-                    )}
-
-                    {/* Title */}
-                    <h2 className="text-xl font-heading font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
-                      <Link href={`${blogPrefix}/${post.slug}`}>
-                        {post.title}
-                      </Link>
-                    </h2>
-
-                    {/* Excerpt */}
-                    <p className="text-gray-600 mb-6 flex-grow">
-                      {post.excerpt}
-                    </p>
-
-                    {/* Read More Link */}
-                    <Link
-                      href={`${blogPrefix}/${post.slug}`}
-                      className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors"
-                    >
-                      <span>{copy.blogPage.readMore}</span>
-                      <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </article>
-                ))}
-              </div>
+              <BlogPostsGrid
+                posts={translatedPosts}
+                blogPrefix={blogPrefix}
+                allLabel={params.locale === 'en' ? 'All' : 'Todos'}
+                readMoreLabel={copy.blogPage.readMore}
+              />
             ) : (
               <div className="text-center py-16">
                 <p className="text-gray-500 text-lg mb-4">
