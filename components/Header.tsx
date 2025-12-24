@@ -185,7 +185,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
           className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
             }`}
         >
-          <div className="py-4 space-y-2">
+          <div className="py-4 space-y-2 bg-white/95 backdrop-blur-lg rounded-b-xl shadow-lg mx-2 px-2">
             <div className="px-4">
               <button
                 type="button"
