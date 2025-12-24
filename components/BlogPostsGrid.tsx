@@ -83,7 +83,7 @@ export default function BlogPostsGrid({
                     >
                         {/* Featured Image */}
                         <Link href={`${blogPrefix}/${post.slug}`} className="block">
-                            <div className="relative aspect-[16/10] overflow-hidden">
+                            <div className="relative aspect-[16/10] overflow-hidden rounded-t-xl">
                                 {post.image ? (
                                     <img
                                         src={post.image}

@@ -39,7 +39,7 @@ function PostCard({ post, locale, copy }: { post: Post; locale: string; copy: Bl
     <article className="card group h-full flex flex-col overflow-hidden">
       {/* Featured Image */}
       <Link href={blogHref} className="block">
-        <div className="relative aspect-[16/10] overflow-hidden">
+        <div className="relative aspect-[16/10] overflow-hidden rounded-t-xl">
           {post.image ? (
             <img
               src={post.image}
