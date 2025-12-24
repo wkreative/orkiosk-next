@@ -52,8 +52,8 @@ export default function BlogPostsGrid({
                     <button
                         onClick={() => setSelectedCategory('')}
                         className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${!selectedCategory
-                                ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 scale-105'
-                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-105'
+                            ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 scale-105'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-105'
                             }`}
                     >
                         {allLabel}
@@ -63,8 +63,8 @@ export default function BlogPostsGrid({
                             key={category}
                             onClick={() => setSelectedCategory(category)}
                             className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${selectedCategory === category
-                                    ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 scale-105'
-                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-105'
+                                ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 scale-105'
+                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-105'
                                 }`}
                         >
                             {category}
@@ -78,36 +78,58 @@ export default function BlogPostsGrid({
                 {filteredPosts.map((post, index) => (
                     <article
                         key={post.slug}
-                        className="card group h-full flex flex-col animate-fade-in"
+                        className="card group h-full flex flex-col animate-fade-in overflow-hidden"
                         style={{ animationDelay: `${index * 50}ms` }}
                     >
-                        {/* Category Badge */}
-                        {post.category && (
-                            <div className="mb-4">
-                                <span className="text-primary-600 font-medium text-sm">{post.category}</span>
+                        {/* Featured Image */}
+                        <Link href={`${blogPrefix}/${post.slug}`} className="block">
+                            <div className="relative aspect-[16/10] overflow-hidden">
+                                {post.image ? (
+                                    <img
+                                        src={post.image}
+                                        alt={post.title}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+                                        <span className="text-white/80 font-heading text-4xl font-bold">
+                                            {post.title.charAt(0)}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
-                        )}
-
-                        {/* Title */}
-                        <h2 className="text-xl font-heading font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
-                            <Link href={`${blogPrefix}/${post.slug}`}>
-                                {post.title}
-                            </Link>
-                        </h2>
-
-                        {/* Excerpt */}
-                        <p className="text-gray-600 mb-4 flex-grow line-clamp-3">
-                            {post.excerpt}
-                        </p>
-
-                        {/* Read More */}
-                        <Link
-                            href={`${blogPrefix}/${post.slug}`}
-                            className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors mt-auto"
-                        >
-                            <span>{readMoreLabel}</span>
-                            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </Link>
+
+                        {/* Content */}
+                        <div className="p-6 flex flex-col flex-grow">
+                            {/* Category Badge */}
+                            {post.category && (
+                                <div className="mb-3">
+                                    <span className="text-primary-600 font-medium text-sm">{post.category}</span>
+                                </div>
+                            )}
+
+                            {/* Title */}
+                            <h2 className="text-xl font-heading font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+                                <Link href={`${blogPrefix}/${post.slug}`}>
+                                    {post.title}
+                                </Link>
+                            </h2>
+
+                            {/* Excerpt */}
+                            <p className="text-gray-600 mb-4 flex-grow line-clamp-3">
+                                {post.excerpt}
+                            </p>
+
+                            {/* Read More */}
+                            <Link
+                                href={`${blogPrefix}/${post.slug}`}
+                                className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors mt-auto"
+                            >
+                                <span>{readMoreLabel}</span>
+                                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                        </div>
                     </article>
                 ))}
             </div>

@@ -217,13 +217,26 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <SiteShell locale={params.locale} copy={copy}>
-      <article className="pt-4">
+      <article>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {/* Hero Section */}
-        <header className="py-16 md:py-24 bg-gradient-to-b from-primary-50 to-white">
+
+        {/* Full-Width Hero Image */}
+        {translated.image && (
+          <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
+            <img
+              src={translated.image}
+              alt={translated.title}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          </div>
+        )}
+
+        {/* Post Info Section */}
+        <header className={`py-12 md:py-16 ${translated.image ? 'bg-white' : 'bg-gradient-to-b from-primary-50 to-white pt-20'}`}>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Back Link */}
             <Link
@@ -255,11 +268,20 @@ export default async function BlogPostPage({ params }: Props) {
 
             {/* Author */}
             {translated.author && (
-              <div className="mt-6 flex items-center space-x-3">
-                <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold">
+              <div className="mt-8 flex items-center space-x-3">
+                <div className="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
                   {translated.author.charAt(0)}
                 </div>
-                <span className="text-gray-700 font-medium">{translated.author}</span>
+                <div>
+                  <span className="text-gray-900 font-medium block">{translated.author}</span>
+                  <span className="text-gray-500 text-sm">
+                    {new Date(translated.date).toLocaleDateString(params.locale === 'en' ? 'en-US' : 'es-ES', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </span>
+                </div>
               </div>
             )}
           </div>
