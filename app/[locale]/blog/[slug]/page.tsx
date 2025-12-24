@@ -66,47 +66,54 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const copy = await getTranslations(params.locale)
   const post = await getPostBySlug(params.slug)
+
   if (!post) {
     return {
-      title: 'Articulo no encontrado',
+      title: 'Post Not Found',
     }
   }
 
-  const translated = await translatePost(post, params.locale, false)
-  const shareUrl = `https://orkiosk.com/${params.locale}/blog/${translated.slug}`
-  const imageUrl = translated.image
-    ? translated.image.startsWith('http')
-      ? translated.image
-      : `https://orkiosk.com${translated.image}`
-    : 'https://orkiosk.com/images/logo.png'
+  const translatedPost = await translatePost(post, params.locale, false)
+  const url = `https://orkiosk.com/${params.locale}/blog/${params.slug}`
+
+  // Use SEO fields if provided, otherwise use defaults
+  const title = translatedPost.seoTitle || translatedPost.title
+  const description = translatedPost.metaDescription || translatedPost.excerpt
+
+  // Build keywords: prioritize focal keyword, then extract from content
+  let keywords = []
+  if (translatedPost.focalKeyword) {
+    keywords.push(translatedPost.focalKeyword)
+  }
+  if (translatedPost.category) {
+    keywords.push(translatedPost.category)
+  }
+  // Extract additional keywords from title and excerpt
+  const additionalKeywords = buildKeywords([translatedPost.title, translatedPost.excerpt])
+  keywords = [...keywords, ...additionalKeywords].slice(0, 10) // Max 10 keywords
 
   return {
-    title: translated.title,
-    description: translated.excerpt,
+    title,
+    description,
+    keywords: keywords.join(', '),
     alternates: {
-      canonical: shareUrl,
+      canonical: url,
     },
-    keywords: buildKeywords([
-      translated.title,
-      translated.excerpt,
-      translated.category ?? '',
-      translated.content,
-    ]),
     openGraph: {
-      title: translated.title,
-      description: translated.excerpt,
+      title,
+      description,
+      url,
       type: 'article',
-      url: shareUrl,
-      publishedTime: translated.date,
-      authors: translated.author ? [translated.author] : ['Orkiosk'],
-      images: [{ url: imageUrl }],
+      publishedTime: translatedPost.date,
+      authors: [translatedPost.author || 'Orkiosk'],
+      section: translatedPost.category,
     },
     twitter: {
       card: 'summary_large_image',
-      title: translated.title,
-      description: translated.excerpt,
-      images: [imageUrl],
+      title,
+      description,
     },
   }
 }

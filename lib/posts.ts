@@ -10,6 +10,10 @@ export interface Post {
   author?: string;
   category?: string;
   image?: string;
+  // SEO Fields
+  focalKeyword?: string;
+  metaDescription?: string;
+  seoTitle?: string;
 }
 
 const BUILD_TIMEOUT = 5000; // 5 seconds timeout for build-time data fetching

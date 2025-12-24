@@ -27,6 +27,10 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
         image: '',
         date: new Date().toISOString().split('T')[0],
         author: 'Admin',
+        // SEO Fields
+        focalKeyword: '',
+        metaDescription: '',
+        seoTitle: '',
     });
 
     const [loading, setLoading] = useState(false);
@@ -185,6 +189,65 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                 placeholder="Ej: Tecnología"
                                 className="w-full px-4 py-2 bg-gray-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-primary-200 outline-none"
                             />
+                        </div>
+
+                        {/* SEO Section */}
+                        <div className="pt-4 border-t border-gray-100">
+                            <h3 className="text-sm font-bold text-primary-600 mb-4 uppercase tracking-wide flex items-center">
+                                <Hash className="w-4 h-4 mr-2" />
+                                Optimización SEO
+                            </h3>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 mb-2">
+                                        Palabra Clave Focal
+                                        <span className="text-gray-400 font-normal ml-1">(Keyword principal)</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="focalKeyword"
+                                        value={formData.focalKeyword}
+                                        onChange={handleChange}
+                                        placeholder="Ej: quioscos de autoservicio"
+                                        className="w-full px-4 py-2 bg-gray-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-primary-200 outline-none"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 mb-2">
+                                        Título SEO
+                                        <span className="text-gray-400 font-normal ml-1">(Opcional - usa título del post por defecto)</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="seoTitle"
+                                        value={formData.seoTitle}
+                                        onChange={handleChange}
+                                        placeholder="Título optimizado para buscadores"
+                                        maxLength={60}
+                                        className="w-full px-4 py-2 bg-gray-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-primary-200 outline-none"
+                                    />
+                                    <p className="text-xs text-gray-400 mt-1">{formData.seoTitle.length}/60 caracteres</p>
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 mb-2">
+                                        Meta Descripción
+                                        <span className="text-gray-400 font-normal ml-1">(Aparece en resultados de búsqueda)</span>
+                                    </label>
+                                    <textarea
+                                        name="metaDescription"
+                                        value={formData.metaDescription}
+                                        onChange={handleChange}
+                                        placeholder="Describe tu artículo en 155 caracteres..."
+                                        maxLength={155}
+                                        rows={3}
+                                        className="w-full px-4 py-2 bg-gray-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-primary-200 outline-none resize-none"
+                                    />
+                                    <p className="text-xs text-gray-400 mt-1">{formData.metaDescription.length}/155 caracteres</p>
+                                </div>
+                            </div>
                         </div>
 
                         <div>
