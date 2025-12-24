@@ -36,34 +36,56 @@ function PostCard({ post, locale, copy }: { post: Post; locale: string; copy: Bl
   const blogHref = `/${locale}/blog/${post.slug}`
 
   return (
-    <article className="card group h-full flex flex-col">
-      {/* Category Badge */}
-      {post.category && (
-        <div className="mb-4">
-          <span className="text-primary-600 font-medium text-sm">{post.category}</span>
+    <article className="card group h-full flex flex-col overflow-hidden">
+      {/* Featured Image */}
+      <Link href={blogHref} className="block">
+        <div className="relative aspect-[16/10] overflow-hidden">
+          {post.image ? (
+            <img
+              src={post.image}
+              alt={post.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+              <span className="text-white/80 font-heading text-4xl font-bold">
+                {post.title.charAt(0)}
+              </span>
+            </div>
+          )}
         </div>
-      )}
-
-      {/* Title */}
-      <h3 className="text-xl font-heading font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
-        <Link href={blogHref}>
-          {post.title}
-        </Link>
-      </h3>
-
-      {/* Excerpt */}
-      <p className="text-gray-600 mb-6 flex-grow">
-        {post.excerpt}
-      </p>
-
-      {/* Read More Link */}
-      <Link
-        href={blogHref}
-        className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors"
-      >
-        <span>{copy.readMore}</span>
-        <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
       </Link>
+
+      {/* Content */}
+      <div className="p-6 flex flex-col flex-grow">
+        {/* Category Badge */}
+        {post.category && (
+          <div className="mb-3">
+            <span className="text-primary-600 font-medium text-sm">{post.category}</span>
+          </div>
+        )}
+
+        {/* Title */}
+        <h3 className="text-xl font-heading font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+          <Link href={blogHref}>
+            {post.title}
+          </Link>
+        </h3>
+
+        {/* Excerpt */}
+        <p className="text-gray-600 mb-6 flex-grow line-clamp-3">
+          {post.excerpt}
+        </p>
+
+        {/* Read More Link */}
+        <Link
+          href={blogHref}
+          className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors"
+        >
+          <span>{copy.readMore}</span>
+          <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
+        </Link>
+      </div>
     </article>
   )
 }
