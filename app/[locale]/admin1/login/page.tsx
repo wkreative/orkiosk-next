@@ -35,8 +35,19 @@ export default function LoginPage() {
             await signInWithEmailAndPassword(auth, email, password);
             router.push(`/${locale}/admin1/dashboard`);
         } catch (err: any) {
-            console.error(err);
-            setError('Credenciales inválidas. Por favor intenta de nuevo.');
+            console.error('Login error:', err);
+            // Show more detailed error message
+            if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
+                setError('Contraseña incorrecta. Verifica tus credenciales.');
+            } else if (err.code === 'auth/user-not-found') {
+                setError('Usuario no encontrado. Verifica el email.');
+            } else if (err.code === 'auth/too-many-requests') {
+                setError('Demasiados intentos. Espera unos minutos.');
+            } else if (err.code === 'auth/network-request-failed') {
+                setError('Error de red. Verifica tu conexión.');
+            } else {
+                setError(`Error: ${err.code || err.message}`);
+            }
         } finally {
             setLoading(false);
         }
