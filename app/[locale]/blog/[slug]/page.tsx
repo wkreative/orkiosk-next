@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Calendar, ArrowLeft } from 'lucide-react'
 import { getPostBySlug, getAllPosts } from '@/lib/posts'
 import { getTranslations, locales, type Locale, translatePost } from '@/lib/i18n'
+import SiteShell from '@/components/SiteShell'
 
 interface Props {
   params: { locale: Locale; slug: string }
@@ -171,6 +172,17 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   const renderContent = (content: string) => {
+    // If content is HTML (from visual editor), render it directly
+    if (content.includes('<')) {
+      return (
+        <div
+          className="prose prose-lg max-w-none"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
+      )
+    }
+
+    // Otherwise, render as Markdown (legacy content)
     const paragraphs = content.split('\n\n').filter((p) => p.trim())
     return paragraphs.map((paragraph, index) => {
       if (paragraph.startsWith('# ')) {

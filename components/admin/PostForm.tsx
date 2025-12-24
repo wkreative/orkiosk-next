@@ -6,6 +6,7 @@ import { db, storage } from '@/lib/firebase';
 import { collection, doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Save, X, Image as ImageIcon, Loader2, ArrowLeft, Globe, Hash } from 'lucide-react';
+import RichTextEditor from './RichTextEditor';
 
 interface PostFormProps {
     initialData?: any;
@@ -141,15 +142,10 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Contenido (Markdown)</label>
-                            <textarea
-                                name="content"
-                                required
-                                value={formData.content}
-                                onChange={handleChange}
-                                rows={20}
-                                placeholder="Escribe aquí tu contenido en formato Markdown..."
-                                className="w-full px-4 py-3 border border-gray-100 rounded-xl focus:ring-2 focus:ring-primary-500 outline-none transition-all font-mono text-sm leading-relaxed min-h-[500px]"
+                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Contenido</label>
+                            <RichTextEditor
+                                content={formData.content}
+                                onChange={(content) => setFormData({ ...formData, content })}
                             />
                         </div>
                     </div>

@@ -16,88 +16,88 @@ export const baseCopy = {
     ],
     ctaLabel: 'Agendar Demo',
     aria: {
-      navLabel: 'Navegaci?n principal',
-      openMenu: 'Abrir men?',
-      closeMenu: 'Cerrar men?',
+      navLabel: 'Navegación principal',
+      openMenu: 'Abrir menú',
+      closeMenu: 'Cerrar menú',
     },
   },
   hero: {
-    badge: 'Tecnolog?a de vanguardia',
+    badge: 'Tecnología de vanguardia',
     heading: 'Quioscos de Autoservicio Inteligentes',
     subheading:
-      'Transforma la experiencia de tus clientes con quioscos de autoservicio que reducen tiempos de espera, integran pagos y ofrecen anal?tica en tiempo real.',
+      'Transforma la experiencia de tus clientes con quioscos de autoservicio que reducen tiempos de espera, integran pagos y ofrecen analítica en tiempo real.',
     ctaPrimary: 'Agendar Demo Gratuita',
     ctaSecondary: 'Ver Beneficios',
     trustPrimary: '99.9% Uptime Garantizado',
-    trustSecondary: 'Anal?tica en Tiempo Real',
+    trustSecondary: 'Analítica en Tiempo Real',
   },
   features: {
     label: 'Beneficios',
-    title: '?Qu? hace Orkiosk por tu negocio?',
+    title: '¿Qué hace Orkiosk por tu negocio?',
     subtitle:
-      'Una soluci?n completa que combina hardware, software y anal?tica para transformar la experiencia de autoservicio en tu establecimiento.',
+      'Una solución completa que combina hardware, software y analítica para transformar la experiencia de autoservicio en tu establecimiento.',
     items: [
       {
-        name: 'Reducci?n de Tiempos de Espera',
+        name: 'Reducción de Tiempos de Espera',
         description:
-          'Optimiza el flujo de clientes con un proceso de autoservicio r?pido e intuitivo que reduce significativamente los tiempos de espera en caja.',
+          'Optimiza el flujo de clientes con un proceso de autoservicio rápido e intuitivo que reduce significativamente los tiempos de espera en caja.',
       },
       {
         name: 'Pagos Integrados',
         description:
-          'Acepta m?ltiples m?todos de pago incluyendo tarjetas de cr?dito, d?bito, transferencias y efectivo con nuestras integraciones POS.',
+          'Acepta múltiples métodos de pago incluyendo tarjetas de crédito, débito, transferencias y efectivo con nuestras integraciones POS.',
       },
       {
-        name: 'Anal?tica en Tiempo Real',
+        name: 'Analítica en Tiempo Real',
         description:
           'Monitorea ventas, productos populares y comportamiento de clientes con dashboards interactivos y reportes detallados.',
       },
       {
         name: 'Sistema Seguro y Estable',
         description:
-          'Infraestructura robusta con respaldo autom?tico y protecci?n de datos para garantizar la continuidad de tu negocio.',
+          'Infraestructura robusta con respaldo automático y protección de datos para garantizar la continuidad de tu negocio.',
       },
       {
         name: 'Impresora de Recibo',
         description:
-          'Impresi?n r?pida y clara de recibos con personalizaci?n de ticket para incluir promociones e informaci?n de tu marca.',
+          'Impresión rápida y clara de recibos con personalización de ticket para incluir promociones e información de tu marca.',
       },
       {
         name: 'Experiencia Intuitiva',
         description:
-          'Interfaz de usuario dise?ada para una experiencia fluida que tus clientes dominar?n desde el primer uso.',
+          'Interfaz de usuario diseñada para una experiencia fluida que tus clientes dominarán desde el primer uso.',
       },
     ],
-    ctaPrompt: '?Quieres conocer m?s sobre nuestras funcionalidades?',
+    ctaPrompt: '¿Quieres conocer más sobre nuestras funcionalidades?',
     ctaButton: 'Habla con un Asesor',
   },
   blogPreview: {
     label: 'Blog',
-    title: '?ltimos Art?culos',
+    title: 'Últimos Artículos',
     subtitle:
-      'Descubre consejos, tendencias y novedades sobre optimizaci?n de negocios, transformaci?n digital y tecnolog?a de autoservicio.',
-    readMore: 'Leer m?s',
-    emptyMessage: 'No hay art?culos publicados a?n.',
-    emptyButton: 'Crear Primer Art?culo',
-    viewAll: 'Ver Todos los Art?culos',
+      'Descubre consejos, tendencias y novedades sobre optimización de negocios, transformación digital y tecnología de autoservicio.',
+    readMore: 'Leer más',
+    emptyMessage: 'No hay artículos publicados aún.',
+    emptyButton: 'Crear Primer Artículo',
+    viewAll: 'Ver Todos los Artículos',
   },
   blogPage: {
     title: 'Blog',
     description:
-      'Descubre consejos, tendencias y novedades sobre optimizaci?n de negocios, transformaci?n digital y tecnolog?a de autoservicio.',
+      'Descubre consejos, tendencias y novedades sobre optimización de negocios, transformación digital y tecnología de autoservicio.',
     heroTitle: 'Blog de Orkiosk',
     heroSubtitle:
-      'Descubre consejos, tendencias y novedades sobre optimizaci?n de negocios, transformaci?n digital y tecnolog?a de autoservicio.',
-    readMore: 'Leer m?s',
-    emptyMessage: 'No hay art?culos publicados a?n.',
-    emptyButton: 'Crear Primer Art?culo',
-    ctaTitle: '?Quieres estar actualizado?',
+      'Descubre consejos, tendencias y novedades sobre optimización de negocios, transformación digital y tecnología de autoservicio.',
+    readMore: 'Leer más',
+    emptyMessage: 'No hay artículos publicados aún.',
+    emptyButton: 'Crear Primer Artículo',
+    ctaTitle: '¿Quieres estar actualizado?',
     ctaBody:
-      'Suscr?bete a nuestro bolet?n y recibe las ?ltimas noticias sobre tecnolog?a y optimizaci?n de negocios.',
-    ctaButton: 'Cont?ctanos',
+      'Suscríbete a nuestro boletín y recibe las últimas noticias sobre tecnología y optimización de negocios.',
+    ctaButton: 'Contáctanos',
   },
   blogPost: {
-    sharePrompt: '?Te gust? este art?culo? Comp?rtelo con otros',
+    sharePrompt: '¿Te gustó este artículo? Compártelo con otros',
     shareX: 'Compartir en X',
     shareFacebook: 'Compartir en Facebook',
     shareLinkedIn: 'Compartir en LinkedIn',
@@ -106,29 +106,29 @@ export const baseCopy = {
   },
   contact: {
     label: 'Contacto',
-    title: '?Interesado en nuestros quioscos?',
+    title: '¿Interesado en nuestros quioscos?',
     subtitle:
-      'Cont?ctanos para agendar una demo personalizada y descubrir c?mo Orkiosk puede transformar la experiencia de autoservicio en tu negocio.',
+      'Contáctanos para agendar una demo personalizada y descubrir cómo Orkiosk puede transformar la experiencia de autoservicio en tu negocio.',
     whatsappLabel: 'WhatsApp',
     emailLabel: 'Email',
-    locationLabel: 'Ubicaci?n',
+    locationLabel: 'Ubicación',
     locationValue: 'San Juan, Puerto Rico',
-    successTitle: '?Mensaje Enviado!',
+    successTitle: '¡Mensaje Enviado!',
     successBody:
-      'Gracias por tu inter?s. Nos pondremos en contacto contigo dentro de las pr?ximas 24 horas.',
+      'Gracias por tu interés. Nos pondremos en contacto contigo dentro de las próximas 24 horas.',
     successButton: 'Enviar Otro Mensaje',
     form: {
       nameLabel: 'Nombre completo *',
       companyLabel: 'Empresa',
       emailLabel: 'Email *',
-      phoneLabel: 'Tel?fono',
+      phoneLabel: 'Teléfono',
       messageLabel: 'Mensaje *',
-      namePlaceholder: 'Juan P?rez',
+      namePlaceholder: 'Juan Pérez',
       companyPlaceholder: 'Tu Empresa',
       emailPlaceholder: 'juan@empresa.com',
       phonePlaceholder: '+1-787-123-4567',
       messagePlaceholder:
-        'Cu?ntanos sobre tu negocio y c?mo podemos ayudarte...',
+        'Cuéntanos sobre tu negocio y cómo podemos ayudarte...',
       submitIdle: 'Enviar Mensaje',
       submitLoading: 'Enviando...',
       error: 'Hubo un error al enviar el mensaje. Por favor intenta de nuevo.',
@@ -136,13 +136,13 @@ export const baseCopy = {
   },
   footer: {
     description:
-      'Quioscos de autoservicio inteligentes con software, hardware y anal?tica en tiempo real para optimizar tu negocio.',
-    navigationTitle: 'Navegaci?n',
+      'Quioscos de autoservicio inteligentes con software, hardware y analítica en tiempo real para optimizar tu negocio.',
+    navigationTitle: 'Navegación',
     companyTitle: 'Empresa',
     legalTitle: 'Legal',
     copyright:
-      '(c) {year} Orkiosk. Todos los derechos reservados. Hecho con amor en Puerto Rico.',
-    ariaSocial: 'S?guenos en {name}',
+      '(c) {year} Orkiosk. Todos los derechos reservados. Hecho con ❤️ en Puerto Rico.',
+    ariaSocial: 'Síguenos en {name}',
     nav: {
       main: [
         { name: 'Inicio', href: '/' },
@@ -157,8 +157,8 @@ export const baseCopy = {
         { name: 'Integraciones', href: '/#integrations' },
       ],
       legal: [
-        { name: 'Pol?tica de Privacidad', href: '/privacy' },
-        { name: 'T?rminos y Condiciones', href: '/terms' },
+        { name: 'Política de Privacidad', href: '/privacy' },
+        { name: 'Términos y Condiciones', href: '/terms' },
       ],
     },
   },

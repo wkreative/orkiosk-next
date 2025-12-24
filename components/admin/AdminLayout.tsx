@@ -53,7 +53,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Sidebar */}
             <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
                 <div className="p-6 border-b border-gray-100">
-                    <Link href="/" className="text-xl font-bold text-primary-600">
+                    <Link href={`/${locale}/admin1/dashboard`} className="text-xl font-bold text-primary-600">
                         Orkiosk Admin
                     </Link>
                 </div>
@@ -66,8 +66,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                 key={item.name}
                                 href={item.href}
                                 className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                                        ? 'bg-primary-50 text-primary-600'
-                                        : 'text-gray-600 hover:bg-gray-100'
+                                    ? 'bg-primary-50 text-primary-600'
+                                    : 'text-gray-600 hover:bg-gray-100'
                                     }`}
                             >
                                 <Icon className="w-5 h-5" />
@@ -90,7 +90,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Main Content */}
             <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
                 <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 md:hidden">
-                    <Link href="/" className="text-xl font-bold text-primary-600">
+                    <Link href={`/${locale}/admin1/dashboard`} className="text-xl font-bold text-primary-600">
                         Orkiosk
                     </Link>
                     <button onClick={handleLogout} className="text-red-600">
