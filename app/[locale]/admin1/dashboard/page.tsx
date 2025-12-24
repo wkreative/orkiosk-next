@@ -6,16 +6,18 @@ import { db } from '@/lib/firebase';
 import { collection, query, orderBy, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { Edit2, Trash2, Plus, Search, Eye, Loader2, FileText } from 'lucide-react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 
 export default function DashboardPage() {
     const [posts, setPosts] = useState<any[]>([]);
     const [pages, setPages] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [activeTab, setActiveTab] = useState<'overview' | 'posts'>('overview');
     const params = useParams();
+    const searchParams = useSearchParams();
     const locale = params?.locale || 'es';
+    const tabFromUrl = searchParams.get('tab');
+    const [activeTab, setActiveTab] = useState<'overview' | 'posts'>(tabFromUrl === 'posts' ? 'posts' : 'overview');
 
     useEffect(() => {
         fetchData();
@@ -100,8 +102,8 @@ export default function DashboardPage() {
                         <button
                             onClick={() => setActiveTab('overview')}
                             className={`px-4 py-2 rounded-lg font-medium transition-all ${activeTab === 'overview'
-                                    ? 'bg-white text-primary-600 shadow-sm'
-                                    : 'text-gray-600 hover:text-gray-900'
+                                ? 'bg-white text-primary-600 shadow-sm'
+                                : 'text-gray-600 hover:text-gray-900'
                                 }`}
                         >
                             Resumen
@@ -109,8 +111,8 @@ export default function DashboardPage() {
                         <button
                             onClick={() => setActiveTab('posts')}
                             className={`px-4 py-2 rounded-lg font-medium transition-all ${activeTab === 'posts'
-                                    ? 'bg-white text-primary-600 shadow-sm'
-                                    : 'text-gray-600 hover:text-gray-900'
+                                ? 'bg-white text-primary-600 shadow-sm'
+                                : 'text-gray-600 hover:text-gray-900'
                                 }`}
                         >
                             Publicaciones
