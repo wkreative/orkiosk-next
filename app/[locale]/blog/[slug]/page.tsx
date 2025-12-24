@@ -216,137 +216,135 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   return (
-    <article className="pt-20 md:pt-24">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      {/* Hero Section */}
-      <header className="py-16 md:py-24 bg-gradient-to-b from-primary-50 to-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back Link */}
-          <Link
-            href={`/${params.locale}/blog`}
-            className="inline-flex items-center text-gray-600 hover:text-primary-600 transition-colors mb-8"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            <span>{params.locale === 'en' ? 'Back to blog' : 'Volver al blog'}</span>
-          </Link>
+    <SiteShell locale={params.locale} copy={copy}>
+      <article className="pt-4">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {/* Hero Section */}
+        <header className="py-16 md:py-24 bg-gradient-to-b from-primary-50 to-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Back Link */}
+            <Link
+              href={`/${params.locale}/blog`}
+              className="inline-flex items-center text-gray-600 hover:text-primary-600 transition-colors mb-8"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              <span>{params.locale === 'en' ? 'Back to blog' : 'Volver al blog'}</span>
+            </Link>
 
-          {/* Category & Date */}
-          <div className="flex items-center space-x-4 text-sm text-gray-500 mb-6">
-            <time dateTime={translated.date} className="flex items-center">
-              <Calendar className="w-4 h-4 mr-2" />
-              {formatDate(translated.date, params.locale)}
-            </time>
+            {/* Category */}
             {translated.category && (
-              <span className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full font-medium">
-                {translated.category}
-              </span>
+              <div className="mb-6">
+                <span className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full font-medium text-sm">
+                  {translated.category}
+                </span>
+              </div>
+            )}
+
+            {/* Title */}
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-gray-900 leading-tight mb-6">
+              {translated.title}
+            </h1>
+
+            {/* Excerpt */}
+            <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
+              {translated.excerpt}
+            </p>
+
+            {/* Author */}
+            {translated.author && (
+              <div className="mt-6 flex items-center space-x-3">
+                <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold">
+                  {translated.author.charAt(0)}
+                </div>
+                <span className="text-gray-700 font-medium">{translated.author}</span>
+              </div>
             )}
           </div>
+        </header>
 
-          {/* Title */}
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-gray-900 leading-tight mb-6">
-            {translated.title}
-          </h1>
-
-          {/* Excerpt */}
-          <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
-            {translated.excerpt}
-          </p>
-
-          {/* Author */}
-          {translated.author && (
-            <div className="mt-6 flex items-center space-x-3">
-              <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold">
-                {translated.author.charAt(0)}
-              </div>
-              <span className="text-gray-700 font-medium">{translated.author}</span>
-            </div>
-          )}
-        </div>
-      </header>
-
-      {/* Content */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="prose prose-lg max-w-none">
-          {renderContent(translated.content)}
-        </div>
-      </div>
-
-      {/* Share Section */}
-      <section className="py-12 bg-gray-50 border-t border-gray-200">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-600 mb-4">
-            {copy.blogPost.sharePrompt}
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <a
-              href={`https://x.com/intent/post?text=${encodeURIComponent(translated.title)}&url=${encodeURIComponent(shareUrl)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary text-sm"
-            >
-              {copy.blogPost.shareX}
-            </a>
-            <a
-              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary text-sm"
-            >
-              {copy.blogPost.shareFacebook}
-            </a>
-            <a
-              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary text-sm"
-            >
-              {copy.blogPost.shareLinkedIn}
-            </a>
-            <a
-              href={`https://wa.me/?text=${encodeURIComponent(`${translated.title} ${shareUrl}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary text-sm"
-            >
-              {copy.blogPost.shareWhatsapp}
-            </a>
+        {/* Content */}
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="prose prose-lg max-w-none">
+            {renderContent(translated.content)}
           </div>
         </div>
-      </section>
 
-      {/* Recommended Posts */}
-      {relatedPosts.length > 0 && (
-        <section className="py-12 border-t border-gray-200">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-lg font-heading font-semibold text-gray-900 mb-6 text-center">
-              {copy.blogPost.recommendedTitle}
-            </h2>
-            <div className="grid gap-6 md:grid-cols-3">
-              {relatedPosts.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/${params.locale}/blog/${item.slug}`}
-                  className="group rounded-2xl border border-gray-200 p-5 text-left transition-colors hover:border-primary-300"
-                >
-                  <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">
-                    {item.category || 'Orkiosk'}
-                  </p>
-                  <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-primary-600">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 line-clamp-3">
-                    {item.excerpt}
-                  </p>
-                </Link>
-              ))}
+        {/* Share Section */}
+        <section className="py-12 bg-gray-50 border-t border-gray-200">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p className="text-gray-600 mb-4">
+              {copy.blogPost.sharePrompt}
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <a
+                href={`https://x.com/intent/post?text=${encodeURIComponent(translated.title)}&url=${encodeURIComponent(shareUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary text-sm"
+              >
+                {copy.blogPost.shareX}
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary text-sm"
+              >
+                {copy.blogPost.shareFacebook}
+              </a>
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary text-sm"
+              >
+                {copy.blogPost.shareLinkedIn}
+              </a>
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(`${translated.title} ${shareUrl}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary text-sm"
+              >
+                {copy.blogPost.shareWhatsapp}
+              </a>
             </div>
           </div>
         </section>
-      )}
-    </article>
+
+        {/* Recommended Posts */}
+        {relatedPosts.length > 0 && (
+          <section className="py-12 border-t border-gray-200">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-lg font-heading font-semibold text-gray-900 mb-6 text-center">
+                {copy.blogPost.recommendedTitle}
+              </h2>
+              <div className="grid gap-6 md:grid-cols-3">
+                {relatedPosts.map((item) => (
+                  <Link
+                    key={item.slug}
+                    href={`/${params.locale}/blog/${item.slug}`}
+                    className="group rounded-2xl border border-gray-200 p-5 text-left transition-colors hover:border-primary-300"
+                  >
+                    <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">
+                      {item.category || 'Orkiosk'}
+                    </p>
+                    <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-primary-600">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 line-clamp-3">
+                      {item.excerpt}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+      </article>
+    </SiteShell>
   )
 }
