@@ -27,7 +27,7 @@ const defaultCopy: FooterCopy = {
   companyTitle: 'Empresa',
   legalTitle: 'Legal',
   copyright:
-    '(c) {year} Orkiosk. Todos los derechos reservados. Hecho con amor en Puerto Rico.',
+    '© {year} Orkiosk. Todos los derechos reservados. Hecho con ❤️ en Puerto Rico.',
   ariaSocial: 'S?guenos en {name}',
   nav: {
     main: [
@@ -154,7 +154,7 @@ export default function Footer({ copy = defaultCopy, locale = 'es' }: { copy?: F
         {/* Bottom Section */}
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-sm text-center md:text-left">
               {copy.copyright.replace('{year}', String(currentYear))}
             </p>
 
