@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, ChevronDown } from 'lucide-react'
+import { Menu, X, ChevronDown, Globe } from 'lucide-react'
 
 export type NavItem = {
   name: string
@@ -164,29 +164,39 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
 
           {/* Mobile Language Switcher + Menu Button */}
           <div className="md:hidden flex items-center gap-2">
-            {/* Mobile Language Switcher - Fixed outside menu */}
-            <div className="flex items-center rounded-lg border border-gray-200 overflow-hidden">
-              <Link
-                href={localeHref('es')}
-                className={`px-2.5 py-1.5 text-sm font-medium transition-colors ${currentLocale === 'es'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-50'
-                  }`}
+            {/* Mobile Language Switcher - Globe icon with popup */}
+            <div className="relative">
+              <button
+                type="button"
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                onClick={() => setIsLangOpen((open) => !open)}
+                aria-expanded={isLangOpen}
+                aria-haspopup="true"
+                aria-label="Seleccionar idioma"
               >
-                ES
-              </Link>
-              <Link
-                href={localeHref('en')}
-                className={`px-2.5 py-1.5 text-sm font-medium transition-colors ${currentLocale === 'en'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-50'
-                  }`}
-              >
-                EN
-              </Link>
+                <Globe className="w-5 h-5 text-gray-900" />
+              </button>
+              {isLangOpen && (
+                <div className="absolute right-0 top-full mt-2 w-36 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-50">
+                  <Link
+                    href={localeHref('es')}
+                    className={`flex items-center gap-2 px-4 py-2.5 text-sm transition-colors ${currentLocale === 'es' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                    onClick={() => setIsLangOpen(false)}
+                  >
+                    🇪🇸 Español
+                  </Link>
+                  <Link
+                    href={localeHref('en')}
+                    className={`flex items-center gap-2 px-4 py-2.5 text-sm transition-colors ${currentLocale === 'en' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                    onClick={() => setIsLangOpen(false)}
+                  >
+                    🇺🇸 English
+                  </Link>
+                </div>
+              )}
             </div>
 
-            {/* Mobile menu button with custom icon */}
+            {/* Mobile menu button - Standard hamburger in black */}
             <button
               type="button"
               className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
@@ -196,23 +206,9 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
               aria-label={isMobileMenuOpen ? copy.aria.closeMenu : copy.aria.openMenu}
             >
               {isMobileMenuOpen ? (
-                <X className="w-6 h-6 text-gray-600" />
+                <X className="w-6 h-6 text-gray-900" />
               ) : (
-                /* Custom hamburger icon matching the uploaded design */
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="menuGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#6366f1" />
-                      <stop offset="100%" stopColor="#3b82f6" />
-                    </linearGradient>
-                  </defs>
-                  {/* Top long pill */}
-                  <rect x="3" y="5" width="14" height="4" rx="2" fill="url(#menuGradient)" />
-                  {/* Bottom short pill */}
-                  <rect x="3" y="15" width="8" height="4" rx="2" fill="url(#menuGradient)" />
-                  {/* Right vertical bar */}
-                  <rect x="19" y="5" width="3" height="14" rx="1.5" fill="url(#menuGradient)" />
-                </svg>
+                <Menu className="w-6 h-6 text-gray-900" />
               )}
             </button>
           </div>
