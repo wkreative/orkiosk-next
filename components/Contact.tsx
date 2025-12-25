@@ -69,17 +69,21 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
     setFormStatus('submitting')
 
     const formData = new FormData(e.currentTarget)
-    const data = Object.fromEntries(formData)
+    formData.append('access_key', 'YOUR_ACCESS_KEY_HERE') // Will be replaced with actual key
+    formData.append('subject', 'Nuevo mensaje de contacto - Orkiosk.com')
+    formData.append('from_name', 'Orkiosk Website')
 
     try {
-      const response = await fetch('/', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(data as Record<string, string>).toString(),
+        body: formData,
       })
 
-      if (response.ok) {
+      const result = await response.json()
+
+      if (result.success) {
         setFormStatus('success')
+          ; (e.target as HTMLFormElement).reset()
       } else {
         setFormStatus('error')
       }
@@ -184,14 +188,9 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
               </div>
             ) : (
               <form
-                name="contact"
-                method="POST"
-                data-netlify="true"
                 onSubmit={handleSubmit}
                 className="space-y-6"
               >
-                {/* Hidden input for Netlify */}
-                <input type="hidden" name="form-name" value="contact" />
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
