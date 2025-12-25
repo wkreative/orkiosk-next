@@ -31,6 +31,7 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
         focalKeyword: '',
         metaDescription: '',
         seoTitle: '',
+        noIndex: false,
         // English translations
         titleEn: '',
         excerptEn: '',
@@ -339,6 +340,21 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                         className="w-full px-4 py-2 bg-gray-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-primary-200 outline-none resize-none"
                                     />
                                     <p className="text-xs text-gray-400 mt-1">{formData.metaDescription.length}/155 caracteres</p>
+                                </div>
+
+                                <div className="pt-4 border-t border-gray-100">
+                                    <label className="flex items-center space-x-3 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={formData.noIndex}
+                                            onChange={(e) => setFormData({ ...formData, noIndex: e.target.checked })}
+                                            className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                                        />
+                                        <div>
+                                            <span className="text-sm font-medium text-gray-700">No indexar en buscadores</span>
+                                            <p className="text-xs text-gray-400">Evita que esta entrada aparezca en Google</p>
+                                        </div>
+                                    </label>
                                 </div>
                             </div>
                         </div>

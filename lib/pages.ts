@@ -10,6 +10,7 @@ export interface Page {
     focalKeyword?: string;
     metaDescription?: string;
     seoTitle?: string;
+    noIndex?: boolean;
     // Status
     published: boolean;
     createdAt?: any;

@@ -42,8 +42,8 @@ const defaultCopy: FooterCopy = {
       { name: 'Integraciones', href: '/#integrations' },
     ],
     legal: [
-      { name: 'Pol?tica de Privacidad', href: '/privacy' },
-      { name: 'T?rminos y Condiciones', href: '/terms' },
+      { name: 'Privacy Policy', href: '/terms-conditions-privacy-policy' },
+      { name: 'Copyright', href: '/copyright' },
     ],
   },
 }
