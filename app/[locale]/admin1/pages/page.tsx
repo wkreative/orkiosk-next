@@ -115,7 +115,7 @@ export default function PagesListPage() {
                                         </td>
                                         <td className="px-6 py-4">
                                             <code className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                                                /p/{page.slug}
+                                                /{page.slug}
                                             </code>
                                         </td>
                                         <td className="px-6 py-4">
@@ -129,7 +129,7 @@ export default function PagesListPage() {
                                         <td className="px-6 py-4">
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link
-                                                    href={`/${locale}/p/${page.slug}`}
+                                                    href={`/${locale}/${page.slug}`}
                                                     target="_blank"
                                                     className="p-2 text-gray-400 hover:text-primary-600 transition-colors"
                                                     title="Ver página"

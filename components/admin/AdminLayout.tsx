@@ -53,8 +53,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Sidebar */}
             <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
                 <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-                    <Link href={`/${locale}/admin1/dashboard`} className="text-xl font-bold text-primary-600">
-                        Orkiosk Admin
+                    <Link href={`/${locale}/admin1/dashboard`} className="flex flex-col">
+                        <span className="text-xl font-black text-gray-900" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900 }}>Orkiosk</span>
+                        <span className="text-xs text-gray-500" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 400 }}>Web Admin Panel</span>
                     </Link>
                     <button
                         onClick={handleLogout}
@@ -88,8 +89,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Main Content */}
             <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
                 <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 md:hidden">
-                    <Link href={`/${locale}/admin1/dashboard`} className="text-xl font-bold text-primary-600">
-                        Orkiosk
+                    <Link href={`/${locale}/admin1/dashboard`} className="flex flex-col">
+                        <span className="text-lg font-black text-gray-900" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900 }}>Orkiosk</span>
+                        <span className="text-xs text-gray-500" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 400 }}>Web Admin Panel</span>
                     </Link>
                     <button onClick={handleLogout} className="text-red-600">
                         <LogOut className="w-6 h-6" />
