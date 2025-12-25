@@ -162,82 +162,87 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
             </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            type="button"
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="mobile-menu"
-            aria-label={isMobileMenuOpen ? copy.aria.closeMenu : copy.aria.openMenu}
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
+          {/* Mobile Language Switcher + Menu Button */}
+          <div className="md:hidden flex items-center gap-2">
+            {/* Mobile Language Switcher - Fixed outside menu */}
+            <div className="flex items-center rounded-lg border border-gray-200 overflow-hidden">
+              <Link
+                href={localeHref('es')}
+                className={`px-2.5 py-1.5 text-sm font-medium transition-colors ${currentLocale === 'es'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                  }`}
+              >
+                ES
+              </Link>
+              <Link
+                href={localeHref('en')}
+                className={`px-2.5 py-1.5 text-sm font-medium transition-colors ${currentLocale === 'en'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                  }`}
+              >
+                EN
+              </Link>
+            </div>
+
+            {/* Mobile menu button with custom icon */}
+            <button
+              type="button"
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+              aria-label={isMobileMenuOpen ? copy.aria.closeMenu : copy.aria.openMenu}
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6 text-gray-600" />
+              ) : (
+                /* Custom hamburger icon matching the uploaded design */
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="menuGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#6366f1" />
+                      <stop offset="100%" stopColor="#3b82f6" />
+                    </linearGradient>
+                  </defs>
+                  {/* Top long pill */}
+                  <rect x="3" y="5" width="14" height="4" rx="2" fill="url(#menuGradient)" />
+                  {/* Bottom short pill */}
+                  <rect x="3" y="15" width="8" height="4" rx="2" fill="url(#menuGradient)" />
+                  {/* Right vertical bar */}
+                  <rect x="19" y="5" width="3" height="14" rx="1.5" fill="url(#menuGradient)" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation - Slide in from right */}
         <div
           id="mobile-menu"
-          className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+          className={`md:hidden fixed top-16 right-0 h-[calc(100vh-4rem)] w-72 transform transition-transform duration-300 ease-in-out z-50 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
         >
-          <div className="mt-2 mx-3 py-4 space-y-2 bg-white/95 backdrop-blur-lg rounded-xl shadow-xl border border-gray-100">
-            <div className="px-4">
-              <button
-                type="button"
-                className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors"
-                onClick={() => setIsLangOpen((open) => !open)}
-                aria-expanded={isLangOpen}
-                aria-haspopup="true"
-              >
-                <span>{currentLocale.toUpperCase()}</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              {isLangOpen && (
-                <div className="mt-2 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden">
-                  <Link
-                    href={localeHref('es')}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                    onClick={() => {
-                      setIsLangOpen(false)
-                      setIsMobileMenuOpen(false)
-                    }}
-                  >
-                    Español
-                  </Link>
-                  <Link
-                    href={localeHref('en')}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                    onClick={() => {
-                      setIsLangOpen(false)
-                      setIsMobileMenuOpen(false)
-                    }}
-                  >
-                    English
-                  </Link>
-                </div>
-              )}
+          <div className="h-full py-4 px-3 bg-white/95 backdrop-blur-lg shadow-xl border-l border-gray-100">
+            <div className="space-y-2">
+              {copy.nav.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="block px-4 py-3 text-gray-600 hover:text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  target={item.external ? '_blank' : undefined}
+                  rel={item.external ? 'noopener noreferrer' : undefined}
+                >
+                  {item.name}
+                </Link>
+              ))}
             </div>
-            {copy.nav.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="block px-4 py-3 text-gray-600 hover:text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-                target={item.external ? '_blank' : undefined}
-                rel={item.external ? 'noopener noreferrer' : undefined}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <div className="pt-4">
+            <div className="pt-4 px-4">
               <Link
                 href={copy.ctaHref ?? '/#contact'}
-                className="btn-primary w-full text-center"
+                className="btn-primary w-full text-center block"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {copy.ctaLabel}
@@ -245,6 +250,14 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
             </div>
           </div>
         </div>
+
+        {/* Overlay when menu is open */}
+        {isMobileMenuOpen && (
+          <div
+            className="md:hidden fixed inset-0 top-16 bg-black/20 backdrop-blur-sm z-40"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
       </nav>
     </header>
   )
