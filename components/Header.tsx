@@ -182,10 +182,10 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
         {/* Mobile Navigation */}
         <div
           id="mobile-menu"
-          className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
             }`}
         >
-          <div className="py-4 space-y-2 bg-white/95 backdrop-blur-lg rounded-b-xl shadow-lg mx-2 px-2">
+          <div className="mt-2 mx-3 py-4 space-y-2 bg-white/95 backdrop-blur-lg rounded-xl shadow-xl border border-gray-100">
             <div className="px-4">
               <button
                 type="button"
