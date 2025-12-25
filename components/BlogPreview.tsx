@@ -44,7 +44,7 @@ function PostCard({ post, locale, copy }: { post: Post; locale: string; copy: Bl
             <img
               src={post.image}
               alt={post.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-contain sm:object-cover bg-gray-100 group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">

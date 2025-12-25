@@ -35,9 +35,9 @@ const defaultCopy: HeaderCopy = {
   homeHref: '/',
   ctaHref: '/#contact',
   aria: {
-    navLabel: 'Navegaci?n principal',
-    openMenu: 'Abrir men?',
-    closeMenu: 'Cerrar men?',
+    navLabel: 'Navegación principal',
+    openMenu: 'Abrir menú',
+    closeMenu: 'Cerrar menú',
   },
 }
 
@@ -46,6 +46,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLangOpen, setIsLangOpen] = useState(false)
   const langRef = useRef<HTMLDivElement>(null)
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
   const [hash, setHash] = useState('')
   const pathname = usePathname() ?? '/'
   const segments = pathname.split('/').filter(Boolean)
@@ -72,22 +73,25 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
     setHash(window.location.hash)
   }, [pathname])
 
-  // Close language dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(event.target as Node)) {
         setIsLangOpen(false)
       }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false)
+      }
     }
 
-    if (isLangOpen) {
+    if (isLangOpen || isMobileMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside)
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isLangOpen])
+  }, [isLangOpen, isMobileMenuOpen])
 
   return (
     <header
@@ -120,7 +124,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
             ))}
           </div>
 
-          {/* Language Switcher */}
+          {/* Desktop Language Switcher */}
           <div ref={langRef} className="hidden md:flex items-center relative">
             <button
               type="button"
@@ -133,21 +137,19 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
               <ChevronDown className="w-4 h-4" />
             </button>
             {isLangOpen && (
-              <div className="absolute right-0 top-full mt-2 w-40 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden">
-                <Link
+              <div className="absolute right-0 top-full mt-2 w-32 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden">
+                <a
                   href={localeHref('es')}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                  onClick={() => setIsLangOpen(false)}
                 >
                   Español
-                </Link>
-                <Link
+                </a>
+                <a
                   href={localeHref('en')}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                  onClick={() => setIsLangOpen(false)}
                 >
                   English
-                </Link>
+                </a>
               </div>
             )}
           </div>
@@ -165,11 +167,14 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
           {/* Mobile Language Switcher + Menu Button */}
           <div className="md:hidden flex items-center gap-2">
             {/* Mobile Language Switcher - Globe icon with popup */}
-            <div className="relative">
+            <div className="relative" ref={langRef}>
               <button
                 type="button"
                 className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                onClick={() => setIsLangOpen((open) => !open)}
+                onClick={() => {
+                  setIsLangOpen((open) => !open)
+                  setIsMobileMenuOpen(false)
+                }}
                 aria-expanded={isLangOpen}
                 aria-haspopup="true"
                 aria-label="Seleccionar idioma"
@@ -177,83 +182,77 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
                 <Globe className="w-5 h-5 text-gray-900" />
               </button>
               {isLangOpen && (
-                <div className="absolute right-0 top-full mt-2 w-36 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-50">
-                  <Link
+                <div className="absolute right-0 top-full mt-2 w-32 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-50">
+                  <a
                     href={localeHref('es')}
-                    className={`flex items-center gap-2 px-4 py-2.5 text-sm transition-colors ${currentLocale === 'es' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
-                    onClick={() => setIsLangOpen(false)}
+                    className={`block px-4 py-2.5 text-sm transition-colors ${currentLocale === 'es' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
                   >
-                    🇪🇸 Español
-                  </Link>
-                  <Link
+                    Español
+                  </a>
+                  <a
                     href={localeHref('en')}
-                    className={`flex items-center gap-2 px-4 py-2.5 text-sm transition-colors ${currentLocale === 'en' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
-                    onClick={() => setIsLangOpen(false)}
+                    className={`block px-4 py-2.5 text-sm transition-colors ${currentLocale === 'en' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
                   >
-                    🇺🇸 English
-                  </Link>
+                    English
+                  </a>
                 </div>
               )}
             </div>
 
-            {/* Mobile menu button - Standard hamburger in black */}
-            <button
-              type="button"
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-expanded={isMobileMenuOpen}
-              aria-controls="mobile-menu"
-              aria-label={isMobileMenuOpen ? copy.aria.closeMenu : copy.aria.openMenu}
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6 text-gray-900" />
-              ) : (
-                <Menu className="w-6 h-6 text-gray-900" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation - Slide in from right */}
-        <div
-          id="mobile-menu"
-          className={`md:hidden fixed top-16 right-0 h-[calc(100vh-4rem)] w-72 transform transition-transform duration-300 ease-in-out z-50 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-            }`}
-        >
-          <div className="h-full py-4 px-3 bg-white/95 backdrop-blur-lg shadow-xl border-l border-gray-100">
-            <div className="space-y-2">
-              {copy.nav.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="block px-4 py-3 text-gray-600 hover:text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  target={item.external ? '_blank' : undefined}
-                  rel={item.external ? 'noopener noreferrer' : undefined}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-            <div className="pt-4 px-4">
-              <Link
-                href={copy.ctaHref ?? '/#contact'}
-                className="btn-primary w-full text-center block"
-                onClick={() => setIsMobileMenuOpen(false)}
+            {/* Mobile menu button - Opens popup menu */}
+            <div className="relative" ref={mobileMenuRef}>
+              <button
+                type="button"
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                onClick={() => {
+                  setIsMobileMenuOpen(!isMobileMenuOpen)
+                  setIsLangOpen(false)
+                }}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu"
+                aria-label={isMobileMenuOpen ? copy.aria.closeMenu : copy.aria.openMenu}
               >
-                {copy.ctaLabel}
-              </Link>
+                {isMobileMenuOpen ? (
+                  <X className="w-6 h-6 text-gray-900" />
+                ) : (
+                  <Menu className="w-6 h-6 text-gray-900" />
+                )}
+              </button>
+
+              {/* Mobile Navigation - Popup style with rounded borders */}
+              {isMobileMenuOpen && (
+                <div
+                  id="mobile-menu"
+                  className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-50"
+                >
+                  <div className="py-2">
+                    {copy.nav.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className="block px-4 py-2.5 text-gray-700 hover:text-primary-600 font-medium hover:bg-gray-50 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        target={item.external ? '_blank' : undefined}
+                        rel={item.external ? 'noopener noreferrer' : undefined}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                    <div className="border-t border-gray-100 mt-2 pt-2 px-3">
+                      <Link
+                        href={copy.ctaHref ?? '/#contact'}
+                        className="btn-primary w-full text-center block text-sm"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {copy.ctaLabel}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
-
-        {/* Overlay when menu is open */}
-        {isMobileMenuOpen && (
-          <div
-            className="md:hidden fixed inset-0 top-16 bg-black/20 backdrop-blur-sm z-40"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-        )}
       </nav>
     </header>
   )
