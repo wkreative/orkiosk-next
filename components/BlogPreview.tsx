@@ -39,15 +39,15 @@ function PostCard({ post, locale, copy }: { post: Post; locale: string; copy: Bl
     <article className="card group h-full flex flex-col overflow-hidden">
       {/* Featured Image */}
       <Link href={blogHref} className="block">
-        <div className="relative aspect-[16/10] overflow-hidden rounded-lg">
+        <div className="relative h-auto sm:aspect-[16/10] overflow-hidden rounded-lg bg-gray-100">
           {post.image ? (
             <img
               src={post.image}
               alt={post.title}
-              className="w-full h-full object-contain sm:object-cover bg-gray-100 group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-auto sm:h-full sm:object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+            <div className="w-full aspect-[16/10] bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
               <span className="text-white/80 font-heading text-4xl font-bold">
                 {post.title.charAt(0)}
               </span>

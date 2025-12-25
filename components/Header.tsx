@@ -46,6 +46,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLangOpen, setIsLangOpen] = useState(false)
   const langRef = useRef<HTMLDivElement>(null)
+  const desktopLangRef = useRef<HTMLDivElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
   const [hash, setHash] = useState('')
   const pathname = usePathname() ?? '/'
@@ -77,6 +78,9 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(event.target as Node)) {
+        setIsLangOpen(false)
+      }
+      if (desktopLangRef.current && !desktopLangRef.current.contains(event.target as Node)) {
         setIsLangOpen(false)
       }
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
@@ -125,7 +129,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
           </div>
 
           {/* Desktop Language Switcher */}
-          <div ref={langRef} className="hidden md:flex items-center relative">
+          <div ref={desktopLangRef} className="hidden md:flex items-center relative">
             <button
               type="button"
               className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors"
