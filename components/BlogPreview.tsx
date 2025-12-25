@@ -14,13 +14,13 @@ export type BlogPreviewCopy = {
 
 const defaultCopy: BlogPreviewCopy = {
   label: 'Blog',
-  title: '?ltimos Art?culos',
+  title: 'Últimos Artículos',
   subtitle:
-    'Descubre consejos, tendencias y novedades sobre optimizaci?n de negocios, transformaci?n digital y tecnolog?a de autoservicio.',
-  readMore: 'Leer m?s',
-  emptyMessage: 'No hay art?culos publicados a?n.',
-  emptyButton: 'Crear Primer Art?culo',
-  viewAll: 'Ver Todos los Art?culos',
+    'Descubre consejos, tendencias y novedades sobre optimización de negocios, transformación digital y tecnología de autoservicio.',
+  readMore: 'Leer más',
+  emptyMessage: 'No hay artículos publicados aún.',
+  emptyButton: 'Crear Primer Artículo',
+  viewAll: 'Ver Todos los Artículos',
 }
 
 function formatDate(dateString: string, locale: string): string {
@@ -36,18 +36,18 @@ function PostCard({ post, locale, copy }: { post: Post; locale: string; copy: Bl
   const blogHref = `/${locale}/blog/${post.slug}`
 
   return (
-    <article className="card group h-full flex flex-col overflow-hidden">
-      {/* Featured Image */}
+    <article className="card group h-full flex flex-col">
+      {/* Featured Image - Full width, no cropping on mobile */}
       <Link href={blogHref} className="block">
-        <div className="relative h-auto sm:aspect-[16/10] overflow-hidden rounded-lg bg-gray-100">
+        <div className="rounded-lg overflow-hidden bg-gray-100">
           {post.image ? (
             <img
               src={post.image}
               alt={post.title}
-              className="w-full h-auto sm:h-full sm:object-cover group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-auto max-h-48 sm:max-h-56 object-contain mx-auto group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
-            <div className="w-full aspect-[16/10] bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+            <div className="w-full h-48 bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
               <span className="text-white/80 font-heading text-4xl font-bold">
                 {post.title.charAt(0)}
               </span>

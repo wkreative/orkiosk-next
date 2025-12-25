@@ -44,10 +44,13 @@ const defaultCopy: HeaderCopy = {
 export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isLangOpen, setIsLangOpen] = useState(false)
-  const langRef = useRef<HTMLDivElement>(null)
+  const [isDesktopLangOpen, setIsDesktopLangOpen] = useState(false)
+  const [isMobileLangOpen, setIsMobileLangOpen] = useState(false)
+
   const desktopLangRef = useRef<HTMLDivElement>(null)
+  const mobileLangRef = useRef<HTMLDivElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
+
   const [hash, setHash] = useState('')
   const pathname = usePathname() ?? '/'
   const segments = pathname.split('/').filter(Boolean)
@@ -65,7 +68,6 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
     }
-
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -74,28 +76,44 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
     setHash(window.location.hash)
   }, [pathname])
 
-  // Close dropdowns when clicking outside
+  // Desktop language dropdown - click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (langRef.current && !langRef.current.contains(event.target as Node)) {
-        setIsLangOpen(false)
-      }
       if (desktopLangRef.current && !desktopLangRef.current.contains(event.target as Node)) {
-        setIsLangOpen(false)
+        setIsDesktopLangOpen(false)
       }
+    }
+    if (isDesktopLangOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isDesktopLangOpen])
+
+  // Mobile language dropdown - click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileLangRef.current && !mobileLangRef.current.contains(event.target as Node)) {
+        setIsMobileLangOpen(false)
+      }
+    }
+    if (isMobileLangOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isMobileLangOpen])
+
+  // Mobile menu - click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
         setIsMobileMenuOpen(false)
       }
     }
-
-    if (isLangOpen || isMobileMenuOpen) {
+    if (isMobileMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside)
     }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isLangOpen, isMobileMenuOpen])
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isMobileMenuOpen])
 
   return (
     <header
@@ -133,24 +151,24 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
             <button
               type="button"
               className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors"
-              onClick={() => setIsLangOpen((open) => !open)}
-              aria-expanded={isLangOpen}
+              onClick={() => setIsDesktopLangOpen(!isDesktopLangOpen)}
+              aria-expanded={isDesktopLangOpen}
               aria-haspopup="true"
             >
               <span>{currentLocale.toUpperCase()}</span>
               <ChevronDown className="w-4 h-4" />
             </button>
-            {isLangOpen && (
-              <div className="absolute right-0 top-full mt-2 w-32 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden">
+            {isDesktopLangOpen && (
+              <div className="absolute right-0 top-full mt-2 w-32 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-50">
                 <a
                   href={localeHref('es')}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  className={`block px-4 py-2 text-sm transition-colors ${currentLocale === 'es' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
                 >
                   Español
                 </a>
                 <a
                   href={localeHref('en')}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  className={`block px-4 py-2 text-sm transition-colors ${currentLocale === 'en' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
                 >
                   English
                 </a>
@@ -170,22 +188,22 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
 
           {/* Mobile Language Switcher + Menu Button */}
           <div className="md:hidden flex items-center gap-2">
-            {/* Mobile Language Switcher - Globe icon with popup */}
-            <div className="relative" ref={langRef}>
+            {/* Mobile Language Switcher */}
+            <div className="relative" ref={mobileLangRef}>
               <button
                 type="button"
                 className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                 onClick={() => {
-                  setIsLangOpen((open) => !open)
+                  setIsMobileLangOpen(!isMobileLangOpen)
                   setIsMobileMenuOpen(false)
                 }}
-                aria-expanded={isLangOpen}
+                aria-expanded={isMobileLangOpen}
                 aria-haspopup="true"
                 aria-label="Seleccionar idioma"
               >
                 <Globe className="w-5 h-5 text-gray-900" />
               </button>
-              {isLangOpen && (
+              {isMobileLangOpen && (
                 <div className="absolute right-0 top-full mt-2 w-32 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-50">
                   <a
                     href={localeHref('es')}
@@ -203,14 +221,14 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
               )}
             </div>
 
-            {/* Mobile menu button - Opens popup menu */}
+            {/* Mobile menu button */}
             <div className="relative" ref={mobileMenuRef}>
               <button
                 type="button"
                 className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                 onClick={() => {
                   setIsMobileMenuOpen(!isMobileMenuOpen)
-                  setIsLangOpen(false)
+                  setIsMobileLangOpen(false)
                 }}
                 aria-expanded={isMobileMenuOpen}
                 aria-controls="mobile-menu"
@@ -223,7 +241,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
                 )}
               </button>
 
-              {/* Mobile Navigation - Popup style with rounded borders */}
+              {/* Mobile Navigation Popup */}
               {isMobileMenuOpen && (
                 <div
                   id="mobile-menu"
