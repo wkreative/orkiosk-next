@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { LayoutDashboard, FileText, LogOut, Loader2 } from 'lucide-react';
+import { LayoutDashboard, FileText, LogOut, Loader2, Settings } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
@@ -42,10 +42,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     if (!user) return null;
 
-    const navItems = [
-        { name: 'Dashboard', href: `/${locale}/admin1/dashboard`, icon: LayoutDashboard },
-        { name: 'Posts', href: `/${locale}/admin1/dashboard?tab=posts`, icon: FileText },
-        { name: 'Páginas', href: `/${locale}/admin1/pages`, icon: FileText },
+    { name: 'Dashboard', href: `/${locale}/admin1/dashboard`, icon: LayoutDashboard },
+    { name: 'Posts', href: `/${locale}/admin1/dashboard?tab=posts`, icon: FileText },
+    { name: 'Páginas', href: `/${locale}/admin1/pages`, icon: FileText },
+    { name: 'Settings', href: `/${locale}/admin1/settings`, icon: Settings },
     ];
 
     return (

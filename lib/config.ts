@@ -4,6 +4,11 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 export interface AppSettings {
     openaiApiKey?: string;
     geminiApiKey?: string;
+    // Advanced AI Config
+    systemPrompt?: string;
+    aiModel?: string; // 'gpt-4o', 'gpt-3.5-turbo', 'gemini-pro'
+    maxTokens?: number;
+    temperature?: number;
 }
 
 const SETTINGS_COLLECTION = 'settings';
