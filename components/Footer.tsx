@@ -23,12 +23,12 @@ export type FooterCopy = {
 const defaultCopy: FooterCopy = {
   description:
     'Quioscos de autoservicio inteligentes con software, hardware y anal?tica en tiempo real para optimizar tu negocio.',
-  navigationTitle: 'Navegaci?n',
+  navigationTitle: 'Navegación',
   companyTitle: 'Empresa',
   legalTitle: 'Legal',
   copyright:
     '© {year} Orkiosk. Todos los derechos reservados. Hecho con ❤️ en Puerto Rico.',
-  ariaSocial: 'S?guenos en {name}',
+  ariaSocial: 'Síguenos en {name}',
   nav: {
     main: [
       { name: 'Inicio', href: '/' },
