@@ -9,11 +9,11 @@ const nextConfig = {
     return [
       {
         source: '/admin',
-        destination: 'http://35.209.116.50/admin',
+        destination: 'http://35.209.116.50/',
       },
       {
         source: '/admin/:path*',
-        destination: 'http://35.209.116.50/admin/:path*',
+        destination: 'http://35.209.116.50/:path*',
       },
     ]
   },
