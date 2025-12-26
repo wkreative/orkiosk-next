@@ -98,6 +98,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const additionalKeywords = buildKeywords([translatedPost.title, translatedPost.excerpt])
   keywords = [...keywords, ...additionalKeywords].slice(0, 10) // Max 10 keywords
 
+  // Ensure absolute URL for image
+  const imageUrl = translatedPost.image
+    ? translatedPost.image.startsWith('http')
+      ? translatedPost.image
+      : `https://orkiosk.com${translatedPost.image}`
+    : 'https://orkiosk.com/images/logo.png'
+
   return {
     title,
     description,
@@ -113,11 +120,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       publishedTime: translatedPost.date,
       authors: [translatedPost.author || 'Orkiosk'],
       section: translatedPost.category,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [imageUrl],
     },
   }
 }

@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     description: 'Quioscos de autoservicio inteligentes con software, hardware y analítica en tiempo real.',
     images: [
       {
-        url: '/images/og-image.jpg',
+        url: 'https://orkiosk.com/images/logo.png',
         width: 1200,
         height: 630,
         alt: 'Orkiosk - Quioscos de Autoservicio',
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Orkiosk | Quioscos de Autoservicio Inteligentes',
     description: 'Quioscos de autoservicio inteligentes con software, hardware y analítica en tiempo real.',
-    images: ['/images/og-image.jpg'],
+    images: ['https://orkiosk.com/images/logo.png'],
     creator: '@orkiosk',
   },
   alternates: {
