@@ -41,7 +41,58 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
 
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [generating, setGenerating] = useState(false);
     const [error, setError] = useState('');
+
+    const handleAIGenerate = async (provider: 'openai' | 'gemini') => {
+        const topicInput = document.getElementById('ai-topic-input') as HTMLInputElement;
+        const topic = topicInput?.value;
+
+        if (!topic) {
+            setError('Por favor, ingresa un tema para generar el contenido.');
+            return;
+        }
+
+        setGenerating(true);
+        setError('');
+
+        try {
+            const res = await fetch('/api/ai/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ topic, provider }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Error en la generación');
+            }
+
+            // Autofill form
+            setFormData(prev => ({
+                ...prev,
+                title: data.title,
+                slug: data.title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''),
+                excerpt: data.excerpt,
+                content: data.content,
+                category: data.category,
+                focalKeyword: data.focalKeyword,
+                seoTitle: data.seoTitle,
+                metaDescription: data.metaDescription,
+                titleEn: data.titleEn,
+                excerptEn: data.excerptEn,
+                contentEn: data.contentEn,
+                categoryEn: data.categoryEn,
+            }));
+
+        } catch (err: any) {
+            console.error('AI Gen Error:', err);
+            setError(`Error al generar: ${err.message}`);
+        } finally {
+            setGenerating(false);
+        }
+    };
 
     useEffect(() => {
         if (initialData) {
@@ -132,6 +183,61 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                 <h1 className="text-3xl font-bold font-heading text-gray-900">
                     {isEditing ? 'Editar Entrada' : 'Nueva Entrada'}
                 </h1>
+                {!isEditing && (
+                    <div className="flex items-center space-x-2">
+                        <div className="relative group">
+                            <input
+                                type="text"
+                                placeholder="Tema del artículo..."
+                                id="ai-topic-input"
+                                className="w-64 px-4 py-2 border border-purple-200 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all"
+                            />
+                            <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 p-2 hidden group-focus-within:block z-50">
+                                <p className="text-xs text-gray-500 mb-2 px-2">Generar con:</p>
+                                <button
+                                    type="button"
+                                    onClick={() => handleAIGenerate('openai')}
+                                    disabled={generating}
+                                    className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-purple-50 rounded-md transition-colors flex items-center"
+                                >
+                                    <span className="mr-2">🤖</span> OpenAI (GPT-4)
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleAIGenerate('gemini')}
+                                    disabled={generating}
+                                    className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 rounded-md transition-colors flex items-center"
+                                >
+                                    <span className="mr-2">✨</span> Gemini Pro
+                                </button>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                const topicInput = document.getElementById('ai-topic-input') as HTMLInputElement;
+                                if (topicInput?.value) handleAIGenerate('openai'); // Default to OpenAI
+                            }}
+                            disabled={generating}
+                            className={`px-4 py-2 rounded-lg text-sm font-bold text-white shadow-lg transition-all flex items-center space-x-2 ${generating
+                                ? 'bg-gray-400 cursor-not-allowed'
+                                : 'bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 shadow-purple-200'
+                                }`}
+                        >
+                            {generating ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <span>Escribiendo...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span>✨</span>
+                                    <span>Generar Borrador</span>
+                                </>
+                            )}
+                        </button>
+                    </div>
+                )}
             </div>
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
