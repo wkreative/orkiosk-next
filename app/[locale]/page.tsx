@@ -19,22 +19,58 @@ export async function generateStaticParams() {
 export const revalidate = 60
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const copy = await getTranslations(params.locale)
-  const title = copy.hero.heading
-  const description = copy.hero.subheading
   const url = `https://orkiosk.com/${params.locale}`
+
+  // SEO SUPER OPTIMIZATION
+  // Goal: Dominate "Orkiosk" brand and "Self-Service Kiosk" keywords.
+  const title = params.locale === 'en'
+    ? 'Orkiosk - #1 Smart Self-Service Kiosks & Interactive POS'
+    : 'Orkiosk - Líder en Quioscos de Autoservicio y POS Interactivos'
+
+  const description = params.locale === 'en'
+    ? 'Orkiosk transforms businesses with next-gen self-service kiosks, offering real-time analytics, integrated payments, and robust hardware. The smartest way to reduce wait times.'
+    : 'Orkiosk transforma negocios con quioscos de autoservicio de última generación. Ofrecemos analítica en tiempo real, pagos integrados y hardware robusto. La forma inteligente de reducir filas.'
 
   return {
     title,
     description,
+    keywords: [
+      'Orkiosk',
+      'Quioscos de Autoservicio',
+      'Self-Service Kiosks',
+      'Kioscos Interactivos',
+      'Sistema POS Restaurantes',
+      'Puerto Rico Technology',
+      'Restaurant Automation',
+      'Kioscos de Pago'
+    ],
     alternates: {
       canonical: url,
+      languages: {
+        'es': 'https://orkiosk.com/es',
+        'en': 'https://orkiosk.com/en',
+      },
     },
     openGraph: {
       title,
       description,
       url,
       type: 'website',
+      siteName: 'Orkiosk',
+      images: [
+        {
+          url: 'https://orkiosk.com/images/og-home.jpg', // Ensure this exists or fallback to logo
+          width: 1200,
+          height: 630,
+          alt: 'Orkiosk Intelligent Kiosks',
+        }
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['https://orkiosk.com/images/og-home.jpg'],
     },
   }
 }

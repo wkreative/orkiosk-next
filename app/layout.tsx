@@ -108,8 +108,13 @@ export default function RootLayout({
               name: 'Orkiosk',
               url: 'https://orkiosk.com',
               logo: 'https://orkiosk.com/images/logo.png',
-              description: 'Quioscos de autoservicio inteligentes con software, hardware y analítica en tiempo real.',
+              description: 'Orkiosk es líder en quioscos de autoservicio inteligentes, analítica en tiempo real y sistemas de pago integrados. Transformamos restaurantes y comercios en Puerto Rico y Estados Unidos.',
               foundingDate: '2020',
+              areaServed: [
+                { '@type': 'Country', name: 'Puerto Rico' },
+                { '@type': 'Country', name: 'United States' },
+                { '@type': 'Country', name: 'Dominican Republic' }
+              ],
               address: {
                 '@type': 'PostalAddress',
                 addressCountry: 'PR',
@@ -120,11 +125,12 @@ export default function RootLayout({
                 '@type': 'ContactPoint',
                 telephone: '+1-877-799-3720',
                 contactType: 'customer service',
-                availableLanguage: 'Spanish',
+                availableLanguage: ['Spanish', 'English'],
               },
               sameAs: [
                 'https://www.facebook.com/orkiosk',
                 'https://www.instagram.com/orkiosk',
+                'https://www.linkedin.com/company/orkiosk',
                 'https://www.youtube.com/@orkiosk',
               ],
             }),
