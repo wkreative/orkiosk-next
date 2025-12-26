@@ -141,7 +141,7 @@ export const baseCopy = {
     companyTitle: 'Empresa',
     legalTitle: 'Legal',
     copyright:
-      '(c) {year} Orkiosk. Todos los derechos reservados. Hecho con ❤️ en Puerto Rico.',
+      '© {year} Orkiosk. Todos los derechos reservados. Hecho con ❤️ en Puerto Rico.',
     ariaSocial: 'Síguenos en {name}',
     nav: {
       main: [
@@ -343,7 +343,7 @@ const enCopy: Translations = {
     companyTitle: 'Company',
     legalTitle: 'Legal',
     copyright:
-      '(c) {year} Orkiosk. All rights reserved. Made with ❤️ in Puerto Rico.',
+      '© {year} Orkiosk. All rights reserved. Made with ❤️ in Puerto Rico.',
     ariaSocial: 'Follow us on {name}',
     nav: {
       main: [

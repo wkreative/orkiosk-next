@@ -32,7 +32,8 @@ export default function BlogPostsGrid({
         const cats = new Set<string>();
         posts.forEach((post) => {
             if (post.category) {
-                cats.add(post.category);
+                // Trim whitespace to avoid duplication
+                cats.add(post.category.trim());
             }
         });
         return Array.from(cats).sort();

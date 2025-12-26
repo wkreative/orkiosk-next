@@ -112,7 +112,10 @@ export default async function BlogPage({ params }: PageProps) {
         <section className="py-16 md:py-24 bg-gradient-to-b from-primary-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-gray-900 mb-6">
-              {copy.blogPage.heroTitle}
+              <span className="font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900 }}>
+                Orkiosk
+              </span>
+              {' '}Blog
             </h1>
             <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
               {copy.blogPage.heroSubtitle}
