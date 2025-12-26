@@ -31,6 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const description = page.metaDescription || `${page.title} - Orkiosk`
     const url = `https://orkiosk.com/${params.locale}/${params.slug}`
 
+    const imageUrl = 'https://orkiosk.com/images/logo.png'
+
     return {
         title,
         description,
@@ -43,6 +45,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             description,
             url,
             type: 'website',
+            images: [
+                {
+                    url: imageUrl,
+                    width: 1200,
+                    height: 630,
+                    alt: title,
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: [imageUrl],
         },
     }
 }
