@@ -27,22 +27,35 @@ export default function BlogPostsGrid({
 }: BlogPostsGridProps) {
     const [selectedCategory, setSelectedCategory] = useState<string>('');
 
-    // Extract unique categories
+    // Extract unique categories (case-insensitive deduplication)
     const categories = useMemo(() => {
-        const cats = new Set<string>();
+        const uniqueCategories = new Map<string, string>();
+
         posts.forEach((post) => {
             if (post.category) {
-                // Trim whitespace to avoid duplication
-                cats.add(post.category.trim());
+                const normalized = post.category.trim().toLowerCase();
+                const display = post.category.trim();
+
+                // If not exists, or if current version has uppercase (prefer "Tips" over "tips")
+                if (!uniqueCategories.has(normalized) || (display !== normalized && display[0] === display[0].toUpperCase())) {
+                    uniqueCategories.set(normalized, display);
+                }
             }
         });
-        return Array.from(cats).sort();
+
+        return Array.from(uniqueCategories.values()).sort();
     }, [posts]);
 
-    // Filter posts by category
+    // Filter posts by category (case-insensitive)
     const filteredPosts = useMemo(() => {
         if (!selectedCategory) return posts;
-        return posts.filter((post) => post.category === selectedCategory);
+
+        const selectedNormalized = selectedCategory.trim().toLowerCase();
+
+        return posts.filter((post) => {
+            if (!post.category) return false;
+            return post.category.trim().toLowerCase() === selectedNormalized;
+        });
     }, [posts, selectedCategory]);
 
     return (
