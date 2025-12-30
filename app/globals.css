@@ -77,6 +77,15 @@
   .animate-delay-400 {
     animation-delay: 400ms;
   }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 /* Blog post fade-in animation */

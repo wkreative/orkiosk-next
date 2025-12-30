@@ -49,10 +49,10 @@ export default function BlogPostsGrid({
         <>
             {/* Category Filter */}
             {categories.length > 0 && (
-                <div className="flex flex-wrap justify-center gap-3 mb-12">
+                <div className="flex flex-nowrap overflow-x-auto pb-4 md:pb-0 md:flex-wrap md:justify-center gap-3 mb-8 md:mb-12 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
                     <button
                         onClick={() => setSelectedCategory('')}
-                        className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${!selectedCategory
+                        className={`px-4 py-2 md:px-5 md:py-2.5 whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-300 flex-shrink-0 ${!selectedCategory
                             ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 scale-105'
                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-105'
                             }`}
@@ -63,7 +63,7 @@ export default function BlogPostsGrid({
                         <button
                             key={category}
                             onClick={() => setSelectedCategory(category)}
-                            className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${selectedCategory === category
+                            className={`px-4 py-2 md:px-5 md:py-2.5 whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-300 flex-shrink-0 ${selectedCategory === category
                                 ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 scale-105'
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-105'
                                 }`}

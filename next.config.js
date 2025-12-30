@@ -13,6 +13,21 @@ const nextConfig = {
   },
   // Optimización para SEO
   compress: true,
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.orkiosk.com',
+          },
+        ],
+        destination: 'https://orkiosk.com/:path*',
+        permanent: true,
+      },
+    ]
+  },
   async rewrites() {
     return [
       {
