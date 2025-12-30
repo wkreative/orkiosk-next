@@ -4,12 +4,16 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
+import Youtube from '@tiptap/extension-youtube';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
 import { useEffect, useRef, useState } from 'react';
 import { storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
-    Bold, Italic, List, ListOrdered, Quote, Undo, Redo,
-    Heading1, Heading2, Link as LinkIcon, Image as ImageIcon
+    Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, Quote, Undo, Redo,
+    Heading1, Heading2, Heading3, Link as LinkIcon, Image as ImageIcon, Youtube as YoutubeIcon,
+    AlignLeft, AlignCenter, AlignRight, Type
 } from 'lucide-react';
 
 interface RichTextEditorProps {
@@ -27,10 +31,18 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
             Image,
             Link.configure({
                 openOnClick: false,
+                autolink: true
+            }),
+            Youtube.configure({
+                controls: true,
+            }),
+            Underline,
+            TextAlign.configure({
+                types: ['heading', 'paragraph'],
             }),
         ],
         content: content,
-        immediatelyRender: false, // Fix SSR hydration issue
+        immediatelyRender: false,
         onUpdate: ({ editor }) => {
             onChange(editor.getHTML());
         },
@@ -58,22 +70,12 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
 
         try {
             setUploading(true);
-
-            // Create a unique filename
             const timestamp = Date.now();
             const filename = `blog/${timestamp}-${file.name}`;
             const storageRef = ref(storage, filename);
-
-            // Upload file
             await uploadBytes(storageRef, file);
-
-            // Get download URL
             const url = await getDownloadURL(storageRef);
-
-            // Insert image into editor
             editor.chain().focus().setImage({ src: url }).run();
-
-            // Reset file input
             if (fileInputRef.current) {
                 fileInputRef.current.value = '';
             }
@@ -90,122 +92,215 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
     };
 
     const addLink = () => {
-        const url = window.prompt('URL del enlace:');
+        const previousUrl = editor.getAttributes('link').href;
+
+        // If already linked, ask to remove or edit
+        if (previousUrl) {
+            editor.chain().focus().unsetLink().run();
+            return;
+        }
+
+        const url = window.prompt('URL del enlace:', previousUrl);
+
+        // cancelled
+        if (url === null) {
+            return;
+        }
+
+        // empty
+        if (url === '') {
+            editor.chain().focus().extendMarkRange('link').unsetLink().run();
+            return;
+        }
+
+        // If no text is selected, insert the URL as text and link it
+        if (editor.state.selection.empty) {
+            editor.chain().focus().insertContent(`<a href="${url}">${url}</a>`).run();
+        } else {
+            // update link
+            editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+        }
+    };
+
+    const addYoutube = () => {
+        const url = prompt('Ingrese la URL del video de YouTube:');
         if (url) {
-            editor.chain().focus().setLink({ href: url }).run();
+            editor.commands.setYoutubeVideo({
+                src: url,
+                width: 640,
+                height: 480,
+            });
         }
     };
 
     return (
-        <div className="border border-gray-200 rounded-xl overflow-hidden">
+        <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
             {/* Toolbar */}
-            <div className="bg-gray-50 border-b border-gray-200 p-2 flex flex-wrap gap-1">
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().toggleBold().run()}
-                    className={`p-2 rounded hover:bg-white transition-colors ${editor.isActive('bold') ? 'bg-white shadow-sm' : ''}`}
-                    title="Negrita"
-                >
-                    <Bold className="w-4 h-4" />
-                </button>
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().toggleItalic().run()}
-                    className={`p-2 rounded hover:bg-white transition-colors ${editor.isActive('italic') ? 'bg-white shadow-sm' : ''}`}
-                    title="Cursiva"
-                >
-                    <Italic className="w-4 h-4" />
-                </button>
+            <div className="bg-gray-50 border-b border-gray-200 p-2 flex flex-wrap gap-1 sticky top-0 z-10">
+                {/* Text Style */}
+                <div className="flex bg-white rounded-lg border border-gray-200 p-1 gap-1">
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().toggleBold().run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive('bold') ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Negrita"
+                    >
+                        <Bold className="w-4 h-4" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().toggleItalic().run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive('italic') ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Cursiva"
+                    >
+                        <Italic className="w-4 h-4" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().toggleUnderline().run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive('underline') ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Subrayado"
+                    >
+                        <UnderlineIcon className="w-4 h-4" />
+                    </button>
+                </div>
 
-                <div className="w-px bg-gray-300 mx-1" />
+                {/* Headings */}
+                <div className="flex bg-white rounded-lg border border-gray-200 p-1 gap-1">
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().setParagraph().run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive('paragraph') ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Párrafo Normal"
+                    >
+                        <Type className="w-4 h-4" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive('heading', { level: 1 }) ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Título 1 (Grande)"
+                    >
+                        <Heading1 className="w-4 h-4" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive('heading', { level: 2 }) ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Título 2 (Mediano)"
+                    >
+                        <Heading2 className="w-4 h-4" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive('heading', { level: 3 }) ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Título 3 (Pequeño)"
+                    >
+                        <Heading3 className="w-4 h-4" />
+                    </button>
+                </div>
 
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                    className={`p-2 rounded hover:bg-white transition-colors ${editor.isActive('heading', { level: 1 }) ? 'bg-white shadow-sm' : ''}`}
-                    title="Título 1"
-                >
-                    <Heading1 className="w-4 h-4" />
-                </button>
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                    className={`p-2 rounded hover:bg-white transition-colors ${editor.isActive('heading', { level: 2 }) ? 'bg-white shadow-sm' : ''}`}
-                    title="Título 2"
-                >
-                    <Heading2 className="w-4 h-4" />
-                </button>
+                {/* Alignment */}
+                <div className="flex bg-white rounded-lg border border-gray-200 p-1 gap-1">
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive({ textAlign: 'left' }) ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Alinear Izquierda"
+                    >
+                        <AlignLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive({ textAlign: 'center' }) ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Centrar"
+                    >
+                        <AlignCenter className="w-4 h-4" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive({ textAlign: 'right' }) ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Alinear Derecha"
+                    >
+                        <AlignRight className="w-4 h-4" />
+                    </button>
+                </div>
 
-                <div className="w-px bg-gray-300 mx-1" />
+                {/* Lists & Quotes */}
+                <div className="flex bg-white rounded-lg border border-gray-200 p-1 gap-1">
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().toggleBulletList().run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive('bulletList') ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Lista"
+                    >
+                        <List className="w-4 h-4" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive('orderedList') ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Lista numerada"
+                    >
+                        <ListOrdered className="w-4 h-4" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive('blockquote') ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title="Cita"
+                    >
+                        <Quote className="w-4 h-4" />
+                    </button>
+                </div>
 
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().toggleBulletList().run()}
-                    className={`p-2 rounded hover:bg-white transition-colors ${editor.isActive('bulletList') ? 'bg-white shadow-sm' : ''}`}
-                    title="Lista"
-                >
-                    <List className="w-4 h-4" />
-                </button>
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                    className={`p-2 rounded hover:bg-white transition-colors ${editor.isActive('orderedList') ? 'bg-white shadow-sm' : ''}`}
-                    title="Lista numerada"
-                >
-                    <ListOrdered className="w-4 h-4" />
-                </button>
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                    className={`p-2 rounded hover:bg-white transition-colors ${editor.isActive('blockquote') ? 'bg-white shadow-sm' : ''}`}
-                    title="Cita"
-                >
-                    <Quote className="w-4 h-4" />
-                </button>
+                {/* Media */}
+                <div className="flex bg-white rounded-lg border border-gray-200 p-1 gap-1">
+                    <button
+                        type="button"
+                        onClick={addLink}
+                        className={`p-1.5 rounded hover:bg-gray-100 transition-colors ${editor.isActive('link') ? 'bg-primary-50 text-primary-600' : 'text-gray-600'}`}
+                        title={editor.isActive('link') ? "Quitar enlace" : "Agregar enlace"}
+                    >
+                        <LinkIcon className="w-4 h-4" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={addImage}
+                        className="p-1.5 rounded hover:bg-gray-100 transition-colors text-gray-600"
+                        title="Agregar imagen"
+                    >
+                        <ImageIcon className="w-4 h-4" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={addYoutube}
+                        className="p-1.5 rounded hover:bg-gray-100 transition-colors text-gray-600"
+                        title="Insertar Video de Youtube"
+                    >
+                        <YoutubeIcon className="w-4 h-4" />
+                    </button>
+                </div>
 
-                <div className="w-px bg-gray-300 mx-1" />
-
-                <button
-                    type="button"
-                    onClick={addLink}
-                    className={`p-2 rounded hover:bg-white transition-colors ${editor.isActive('link') ? 'bg-white shadow-sm' : ''}`}
-                    title="Agregar enlace"
-                >
-                    <LinkIcon className="w-4 h-4" />
-                </button>
-                <button
-                    type="button"
-                    onClick={addImage}
-                    className="p-2 rounded hover:bg-white transition-colors"
-                    title="Agregar imagen"
-                >
-                    <ImageIcon className="w-4 h-4" />
-                </button>
-
-                <div className="w-px bg-gray-300 mx-1" />
-
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().undo().run()}
-                    disabled={!editor.can().undo()}
-                    className="p-2 rounded hover:bg-white transition-colors disabled:opacity-30"
-                    title="Deshacer"
-                >
-                    <Undo className="w-4 h-4" />
-                </button>
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().redo().run()}
-                    disabled={!editor.can().redo()}
-                    className="p-2 rounded hover:bg-white transition-colors disabled:opacity-30"
-                    title="Rehacer"
-                >
-                    <Redo className="w-4 h-4" />
-                </button>
+                {/* History */}
+                <div className="flex bg-white rounded-lg border border-gray-200 p-1 gap-1 ml-auto">
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().undo().run()}
+                        disabled={!editor.can().undo()}
+                        className="p-1.5 rounded hover:bg-gray-100 transition-colors disabled:opacity-30 text-gray-600"
+                        title="Deshacer"
+                    >
+                        <Undo className="w-4 h-4" />
+                    </button>
+                </div>
             </div>
 
             {/* Editor */}
-            <EditorContent editor={editor} className="bg-white" />
+            <EditorContent editor={editor} className="bg-white min-h-[500px]" />
 
             {/* Hidden file input for image upload */}
             <input
@@ -215,6 +310,12 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
                 onChange={handleImageUpload}
                 className="hidden"
             />
+
+            {uploading && (
+                <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-20">
+                    <span className="text-primary-600 font-medium">Subiendo imagen...</span>
+                </div>
+            )}
         </div>
     );
 }
