@@ -42,10 +42,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     if (!user) return null;
 
-    { name: 'Dashboard', href: `/${locale}/admin1/dashboard`, icon: LayoutDashboard },
-    { name: 'Posts', href: `/${locale}/admin1/dashboard?tab=posts`, icon: FileText },
-    { name: 'Páginas', href: `/${locale}/admin1/pages`, icon: FileText },
-    { name: 'Settings', href: `/${locale}/admin1/settings`, icon: Settings },
+    const navItems = [
+        { name: 'Dashboard', href: `/${locale}/admin1/dashboard`, icon: LayoutDashboard },
+        { name: 'Posts', href: `/${locale}/admin1/dashboard?tab=posts`, icon: FileText },
+        { name: 'Páginas', href: `/${locale}/admin1/pages`, icon: FileText },
+        { name: 'Settings', href: `/${locale}/admin1/settings`, icon: Settings },
     ];
 
     return (
