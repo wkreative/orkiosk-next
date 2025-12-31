@@ -148,37 +148,3 @@ div[data-youtube-video] iframe,
   height: 100% !important;
   border: 0;
 }
-
-/* Fallback for raw iframes without wrapper */
-.prose iframe[src*="youtube.com"] {
-  width: 100% !important;
-  max-width: 100% !important;
-  aspect-ratio: 16/9;
-  height: auto !important;
-  border-radius: 0.75rem;
-}
-
-/* Mobile-specific force override */
-@media (max-width: 768px) {
-  .prose iframe {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    border-radius: 0 !important;
-  }
-
-  div[data-youtube-video] {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    border-radius: 0 !important;
-  }
-}
