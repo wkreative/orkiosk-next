@@ -104,7 +104,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? translatedPost.image.startsWith('http')
       ? translatedPost.image
       : `https://orkiosk.com${translatedPost.image}`
-    : 'https://orkiosk.com/images/logo.png'
+    : 'https://orkiosk.com/og-default.png'
 
   return {
     title,
