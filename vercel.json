@@ -9,6 +9,23 @@
             "destination": "http://35.209.116.50/:path*"
         }
     ],
+    "redirects": [
+        {
+            "source": "/admin1",
+            "destination": "/es/admin1/dashboard",
+            "permanent": false
+        },
+        {
+            "source": "/admin1/login",
+            "destination": "/es/admin1/login",
+            "permanent": false
+        },
+        {
+            "source": "/admin1/:path*",
+            "destination": "/es/admin1/:path*",
+            "permanent": false
+        }
+    ],
     "cleanUrls": true,
     "trailingSlash": false
 }
