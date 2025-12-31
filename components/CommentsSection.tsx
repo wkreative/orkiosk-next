@@ -73,7 +73,6 @@ export default function CommentsSection({ slug, enableComments = true }: Comment
             <div className="border-t border-gray-200 pt-12">
                 <h2 className="text-2xl font-heading font-bold text-gray-900 mb-8">
                     Comentarios ({comments.length})
-                    Comentarios ({comments.length})
                     {!isEnabled && <span className="text-red-500 text-sm ml-4">(Deshabilitados)</span>}
                 </h2>
 
