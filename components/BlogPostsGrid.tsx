@@ -18,13 +18,21 @@ interface BlogPostsGridProps {
     blogPrefix: string;
     allLabel?: string;
     readMoreLabel?: string;
+    searchPlaceholder?: string;
+    noResultsSearch?: string;
+    noResultsCategory?: string;
+    viewAllLabel?: string;
 }
 
 export default function BlogPostsGrid({
     posts,
     blogPrefix,
     allLabel = 'Todos',
-    readMoreLabel = 'Leer más'
+    readMoreLabel = 'Leer más',
+    searchPlaceholder = 'Buscar artículos...',
+    noResultsSearch = 'No se encontraron artículos con esa búsqueda.',
+    noResultsCategory = 'No hay artículos en esta categoría.',
+    viewAllLabel = 'Ver todos los artículos'
 }: BlogPostsGridProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -99,7 +107,7 @@ export default function BlogPostsGrid({
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
                         type="text"
-                        placeholder="Buscar artículos..."
+                        placeholder={searchPlaceholder}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
@@ -204,7 +212,7 @@ export default function BlogPostsGrid({
             {filteredPosts.length === 0 && (
                 <div className="text-center py-12">
                     <p className="text-gray-500 text-lg">
-                        {searchQuery ? 'No se encontraron artículos con esa búsqueda.' : 'No hay artículos en esta categoría.'}
+                        {searchQuery ? noResultsSearch : noResultsCategory}
                     </p>
                     <button
                         onClick={() => {
@@ -214,7 +222,7 @@ export default function BlogPostsGrid({
                         }}
                         className="mt-4 text-primary-600 font-semibold hover:text-primary-700"
                     >
-                        Ver todos los artículos
+                        {viewAllLabel}
                     </button>
                 </div>
             )}

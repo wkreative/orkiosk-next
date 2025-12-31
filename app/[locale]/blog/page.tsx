@@ -134,6 +134,10 @@ export default async function BlogPage({ params }: PageProps) {
                   blogPrefix={blogPrefix}
                   allLabel={params.locale === 'en' ? 'All' : 'Todos'}
                   readMoreLabel={copy.blogPage.readMore}
+                  searchPlaceholder={copy.blogPage.searchPlaceholder}
+                  noResultsSearch={copy.blogPage.noResultsSearch}
+                  noResultsCategory={copy.blogPage.noResultsCategory}
+                  viewAllLabel={copy.blogPage.viewAllLabel}
                 />
               </Suspense>
             ) : (

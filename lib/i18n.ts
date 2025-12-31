@@ -95,6 +95,10 @@ export const baseCopy = {
     ctaBody:
       'Suscríbete a nuestro boletín y recibe las últimas noticias sobre tecnología y optimización de negocios.',
     ctaButton: 'Contáctanos',
+    searchPlaceholder: 'Buscar artículos...',
+    noResultsSearch: 'No se encontraron artículos con esa búsqueda.',
+    noResultsCategory: 'No hay artículos en esta categoría.',
+    viewAllLabel: 'Ver todos los artículos',
   },
   blogPost: {
     sharePrompt: '¿Te gustó este artículo? Compártelo con otros',
@@ -103,6 +107,9 @@ export const baseCopy = {
     shareLinkedIn: 'Compartir en LinkedIn',
     shareWhatsapp: 'Compartir en WhatsApp',
     recommendedTitle: 'Publicaciones recomendadas',
+    commentsLabel: 'Comentarios',
+    loadingComments: 'Cargando comentarios...',
+    emptyComments: 'Sé el primero en comentar.',
   },
   contact: {
     label: 'Contacto',
@@ -297,6 +304,10 @@ const enCopy: Translations = {
     ctaTitle: 'Ready to transform your business?',
     ctaBody: 'Schedule a personalized demo and discover how our kiosks can optimize your operations.',
     ctaButton: 'Schedule Demo',
+    searchPlaceholder: 'Search articles...',
+    noResultsSearch: 'No articles found with that search.',
+    noResultsCategory: 'No articles in this category.',
+    viewAllLabel: 'View all articles',
   },
   blogPost: {
     sharePrompt: 'Did you like this article? Share it with others',
@@ -305,6 +316,9 @@ const enCopy: Translations = {
     shareLinkedIn: 'Share on LinkedIn',
     shareWhatsapp: 'Share on WhatsApp',
     recommendedTitle: 'Recommended posts',
+    commentsLabel: 'Comments',
+    loadingComments: 'Loading comments...',
+    emptyComments: 'Be the first to comment.',
   },
   contact: {
     label: 'Contact',

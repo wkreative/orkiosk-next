@@ -7,14 +7,25 @@ import { auth } from '@/lib/firebase'
 import { onAuthStateChanged, User } from 'firebase/auth'
 import { Trash2 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { es, enUS } from 'date-fns/locale'
 
 interface CommentsSectionProps {
     slug: string
     enableComments?: boolean
+    locale?: string
+    commentsLabel?: string
+    loadingLabel?: string
+    emptyLabel?: string
 }
 
-export default function CommentsSection({ slug, enableComments = true }: CommentsSectionProps) {
+export default function CommentsSection({
+    slug,
+    enableComments = true,
+    locale = 'es',
+    commentsLabel = 'Comentarios',
+    loadingLabel = 'Cargando comentarios...',
+    emptyLabel = 'Sé el primero en comentar.'
+}: CommentsSectionProps) {
     const [comments, setComments] = useState<Comment[]>([])
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(true)
@@ -72,16 +83,16 @@ export default function CommentsSection({ slug, enableComments = true }: Comment
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-24">
             <div className="border-t border-gray-200 pt-12">
                 <h2 className="text-2xl font-heading font-bold text-gray-900 mb-8">
-                    Comentarios ({comments.length})
+                    {commentsLabel} ({comments.length})
                 </h2>
 
                 {isEnabled && <CommentForm slug={slug} onCommentAdded={fetchComments} />}
 
                 <div className="space-y-6">
                     {isLoading ? (
-                        <p className="text-gray-500 animate-pulse">Cargando comentarios...</p>
+                        <p className="text-gray-500 animate-pulse">{loadingLabel}</p>
                     ) : comments.length === 0 ? (
-                        <p className="text-gray-500 italic">Sé el primero en comentar.</p>
+                        <p className="text-gray-500 italic">{emptyLabel}</p>
                     ) : (
                         comments.map((comment) => (
                             <div key={comment.id} className="bg-gray-50 rounded-2xl p-6 relative group">
@@ -90,7 +101,7 @@ export default function CommentsSection({ slug, enableComments = true }: Comment
                                     <div className="flex items-center gap-3">
                                         <span className="text-xs text-gray-500">
                                             {comment.createdAt?.seconds
-                                                ? formatDistanceToNow(new Date(comment.createdAt.seconds * 1000), { addSuffix: true, locale: es })
+                                                ? formatDistanceToNow(new Date(comment.createdAt.seconds * 1000), { addSuffix: true, locale: locale === 'en' ? enUS : es })
                                                 : 'Recién'}
                                         </span>
                                         {user && (
