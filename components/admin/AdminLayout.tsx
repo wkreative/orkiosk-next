@@ -50,56 +50,70 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50 flex">
-            {/* Sidebar */}
-            <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
-                <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+        <div className="min-h-screen bg-gray-50 flex font-sans">
+            {/* Sidebar - Fixed/Sticky */}
+            <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col h-screen sticky top-0 shadow-sm z-30">
+                <div className="p-6 border-b border-gray-100 flex items-center justify-between shrink-0 h-16">
                     <Link href={`/${locale}/admin1/dashboard`} className="flex flex-col">
-                        <span className="text-xl font-black text-gray-900" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900 }}>Orkiosk</span>
-                        <span className="text-xs text-gray-500" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 400 }}>Web Admin Panel</span>
+                        <span className="text-xl font-black text-gray-900 tracking-tight" style={{ fontFamily: 'Montserrat, sans-serif' }}>Orkiosk</span>
+                        <span className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">Admin Panel</span>
                     </Link>
-                    <button
-                        onClick={handleLogout}
-                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                        title="Cerrar Sesión"
-                    >
-                        <LogOut className="w-5 h-5" />
-                    </button>
                 </div>
-                <nav className="flex-1 p-4 space-y-2">
+
+                <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+                    <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-2">Menu</p>
                     {navItems.map((item) => {
                         const Icon = item.icon;
-                        const isActive = pathname === item.href;
+                        const isActive = pathname === item.href || (pathname.includes(item.href) && item.href !== `/${locale}/admin1/dashboard`);
                         return (
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                                    ? 'bg-primary-50 text-primary-600'
-                                    : 'text-gray-600 hover:bg-gray-100'
+                                className={`flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-all duration-200 group ${isActive
+                                    ? 'bg-primary-50 text-primary-700 font-semibold shadow-sm ring-1 ring-primary-100'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                     }`}
                             >
-                                <Icon className="w-5 h-5" />
-                                <span className="font-medium">{item.name}</span>
+                                <Icon className={`w-5 h-5 transition-colors ${isActive ? 'text-primary-600' : 'text-gray-400 group-hover:text-gray-600'}`} />
+                                <span>{item.name}</span>
                             </Link>
                         );
                     })}
                 </nav>
+
+                <div className="p-4 border-t border-gray-100 bg-gray-50/50 shrink-0">
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center space-x-3 text-gray-600 hover:text-red-600 hover:bg-red-50 w-full px-4 py-2.5 rounded-lg transition-all duration-200 group"
+                    >
+                        <LogOut className="w-5 h-5 text-gray-400 group-hover:text-red-500 transition-colors" />
+                        <span className="font-medium">Cerrar Sesión</span>
+                    </button>
+                    {user && (
+                        <div className="mt-3 px-4 pt-3 border-t border-gray-200/60">
+                            <p className="text-xs text-gray-400">Logueado como</p>
+                            <p className="text-sm font-semibold text-gray-700 truncate">{user.email}</p>
+                        </div>
+                    )}
+                </div>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-                <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 md:hidden">
+            <main className="flex-1 flex flex-col min-w-0">
+                {/* Mobile Header */}
+                <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 sticky top-0 z-20 md:hidden shadow-sm">
                     <Link href={`/${locale}/admin1/dashboard`} className="flex flex-col">
-                        <span className="text-lg font-black text-gray-900" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900 }}>Orkiosk</span>
-                        <span className="text-xs text-gray-500" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 400 }}>Web Admin Panel</span>
+                        <span className="text-lg font-black text-gray-900" style={{ fontFamily: 'Montserrat, sans-serif' }}>Orkiosk</span>
                     </Link>
-                    <button onClick={handleLogout} className="text-red-600">
-                        <LogOut className="w-6 h-6" />
+                    <button onClick={handleLogout} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md">
+                        <LogOut className="w-5 h-5" />
                     </button>
                 </header>
-                <div className="flex-1 overflow-auto p-4 md:p-8">
-                    {children}
+
+                <div className="flex-1 p-4 md:p-8 overflow-y-auto scroll-smooth">
+                    <div className="max-w-7xl mx-auto">
+                        {children}
+                    </div>
                 </div>
             </main>
         </div>
