@@ -308,10 +308,6 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         </header>
 
-
-
-        // Inside BlogPostPage function, before Share Section:
-
         {/* Content */}
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="prose prose-lg max-w-none">

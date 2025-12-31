@@ -17,11 +17,21 @@ export default function CommentsSection({ slug }: CommentsSectionProps) {
     const [comments, setComments] = useState<Comment[]>([])
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(true)
+    const [isEnabled, setIsEnabled] = useState(true)
 
     const fetchComments = async () => {
         try {
-            const data = await getComments(slug)
-            setComments(data)
+            // Import dynamically to avoid SSR issues if used elsewhere, though this is client comp
+            const { getSettings } = await import('@/lib/settings')
+            const settings = await getSettings()
+            setIsEnabled(settings.enableComments)
+
+            // If disabled and not admin (optimization), we could skip. But we check admin later.
+            // Always fetch comments to show count effectively or just fetch logic
+            if (settings.enableComments) {
+                const data = await getComments(slug)
+                setComments(data)
+            }
         } catch (error) {
             console.error('Error fetching comments:', error)
         } finally {
@@ -52,14 +62,19 @@ export default function CommentsSection({ slug }: CommentsSectionProps) {
         }
     }
 
+    if (!isEnabled && !user) {
+        return null;
+    }
+
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-24">
             <div className="border-t border-gray-200 pt-12">
                 <h2 className="text-2xl font-heading font-bold text-gray-900 mb-8">
                     Comentarios ({comments.length})
+                    {!isEnabled && <span className="text-red-500 text-sm ml-4">(Deshabilitados al público)</span>}
                 </h2>
 
-                <CommentForm slug={slug} onCommentAdded={fetchComments} />
+                {isEnabled && <CommentForm slug={slug} onCommentAdded={fetchComments} />}
 
                 <div className="space-y-6">
                     {isLoading ? (
