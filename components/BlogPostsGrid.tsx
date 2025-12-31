@@ -2,7 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ArrowRight, Search } from 'lucide-react';
 
 interface Post {
     slug: string;
@@ -25,7 +26,12 @@ export default function BlogPostsGrid({
     allLabel = 'Todos',
     readMoreLabel = 'Leer más'
 }: BlogPostsGridProps) {
-    const [selectedCategory, setSelectedCategory] = useState<string>('');
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const categoryFromUrl = searchParams.get('category') || '';
+
+    const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl);
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     // Extract unique categories (case-insensitive deduplication)
     const categories = useMemo(() => {
@@ -46,25 +52,66 @@ export default function BlogPostsGrid({
         return Array.from(uniqueCategories.values()).sort();
     }, [posts]);
 
-    // Filter posts by category (case-insensitive)
+    // Filter posts by category and search query
     const filteredPosts = useMemo(() => {
-        if (!selectedCategory) return posts;
+        let result = posts;
 
-        const selectedNormalized = selectedCategory.trim().toLowerCase();
+        // Filter by category
+        if (selectedCategory) {
+            const selectedNormalized = selectedCategory.trim().toLowerCase();
+            result = result.filter((post) => {
+                if (!post.category) return false;
+                return post.category.trim().toLowerCase() === selectedNormalized;
+            });
+        }
 
-        return posts.filter((post) => {
-            if (!post.category) return false;
-            return post.category.trim().toLowerCase() === selectedNormalized;
-        });
-    }, [posts, selectedCategory]);
+        // Filter by search query
+        if (searchQuery.trim()) {
+            const query = searchQuery.toLowerCase();
+            result = result.filter((post) => {
+                return (
+                    post.title.toLowerCase().includes(query) ||
+                    post.excerpt.toLowerCase().includes(query) ||
+                    post.category?.toLowerCase().includes(query)
+                );
+            });
+        }
+
+        return result;
+    }, [posts, selectedCategory, searchQuery]);
+
+    const handleCategoryClick = (category: string) => {
+        setSelectedCategory(category);
+        const params = new URLSearchParams(searchParams.toString());
+        if (category) {
+            params.set('category', category);
+        } else {
+            params.delete('category');
+        }
+        router.push(`${blogPrefix}?${params.toString()}`, { scroll: false });
+    };
 
     return (
         <>
+            {/* Search Bar */}
+            <div className="mb-8">
+                <div className="relative max-w-2xl mx-auto">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                        type="text"
+                        placeholder="Buscar artículos..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
+                    />
+                </div>
+            </div>
+
             {/* Category Filter */}
             {categories.length > 0 && (
                 <div className="flex flex-nowrap overflow-x-auto pb-4 md:pb-0 md:flex-wrap md:justify-center gap-3 mb-8 md:mb-12 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
                     <button
-                        onClick={() => setSelectedCategory('')}
+                        onClick={() => handleCategoryClick('')}
                         className={`px-4 py-2 md:px-5 md:py-2.5 whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-300 flex-shrink-0 ${!selectedCategory
                             ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 scale-105'
                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-105'
@@ -75,7 +122,7 @@ export default function BlogPostsGrid({
                     {categories.map((category) => (
                         <button
                             key={category}
-                            onClick={() => setSelectedCategory(category)}
+                            onClick={() => handleCategoryClick(category)}
                             className={`px-4 py-2 md:px-5 md:py-2.5 whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-300 flex-shrink-0 ${selectedCategory === category
                                 ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 scale-105'
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-105'
@@ -119,7 +166,12 @@ export default function BlogPostsGrid({
                             {/* Category Badge */}
                             {post.category && (
                                 <div className="mb-3">
-                                    <span className="text-primary-600 font-medium text-sm">{post.category}</span>
+                                    <button
+                                        onClick={() => handleCategoryClick(post.category!)}
+                                        className="text-primary-600 font-medium text-sm hover:text-primary-700 hover:underline transition-colors"
+                                    >
+                                        {post.category}
+                                    </button>
                                 </div>
                             )}
 
@@ -151,9 +203,15 @@ export default function BlogPostsGrid({
             {/* No results */}
             {filteredPosts.length === 0 && (
                 <div className="text-center py-12">
-                    <p className="text-gray-500 text-lg">No hay artículos en esta categoría.</p>
+                    <p className="text-gray-500 text-lg">
+                        {searchQuery ? 'No se encontraron artículos con esa búsqueda.' : 'No hay artículos en esta categoría.'}
+                    </p>
                     <button
-                        onClick={() => setSelectedCategory('')}
+                        onClick={() => {
+                            setSelectedCategory('');
+                            setSearchQuery('');
+                            handleCategoryClick('');
+                        }}
                         className="mt-4 text-primary-600 font-semibold hover:text-primary-700"
                     >
                         Ver todos los artículos
