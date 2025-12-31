@@ -5,6 +5,7 @@ import { Calendar, ArrowLeft } from 'lucide-react'
 import { getPostBySlug, getAllPosts } from '@/lib/posts'
 import { getTranslations, locales, type Locale, translatePost } from '@/lib/i18n'
 import SiteShell from '@/components/SiteShell'
+import CommentsSection from '@/components/CommentsSection'
 
 interface Props {
   params: { locale: Locale; slug: string }
@@ -307,12 +308,19 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         </header>
 
+
+
+        // Inside BlogPostPage function, before Share Section:
+
         {/* Content */}
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="prose prose-lg max-w-none">
             {renderContent(translated.content)}
           </div>
         </div>
+
+        {/* Comments Section */}
+        <CommentsSection slug={translated.slug} />
 
         {/* Share Section */}
         <section className="py-12 bg-gray-50 border-t border-gray-200">
