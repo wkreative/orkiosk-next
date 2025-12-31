@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { getAllPosts } from '@/lib/posts'
 import { getTranslations, locales, type Locale, translatePost } from '@/lib/i18n'
 import SiteShell from '@/components/SiteShell'
@@ -127,12 +128,14 @@ export default async function BlogPage({ params }: PageProps) {
         <section className="py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {translatedPosts.length > 0 ? (
-              <BlogPostsGrid
-                posts={translatedPosts}
-                blogPrefix={blogPrefix}
-                allLabel={params.locale === 'en' ? 'All' : 'Todos'}
-                readMoreLabel={copy.blogPage.readMore}
-              />
+              <Suspense fallback={<div className="text-center py-12"><p className="text-gray-500">Cargando...</p></div>}>
+                <BlogPostsGrid
+                  posts={translatedPosts}
+                  blogPrefix={blogPrefix}
+                  allLabel={params.locale === 'en' ? 'All' : 'Todos'}
+                  readMoreLabel={copy.blogPage.readMore}
+                />
+              </Suspense>
             ) : (
               <div className="text-center py-16">
                 <p className="text-gray-500 text-lg mb-4">
