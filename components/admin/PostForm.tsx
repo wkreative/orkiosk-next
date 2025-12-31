@@ -32,6 +32,7 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
         metaDescription: '',
         seoTitle: '',
         noIndex: false,
+        enableComments: true,
         // English translations
         titleEn: '',
         excerptEn: '',
@@ -80,6 +81,8 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                 focalKeyword: data.focalKeyword,
                 seoTitle: data.seoTitle,
                 metaDescription: data.metaDescription,
+                noIndex: false, // Default for new generated content
+                enableComments: true, // Default for new generated content
                 titleEn: data.titleEn,
                 excerptEn: data.excerptEn,
                 contentEn: data.contentEn,
@@ -459,6 +462,21 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                         <div>
                                             <span className="text-sm font-medium text-gray-700">No indexar en buscadores</span>
                                             <p className="text-xs text-gray-400">Evita que esta entrada aparezca en Google</p>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div className="pt-4 border-t border-gray-100">
+                                    <label className="flex items-center space-x-3 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={formData.enableComments}
+                                            onChange={(e) => setFormData({ ...formData, enableComments: e.target.checked })}
+                                            className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                                        />
+                                        <div>
+                                            <span className="text-sm font-medium text-gray-700">Habilitar comentarios</span>
+                                            <p className="text-xs text-gray-400">Permite que los usuarios comenten en esta entrada</p>
                                         </div>
                                     </label>
                                 </div>

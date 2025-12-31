@@ -11,24 +11,26 @@ import { es } from 'date-fns/locale'
 
 interface CommentsSectionProps {
     slug: string
+    enableComments?: boolean
 }
 
-export default function CommentsSection({ slug }: CommentsSectionProps) {
+export default function CommentsSection({ slug, enableComments = true }: CommentsSectionProps) {
     const [comments, setComments] = useState<Comment[]>([])
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(true)
-    const [isEnabled, setIsEnabled] = useState(true)
+    const [isGlobalEnabled, setIsGlobalEnabled] = useState(true)
+
+    const isEnabled = isGlobalEnabled && enableComments
 
     const fetchComments = async () => {
         try {
             // Import dynamically to avoid SSR issues if used elsewhere, though this is client comp
             const { getSettings } = await import('@/lib/settings')
             const settings = await getSettings()
-            setIsEnabled(settings.enableComments)
+            setIsGlobalEnabled(settings.enableComments)
 
-            // If disabled and not admin (optimization), we could skip. But we check admin later.
-            // Always fetch comments to show count effectively or just fetch logic
-            if (settings.enableComments) {
+            // Even if disabled, we might want to fetch comments for admin view or if we decide to show them but disable posting
+            if (settings.enableComments && enableComments) {
                 const data = await getComments(slug)
                 setComments(data)
             }
@@ -71,7 +73,8 @@ export default function CommentsSection({ slug }: CommentsSectionProps) {
             <div className="border-t border-gray-200 pt-12">
                 <h2 className="text-2xl font-heading font-bold text-gray-900 mb-8">
                     Comentarios ({comments.length})
-                    {!isEnabled && <span className="text-red-500 text-sm ml-4">(Deshabilitados al público)</span>}
+                    Comentarios ({comments.length})
+                    {!isEnabled && <span className="text-red-500 text-sm ml-4">(Deshabilitados)</span>}
                 </h2>
 
                 {isEnabled && <CommentForm slug={slug} onCommentAdded={fetchComments} />}

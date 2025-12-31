@@ -19,6 +19,7 @@ export interface Post {
   excerptEn?: string;
   contentEn?: string;
   categoryEn?: string;
+  enableComments?: boolean;
 }
 
 const BUILD_TIMEOUT = 5000; // 5 seconds timeout for build-time data fetching
@@ -58,6 +59,7 @@ export async function getAllPosts(): Promise<Post[]> {
           excerptEn: data.excerptEn,
           contentEn: data.contentEn,
           categoryEn: data.categoryEn,
+          enableComments: data.enableComments !== false,
         } as Post;
       });
     });
@@ -95,6 +97,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
         excerptEn: data.excerptEn,
         contentEn: data.contentEn,
         categoryEn: data.categoryEn,
+        enableComments: data.enableComments !== false,
       } as Post;
     });
 
@@ -128,6 +131,7 @@ export async function getRecentPosts(count: number = 3): Promise<Post[]> {
           excerptEn: data.excerptEn,
           contentEn: data.contentEn,
           categoryEn: data.categoryEn,
+          enableComments: data.enableComments !== false, // Default to true if missing
         } as Post;
       });
     });

@@ -316,7 +316,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
 
         {/* Comments Section */}
-        <CommentsSection slug={translated.slug} />
+        <CommentsSection slug={translated.slug} enableComments={translated.enableComments} />
 
         {/* Share Section */}
         <section className="py-12 bg-gray-50 border-t border-gray-200">

@@ -386,6 +386,7 @@ export async function translatePost(post: Post, locale: Locale, includeContent: 
     excerpt: post.excerptEn || post.excerpt,
     category: post.categoryEn || post.category,
     content: includeContent ? (post.contentEn || post.content) : post.content,
+    enableComments: post.enableComments,
   }
 }
 
