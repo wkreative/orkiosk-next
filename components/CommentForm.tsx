@@ -5,9 +5,12 @@ import { useState } from 'react'
 interface CommentFormProps {
     slug: string
     onCommentAdded: () => void
+    parentId?: string | null
+    parentAuthor?: string
+    onCancel?: () => void
 }
 
-export default function CommentForm({ slug, onCommentAdded }: CommentFormProps) {
+export default function CommentForm({ slug, onCommentAdded, parentId, parentAuthor, onCancel }: CommentFormProps) {
     const [author, setAuthor] = useState('')
     const [content, setContent] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -22,7 +25,7 @@ export default function CommentForm({ slug, onCommentAdded }: CommentFormProps) 
             // Dynamic import to avoid SSR issues with Firebase
             const { addComment } = await import('@/lib/comments')
 
-            await addComment(slug, author, content)
+            await addComment(slug, author, content, parentId || null)
 
             setAuthor('')
             setContent('')
@@ -37,7 +40,25 @@ export default function CommentForm({ slug, onCommentAdded }: CommentFormProps) 
 
     return (
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Deja un comentario</h3>
+            {parentAuthor && (
+                <div className="mb-4 flex items-center justify-between bg-primary-50 p-3 rounded-lg">
+                    <p className="text-sm text-primary-700">
+                        <span className="font-semibold">Respondiendo a {parentAuthor}</span>
+                    </p>
+                    {onCancel && (
+                        <button
+                            type="button"
+                            onClick={onCancel}
+                            className="text-primary-600 hover:text-primary-800 text-sm font-medium"
+                        >
+                            Cancelar
+                        </button>
+                    )}
+                </div>
+            )}
+            <h3 className="text-xl font-bold text-gray-900 mb-4">
+                {parentId ? 'Responder' : 'Deja un comentario'}
+            </h3>
 
             {error && (
                 <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
