@@ -138,7 +138,8 @@ export default function CommentsSection({
         )
     }
 
-    if (!isEnabled && !user) {
+    // Hide completely when disabled
+    if (!isEnabled) {
         return null;
     }
 
@@ -150,15 +151,13 @@ export default function CommentsSection({
                 </h2>
 
                 <div className="comment-form-container">
-                    {isEnabled && (
-                        <CommentForm
-                            slug={slug}
-                            onCommentAdded={handleCommentAdded}
-                            parentId={replyingTo?.id}
-                            parentAuthor={replyingTo?.author}
-                            onCancel={replyingTo ? handleCancelReply : undefined}
-                        />
-                    )}
+                    <CommentForm
+                        slug={slug}
+                        onCommentAdded={handleCommentAdded}
+                        parentId={replyingTo?.id}
+                        parentAuthor={replyingTo?.author}
+                        onCancel={replyingTo ? handleCancelReply : undefined}
+                    />
                 </div>
 
                 <div className="space-y-6">
