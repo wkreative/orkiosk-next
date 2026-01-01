@@ -1,12 +1,14 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import type { Metadata } from 'next'
 import Barcode from 'react-barcode'
 import { Download, Copy, Check, HelpCircle } from 'lucide-react'
+import SiteShell from '@/components/SiteShell'
+import { getTranslations, type Locale } from '@/lib/i18n'
 
 interface PageProps {
-    params: { locale: string }
+    params: { locale: Locale }
 }
 
 export default function BarcodePage({ params }: PageProps) {
@@ -14,11 +16,16 @@ export default function BarcodePage({ params }: PageProps) {
     const [format, setFormat] = useState('CODE128')
     const [copied, setCopied] = useState(false)
     const [showTutorial, setShowTutorial] = useState(true)
+    const [copy, setCopy] = useState<any>(null)
     const barcodeRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        getTranslations(params.locale).then(setCopy)
+    }, [params.locale])
 
     const isSpanish = params.locale === 'es'
 
-    const copy = isSpanish ? {
+    const pageCopy = isSpanish ? {
         title: 'Generador de Códigos de Barras',
         subtitle: 'Crea códigos de barras profesionales de forma instantánea',
         inputLabel: 'Texto del Código de Barras',
@@ -107,150 +114,156 @@ export default function BarcodePage({ params }: PageProps) {
         setTimeout(() => setCopied(false), 2000)
     }
 
+    if (!copy) {
+        return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+    }
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
-            <div className="max-w-4xl mx-auto">
-                {/* Header */}
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">
-                        {copy.title}
-                    </h1>
-                    <p className="text-gray-600 text-lg">
-                        {copy.subtitle}
-                    </p>
-                </div>
-
-                {/* Tutorial (Collapsible) */}
-                {showTutorial && (
-                    <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6 mb-8 relative">
-                        <button
-                            onClick={() => setShowTutorial(false)}
-                            className="absolute top-4 right-4 text-blue-600 hover:text-blue-800"
-                        >
-                            ✕
-                        </button>
-                        <div className="flex items-start gap-3 mb-4">
-                            <HelpCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
-                            <h3 className="text-xl font-bold text-blue-900">{copy.tutorialTitle}</h3>
-                        </div>
-                        <ol className="space-y-3 ml-2">
-                            {copy.tutorialSteps.map((step, i) => (
-                                <li key={i} className="flex gap-3">
-                                    <span className="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                                        {i + 1}
-                                    </span>
-                                    <span className="text-blue-800 pt-0.5">{step}</span>
-                                </li>
-                            ))}
-                        </ol>
+        <SiteShell locale={params.locale} copy={copy}>
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+                <div className="max-w-4xl mx-auto">
+                    {/* Header */}
+                    <div className="text-center mb-12">
+                        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">
+                            {pageCopy.title}
+                        </h1>
+                        <p className="text-gray-600 text-lg">
+                            {pageCopy.subtitle}
+                        </p>
                     </div>
-                )}
 
-                {/* Main Card */}
-                <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12">
-                    {/* Show Tutorial Button (if hidden) */}
-                    {!showTutorial && (
-                        <button
-                            onClick={() => setShowTutorial(true)}
-                            className="mb-6 flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
-                        >
-                            <HelpCircle className="w-5 h-5" />
-                            {isSpanish ? 'Ver Tutorial' : 'Show Tutorial'}
-                        </button>
+                    {/* Tutorial (Collapsible) */}
+                    {showTutorial && (
+                        <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6 mb-8 relative">
+                            <button
+                                onClick={() => setShowTutorial(false)}
+                                className="absolute top-4 right-4 text-blue-600 hover:text-blue-800"
+                            >
+                                ✕
+                            </button>
+                            <div className="flex items-start gap-3 mb-4">
+                                <HelpCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+                                <h3 className="text-xl font-bold text-blue-900">{pageCopy.tutorialTitle}</h3>
+                            </div>
+                            <ol className="space-y-3 ml-2">
+                                {pageCopy.tutorialSteps.map((step: string, i: number) => (
+                                    <li key={i} className="flex gap-3">
+                                        <span className="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                                            {i + 1}
+                                        </span>
+                                        <span className="text-blue-800 pt-0.5">{step}</span>
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
                     )}
 
-                    {/* Input Section */}
-                    <div className="space-y-6 mb-8">
-                        <div>
-                            <label htmlFor="barcode-text" className="block text-sm font-semibold text-gray-700 mb-2">
-                                {copy.inputLabel}
-                            </label>
-                            <div className="relative">
-                                <input
-                                    id="barcode-text"
-                                    type="text"
-                                    value={text}
-                                    onChange={(e) => setText(e.target.value)}
-                                    className="w-full px-4 py-3 pr-12 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all text-lg"
-                                    placeholder={copy.inputPlaceholder}
-                                />
-                                <button
-                                    onClick={copyToClipboard}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                                    title={isSpanish ? 'Copiar texto' : 'Copy text'}
+                    {/* Main Card */}
+                    <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12">
+                        {/* Show Tutorial Button (if hidden) */}
+                        {!showTutorial && (
+                            <button
+                                onClick={() => setShowTutorial(true)}
+                                className="mb-6 flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
+                            >
+                                <HelpCircle className="w-5 h-5" />
+                                {isSpanish ? 'Ver Tutorial' : 'Show Tutorial'}
+                            </button>
+                        )}
+
+                        {/* Input Section */}
+                        <div className="space-y-6 mb-8">
+                            <div>
+                                <label htmlFor="barcode-text" className="block text-sm font-semibold text-gray-700 mb-2">
+                                    {pageCopy.inputLabel}
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        id="barcode-text"
+                                        type="text"
+                                        value={text}
+                                        onChange={(e) => setText(e.target.value)}
+                                        className="w-full px-4 py-3 pr-12 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all text-lg"
+                                        placeholder={pageCopy.inputPlaceholder}
+                                    />
+                                    <button
+                                        onClick={copyToClipboard}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                                        title={isSpanish ? 'Copiar texto' : 'Copy text'}
+                                    >
+                                        {copied ? (
+                                            <Check className="w-5 h-5 text-green-600" />
+                                        ) : (
+                                            <Copy className="w-5 h-5 text-gray-400" />
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label htmlFor="format" className="block text-sm font-semibold text-gray-700 mb-2">
+                                    {pageCopy.formatLabel}
+                                </label>
+                                <select
+                                    id="format"
+                                    value={format}
+                                    onChange={(e) => setFormat(e.target.value)}
+                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all text-lg bg-white"
                                 >
-                                    {copied ? (
-                                        <Check className="w-5 h-5 text-green-600" />
-                                    ) : (
-                                        <Copy className="w-5 h-5 text-gray-400" />
-                                    )}
-                                </button>
+                                    {formats.map(f => (
+                                        <option key={f} value={f}>{f}</option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
 
-                        <div>
-                            <label htmlFor="format" className="block text-sm font-semibold text-gray-700 mb-2">
-                                {copy.formatLabel}
-                            </label>
-                            <select
-                                id="format"
-                                value={format}
-                                onChange={(e) => setFormat(e.target.value)}
-                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all text-lg bg-white"
-                            >
-                                {formats.map(f => (
-                                    <option key={f} value={f}>{f}</option>
-                                ))}
-                            </select>
+                        {/* Preview Section */}
+                        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 mb-6">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+                                {pageCopy.previewTitle}
+                            </h3>
+                            <div ref={barcodeRef} className="flex justify-center items-center min-h-[150px] bg-white rounded-xl p-6">
+                                {text && (
+                                    <Barcode
+                                        value={text}
+                                        format={format as any}
+                                        displayValue={true}
+                                        fontSize={16}
+                                        height={80}
+                                        margin={10}
+                                    />
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Download Button */}
+                        <button
+                            onClick={downloadBarcode}
+                            disabled={!text}
+                            className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold py-4 px-6 rounded-xl hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-lg"
+                        >
+                            <Download className="w-5 h-5" />
+                            {pageCopy.downloadButton}
+                        </button>
+
+                        {/* Info */}
+                        <div className="mt-8 p-6 bg-blue-50 rounded-xl border border-blue-100">
+                            <h4 className="font-semibold text-blue-900 mb-2">{pageCopy.infoTitle}</h4>
+                            <ul className="text-sm text-blue-700 space-y-1">
+                                <li><strong>CODE128:</strong> {pageCopy.formats.CODE128}</li>
+                                <li><strong>EAN13:</strong> {pageCopy.formats.EAN13}</li>
+                                <li><strong>UPC:</strong> {pageCopy.formats.UPC}</li>
+                                <li><strong>CODE39:</strong> {pageCopy.formats.CODE39}</li>
+                            </ul>
                         </div>
                     </div>
 
-                    {/* Preview Section */}
-                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 mb-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
-                            {copy.previewTitle}
-                        </h3>
-                        <div ref={barcodeRef} className="flex justify-center items-center min-h-[150px] bg-white rounded-xl p-6">
-                            {text && (
-                                <Barcode
-                                    value={text}
-                                    format={format as any}
-                                    displayValue={true}
-                                    fontSize={16}
-                                    height={80}
-                                    margin={10}
-                                />
-                            )}
-                        </div>
+                    {/* Footer */}
+                    <div className="text-center mt-8 text-gray-500 text-sm">
+                        <p>{pageCopy.footer} <span className="font-semibold text-primary-600">Orkiosk</span></p>
                     </div>
-
-                    {/* Download Button */}
-                    <button
-                        onClick={downloadBarcode}
-                        disabled={!text}
-                        className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold py-4 px-6 rounded-xl hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-lg"
-                    >
-                        <Download className="w-5 h-5" />
-                        {copy.downloadButton}
-                    </button>
-
-                    {/* Info */}
-                    <div className="mt-8 p-6 bg-blue-50 rounded-xl border border-blue-100">
-                        <h4 className="font-semibold text-blue-900 mb-2">{copy.infoTitle}</h4>
-                        <ul className="text-sm text-blue-700 space-y-1">
-                            <li><strong>CODE128:</strong> {copy.formats.CODE128}</li>
-                            <li><strong>EAN13:</strong> {copy.formats.EAN13}</li>
-                            <li><strong>UPC:</strong> {copy.formats.UPC}</li>
-                            <li><strong>CODE39:</strong> {copy.formats.CODE39}</li>
-                        </ul>
-                    </div>
-                </div>
-
-                {/* Footer */}
-                <div className="text-center mt-8 text-gray-500 text-sm">
-                    <p>{copy.footer} <span className="font-semibold text-primary-600">Orkiosk</span></p>
                 </div>
             </div>
-        </div>
+        </SiteShell>
     )
 }
