@@ -121,7 +121,7 @@ export default function BarcodePage() {
                             {text && (
                                 <Barcode
                                     value={text}
-                                    format={format}
+                                    format={format as any}
                                     displayValue={true}
                                     fontSize={16}
                                     height={80}
