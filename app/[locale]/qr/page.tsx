@@ -1,14 +1,16 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import type { Metadata } from 'next'
 import { QRCodeSVG } from 'qrcode.react'
 import { Download, Copy, Check, Link as LinkIcon, Wifi, Mail, Smartphone, HelpCircle } from 'lucide-react'
+import SiteShell from '@/components/SiteShell'
+import { getTranslations, type Locale } from '@/lib/i18n'
 
 type QRType = 'text' | 'url' | 'email' | 'wifi' | 'phone'
 
 interface PageProps {
-    params: { locale: string }
+    params: { locale: Locale }
 }
 
 export default function QRPage({ params }: PageProps) {
@@ -18,11 +20,16 @@ export default function QRPage({ params }: PageProps) {
     const [errorLevel, setErrorLevel] = useState<'L' | 'M' | 'Q' | 'H'>('M')
     const [copied, setCopied] = useState(false)
     const [showTutorial, setShowTutorial] = useState(true)
+    const [copy, setCopy] = useState<any>(null)
     const qrRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        getTranslations(params.locale).then(setCopy)
+    }, [params.locale])
 
     const isSpanish = params.locale === 'es'
 
-    const copy = isSpanish ? {
+    const pageCopy = isSpanish ? {
         title: 'Generador de Códigos QR',
         subtitle: 'Crea códigos QR personalizados para cualquier propósito',
         typeLabel: 'Tipo de Contenido',
@@ -142,196 +149,202 @@ export default function QRPage({ params }: PageProps) {
         }
     }
 
+    if (!copy) {
+        return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+    }
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 py-12 px-4">
-            <div className="max-w-4xl mx-auto">
-                {/* Header */}
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                        {copy.title}
-                    </h1>
-                    <p className="text-gray-600 text-lg">
-                        {copy.subtitle}
-                    </p>
-                </div>
-
-                {/* Tutorial (Collapsible) */}
-                {showTutorial && (
-                    <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl p-6 mb-8 relative">
-                        <button
-                            onClick={() => setShowTutorial(false)}
-                            className="absolute top-4 right-4 text-purple-600 hover:text-purple-800"
-                        >
-                            ✕
-                        </button>
-                        <div className="flex items-start gap-3 mb-4">
-                            <HelpCircle className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
-                            <h3 className="text-xl font-bold text-purple-900">{copy.tutorialTitle}</h3>
-                        </div>
-                        <ol className="space-y-3 ml-2">
-                            {copy.tutorialSteps.map((step, i) => (
-                                <li key={i} className="flex gap-3">
-                                    <span className="flex-shrink-0 w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                                        {i + 1}
-                                    </span>
-                                    <span className="text-purple-800 pt-0.5">{step}</span>
-                                </li>
-                            ))}
-                        </ol>
+        <SiteShell locale={params.locale} copy={copy}>
+            <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 py-12 px-4">
+                <div className="max-w-4xl mx-auto">
+                    {/* Header */}
+                    <div className="text-center mb-12">
+                        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                            {copy.title}
+                        </h1>
+                        <p className="text-gray-600 text-lg">
+                            {copy.subtitle}
+                        </p>
                     </div>
-                )}
 
-                {/* Main Card */}
-                <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12">
-                    {/* Show Tutorial Button */}
-                    {!showTutorial && (
-                        <button
-                            onClick={() => setShowTutorial(true)}
-                            className="mb-6 flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium"
-                        >
-                            <HelpCircle className="w-5 h-5" />
-                            {isSpanish ? 'Ver Tutorial' : 'Show Tutorial'}
-                        </button>
+                    {/* Tutorial (Collapsible) */}
+                    {showTutorial && (
+                        <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl p-6 mb-8 relative">
+                            <button
+                                onClick={() => setShowTutorial(false)}
+                                className="absolute top-4 right-4 text-purple-600 hover:text-purple-800"
+                            >
+                                ✕
+                            </button>
+                            <div className="flex items-start gap-3 mb-4">
+                                <HelpCircle className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
+                                <h3 className="text-xl font-bold text-purple-900">{copy.tutorialTitle}</h3>
+                            </div>
+                            <ol className="space-y-3 ml-2">
+                                {copy.tutorialSteps.map((step, i) => (
+                                    <li key={i} className="flex gap-3">
+                                        <span className="flex-shrink-0 w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                                            {i + 1}
+                                        </span>
+                                        <span className="text-purple-800 pt-0.5">{step}</span>
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
                     )}
 
-                    {/* QR Type Selector */}
-                    <div className="mb-8">
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
-                            {copy.typeLabel}
-                        </label>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            {qrTypes.map(type => {
-                                const Icon = type.icon
-                                return (
-                                    <button
-                                        key={type.id}
-                                        onClick={() => setQRType(type.id as QRType)}
-                                        className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${qrType === type.id
-                                            ? 'border-purple-500 bg-purple-50 text-purple-700'
-                                            : 'border-gray-200 hover:border-gray-300 text-gray-600'
-                                            }`}
-                                    >
-                                        <Icon className="w-6 h-6" />
-                                        <span className="text-sm font-medium">{copy.types[type.id as keyof typeof copy.types]}</span>
-                                    </button>
-                                )
-                            })}
-                        </div>
-                    </div>
+                    {/* Main Card */}
+                    <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12">
+                        {/* Show Tutorial Button */}
+                        {!showTutorial && (
+                            <button
+                                onClick={() => setShowTutorial(true)}
+                                className="mb-6 flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium"
+                            >
+                                <HelpCircle className="w-5 h-5" />
+                                {isSpanish ? 'Ver Tutorial' : 'Show Tutorial'}
+                            </button>
+                        )}
 
-                    {/* Input Section */}
-                    <div className="space-y-6 mb-8">
-                        <div>
-                            <label htmlFor="qr-value" className="block text-sm font-semibold text-gray-700 mb-2">
-                                {copy.contentLabel}
+                        {/* QR Type Selector */}
+                        <div className="mb-8">
+                            <label className="block text-sm font-semibold text-gray-700 mb-3">
+                                {copy.typeLabel}
                             </label>
-                            <div className="relative">
-                                <textarea
-                                    id="qr-value"
-                                    value={value}
-                                    onChange={(e) => setValue(e.target.value)}
-                                    rows={3}
-                                    className="w-full px-4 py-3 pr-12 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all resize-none"
-                                    placeholder={getPlaceholder()}
-                                />
-                                <button
-                                    onClick={copyToClipboard}
-                                    className="absolute right-3 top-3 p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                                    title={isSpanish ? 'Copiar texto' : 'Copy text'}
-                                >
-                                    {copied ? (
-                                        <Check className="w-5 h-5 text-green-600" />
-                                    ) : (
-                                        <Copy className="w-5 h-5 text-gray-400" />
-                                    )}
-                                </button>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                {qrTypes.map(type => {
+                                    const Icon = type.icon
+                                    return (
+                                        <button
+                                            key={type.id}
+                                            onClick={() => setQRType(type.id as QRType)}
+                                            className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${qrType === type.id
+                                                ? 'border-purple-500 bg-purple-50 text-purple-700'
+                                                : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                                                }`}
+                                        >
+                                            <Icon className="w-6 h-6" />
+                                            <span className="text-sm font-medium">{copy.types[type.id as keyof typeof copy.types]}</span>
+                                        </button>
+                                    )
+                                })}
                             </div>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-6">
+                        {/* Input Section */}
+                        <div className="space-y-6 mb-8">
                             <div>
-                                <label htmlFor="size" className="block text-sm font-semibold text-gray-700 mb-2">
-                                    {copy.sizeLabel}
+                                <label htmlFor="qr-value" className="block text-sm font-semibold text-gray-700 mb-2">
+                                    {copy.contentLabel}
                                 </label>
-                                <input
-                                    id="size"
-                                    type="range"
-                                    min="128"
-                                    max="512"
-                                    step="32"
-                                    value={size}
-                                    onChange={(e) => setSize(Number(e.target.value))}
-                                    className="w-full"
-                                />
-                                <div className="text-center text-sm text-gray-600 mt-1">{size}px</div>
+                                <div className="relative">
+                                    <textarea
+                                        id="qr-value"
+                                        value={value}
+                                        onChange={(e) => setValue(e.target.value)}
+                                        rows={3}
+                                        className="w-full px-4 py-3 pr-12 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all resize-none"
+                                        placeholder={getPlaceholder()}
+                                    />
+                                    <button
+                                        onClick={copyToClipboard}
+                                        className="absolute right-3 top-3 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                                        title={isSpanish ? 'Copiar texto' : 'Copy text'}
+                                    >
+                                        {copied ? (
+                                            <Check className="w-5 h-5 text-green-600" />
+                                        ) : (
+                                            <Copy className="w-5 h-5 text-gray-400" />
+                                        )}
+                                    </button>
+                                </div>
                             </div>
 
-                            <div>
-                                <label htmlFor="error-level" className="block text-sm font-semibold text-gray-700 mb-2">
-                                    {copy.errorLabel}
-                                </label>
-                                <select
-                                    id="error-level"
-                                    value={errorLevel}
-                                    onChange={(e) => setErrorLevel(e.target.value as 'L' | 'M' | 'Q' | 'H')}
-                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all bg-white"
-                                >
-                                    {Object.entries(copy.errorLevels).map(([key, val]) => (
-                                        <option key={key} value={key}>
-                                            {val.label}
-                                        </option>
-                                    ))}
-                                </select>
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label htmlFor="size" className="block text-sm font-semibold text-gray-700 mb-2">
+                                        {copy.sizeLabel}
+                                    </label>
+                                    <input
+                                        id="size"
+                                        type="range"
+                                        min="128"
+                                        max="512"
+                                        step="32"
+                                        value={size}
+                                        onChange={(e) => setSize(Number(e.target.value))}
+                                        className="w-full"
+                                    />
+                                    <div className="text-center text-sm text-gray-600 mt-1">{size}px</div>
+                                </div>
+
+                                <div>
+                                    <label htmlFor="error-level" className="block text-sm font-semibold text-gray-700 mb-2">
+                                        {copy.errorLabel}
+                                    </label>
+                                    <select
+                                        id="error-level"
+                                        value={errorLevel}
+                                        onChange={(e) => setErrorLevel(e.target.value as 'L' | 'M' | 'Q' | 'H')}
+                                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all bg-white"
+                                    >
+                                        {Object.entries(copy.errorLevels).map(([key, val]) => (
+                                            <option key={key} value={key}>
+                                                {val.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
+                        </div>
+
+                        {/* Preview Section */}
+                        <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 mb-6">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+                                {copy.previewTitle}
+                            </h3>
+                            <div ref={qrRef} className="flex justify-center items-center bg-white rounded-xl p-8">
+                                {value && (
+                                    <QRCodeSVG
+                                        value={value}
+                                        size={size}
+                                        level={errorLevel}
+                                        includeMargin={true}
+                                    />
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Download Button */}
+                        <button
+                            onClick={downloadQR}
+                            disabled={!value}
+                            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-lg"
+                        >
+                            <Download className="w-5 h-5" />
+                            {copy.downloadButton}
+                        </button>
+
+                        {/* Info */}
+                        <div className="mt-8 p-6 bg-purple-50 rounded-xl border border-purple-100">
+                            <h4 className="font-semibold text-purple-900 mb-2">{copy.infoTitle}</h4>
+                            <p className="text-sm text-purple-700 mb-3">{copy.infoText}</p>
+                            <ul className="text-sm text-purple-700 space-y-1">
+                                {Object.entries(copy.errorLevels).map(([key, val]) => (
+                                    <li key={key}>
+                                        <strong>{val.label}:</strong> {val.desc}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
 
-                    {/* Preview Section */}
-                    <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 mb-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
-                            {copy.previewTitle}
-                        </h3>
-                        <div ref={qrRef} className="flex justify-center items-center bg-white rounded-xl p-8">
-                            {value && (
-                                <QRCodeSVG
-                                    value={value}
-                                    size={size}
-                                    level={errorLevel}
-                                    includeMargin={true}
-                                />
-                            )}
-                        </div>
+                    {/* Footer */}
+                    <div className="text-center mt-8 text-gray-500 text-sm">
+                        <p>{copy.footer} <span className="font-semibold text-purple-600">Orkiosk</span></p>
                     </div>
-
-                    {/* Download Button */}
-                    <button
-                        onClick={downloadQR}
-                        disabled={!value}
-                        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-lg"
-                    >
-                        <Download className="w-5 h-5" />
-                        {copy.downloadButton}
-                    </button>
-
-                    {/* Info */}
-                    <div className="mt-8 p-6 bg-purple-50 rounded-xl border border-purple-100">
-                        <h4 className="font-semibold text-purple-900 mb-2">{copy.infoTitle}</h4>
-                        <p className="text-sm text-purple-700 mb-3">{copy.infoText}</p>
-                        <ul className="text-sm text-purple-700 space-y-1">
-                            {Object.entries(copy.errorLevels).map(([key, val]) => (
-                                <li key={key}>
-                                    <strong>{val.label}:</strong> {val.desc}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-
-                {/* Footer */}
-                <div className="text-center mt-8 text-gray-500 text-sm">
-                    <p>{copy.footer} <span className="font-semibold text-purple-600">Orkiosk</span></p>
                 </div>
             </div>
-        </div>
+        </SiteShell>
     )
 }
