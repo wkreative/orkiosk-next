@@ -212,7 +212,7 @@ export default function QRPage({ params }: PageProps) {
                                             }`}
                                     >
                                         <Icon className="w-6 h-6" />
-                                        <span className="text-sm font-medium">{copy.types[type.id]}</span>
+                                        <span className="text-sm font-medium">{copy.types[type.id as keyof typeof copy.types]}</span>
                                     </button>
                                 )
                             })}
