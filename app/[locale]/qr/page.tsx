@@ -209,7 +209,7 @@ export default function QRPage({ params }: PageProps) {
                         {/* QR Type Selector */}
                         <div className="mb-8">
                             <label className="block text-sm font-semibold text-gray-700 mb-3">
-                                {copy.typeLabel}
+                                {pageCopy.typeLabel}
                             </label>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                 {qrTypes.map(type => {
@@ -224,7 +224,7 @@ export default function QRPage({ params }: PageProps) {
                                                 }`}
                                         >
                                             <Icon className="w-6 h-6" />
-                                            <span className="text-sm font-medium">{copy.types[type.id as keyof typeof copy.types]}</span>
+                                            <span className="text-sm font-medium">{pageCopy.types[type.id as keyof typeof pageCopy.types]}</span>
                                         </button>
                                     )
                                 })}
@@ -235,7 +235,7 @@ export default function QRPage({ params }: PageProps) {
                         <div className="space-y-6 mb-8">
                             <div>
                                 <label htmlFor="qr-value" className="block text-sm font-semibold text-gray-700 mb-2">
-                                    {copy.contentLabel}
+                                    {pageCopy.contentLabel}
                                 </label>
                                 <div className="relative">
                                     <textarea
@@ -263,7 +263,7 @@ export default function QRPage({ params }: PageProps) {
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div>
                                     <label htmlFor="size" className="block text-sm font-semibold text-gray-700 mb-2">
-                                        {copy.sizeLabel}
+                                        {pageCopy.sizeLabel}
                                     </label>
                                     <input
                                         id="size"
@@ -280,7 +280,7 @@ export default function QRPage({ params }: PageProps) {
 
                                 <div>
                                     <label htmlFor="error-level" className="block text-sm font-semibold text-gray-700 mb-2">
-                                        {copy.errorLabel}
+                                        {pageCopy.errorLabel}
                                     </label>
                                     <select
                                         id="error-level"
@@ -301,7 +301,7 @@ export default function QRPage({ params }: PageProps) {
                         {/* Preview Section */}
                         <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 mb-6">
                             <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
-                                {copy.previewTitle}
+                                {pageCopy.previewTitle}
                             </h3>
                             <div ref={qrRef} className="flex justify-center items-center bg-white rounded-xl p-8">
                                 {value && (
@@ -322,7 +322,7 @@ export default function QRPage({ params }: PageProps) {
                             className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-lg"
                         >
                             <Download className="w-5 h-5" />
-                            {copy.downloadButton}
+                            {pageCopy.downloadButton}
                         </button>
 
                         {/* Info */}
@@ -341,7 +341,7 @@ export default function QRPage({ params }: PageProps) {
 
                     {/* Footer */}
                     <div className="text-center mt-8 text-gray-500 text-sm">
-                        <p>{copy.footer} <span className="font-semibold text-purple-600">Orkiosk</span></p>
+                        <p>{pageCopy.footer} <span className="font-semibold text-purple-600">Orkiosk</span></p>
                     </div>
                 </div>
             </div>
