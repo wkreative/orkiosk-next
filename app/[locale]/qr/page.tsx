@@ -155,15 +155,15 @@ export default function QRPage({ params }: PageProps) {
 
     return (
         <SiteShell locale={params.locale} copy={copy}>
-            <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 py-12 px-4">
+            <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 pt-24 pb-12 px-4">
                 <div className="max-w-4xl mx-auto">
                     {/* Header */}
                     <div className="text-center mb-12">
                         <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                            {copy.title}
+                            {pageCopy.title}
                         </h1>
                         <p className="text-gray-600 text-lg">
-                            {copy.subtitle}
+                            {pageCopy.subtitle}
                         </p>
                     </div>
 
@@ -178,10 +178,10 @@ export default function QRPage({ params }: PageProps) {
                             </button>
                             <div className="flex items-start gap-3 mb-4">
                                 <HelpCircle className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
-                                <h3 className="text-xl font-bold text-purple-900">{copy.tutorialTitle}</h3>
+                                <h3 className="text-xl font-bold text-purple-900">{pageCopy.tutorialTitle}</h3>
                             </div>
                             <ol className="space-y-3 ml-2">
-                                {copy.tutorialSteps.map((step, i) => (
+                                {pageCopy.tutorialSteps.map((step: string, i: number) => (
                                     <li key={i} className="flex gap-3">
                                         <span className="flex-shrink-0 w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
                                             {i + 1}
@@ -288,7 +288,7 @@ export default function QRPage({ params }: PageProps) {
                                         onChange={(e) => setErrorLevel(e.target.value as 'L' | 'M' | 'Q' | 'H')}
                                         className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all bg-white"
                                     >
-                                        {Object.entries(copy.errorLevels).map(([key, val]) => (
+                                        {Object.entries(pageCopy.errorLevels).map(([key, val]: [string, any]) => (
                                             <option key={key} value={key}>
                                                 {val.label}
                                             </option>
@@ -327,10 +327,10 @@ export default function QRPage({ params }: PageProps) {
 
                         {/* Info */}
                         <div className="mt-8 p-6 bg-purple-50 rounded-xl border border-purple-100">
-                            <h4 className="font-semibold text-purple-900 mb-2">{copy.infoTitle}</h4>
-                            <p className="text-sm text-purple-700 mb-3">{copy.infoText}</p>
+                            <h4 className="font-semibold text-purple-900 mb-2">{pageCopy.infoTitle}</h4>
+                            <p className="text-sm text-purple-700 mb-3">{pageCopy.infoText}</p>
                             <ul className="text-sm text-purple-700 space-y-1">
-                                {Object.entries(copy.errorLevels).map(([key, val]) => (
+                                {Object.entries(pageCopy.errorLevels).map(([key, val]: [string, any]) => (
                                     <li key={key}>
                                         <strong>{val.label}:</strong> {val.desc}
                                     </li>

@@ -120,7 +120,7 @@ export default function BarcodePage({ params }: PageProps) {
 
     return (
         <SiteShell locale={params.locale} copy={copy}>
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 pt-24 pb-12 px-4">
                 <div className="max-w-4xl mx-auto">
                     {/* Header */}
                     <div className="text-center mb-12">
