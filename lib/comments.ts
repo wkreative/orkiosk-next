@@ -20,6 +20,7 @@ export interface Comment {
     createdAt: Timestamp | null;
     parentId?: string | null;
     replies?: Comment[];
+    postTitle?: string; // For admin display
 }
 
 const COMMENTS_COLLECTION = 'comments';
@@ -97,6 +98,7 @@ export async function getComments(slug: string): Promise<Comment[]> {
     });
 }
 
+
 /**
  * Deletes a comment by ID.
  * Security rules should ensure only admins can perform this.
@@ -106,3 +108,71 @@ export async function deleteComment(commentId: string): Promise<void> {
 
     await deleteDoc(doc(db, COMMENTS_COLLECTION, commentId));
 }
+
+/**
+ * Gets all comments from all posts for admin management.
+ * Returns flat array ordered by newest first.
+ */
+export async function getAllComments(): Promise<Comment[]> {
+    const q = query(
+        collection(db, COMMENTS_COLLECTION),
+        orderBy('createdAt', 'desc')
+    );
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+    } as Comment));
+}
+
+/**
+ * Adds an admin reply to an existing comment.
+ * The reply will be marked with a special admin author name.
+ */
+export async function addAdminReply(
+    commentId: string,
+    content: string,
+    adminEmail: string
+): Promise<string> {
+    const parentComment = await getDocs(
+        query(collection(db, COMMENTS_COLLECTION), where('__name__', '==', commentId))
+    );
+
+    if (parentComment.empty) {
+        throw new Error('Parent comment not found');
+    }
+
+    const parent = parentComment.docs[0].data();
+
+    return await addComment(
+        parent.slug,
+        `Admin (${adminEmail})`,
+        content,
+        commentId
+    );
+}
+
+/**
+ * Deletes a comment and all its nested replies recursively.
+ */
+export async function deleteCommentAndReplies(commentId: string): Promise<void> {
+    if (!commentId) return;
+
+    // Find all replies to this comment
+    const repliesQuery = query(
+        collection(db, COMMENTS_COLLECTION),
+        where('parentId', '==', commentId)
+    );
+
+    const repliesSnapshot = await getDocs(repliesQuery);
+
+    // Recursively delete all replies first
+    for (const replyDoc of repliesSnapshot.docs) {
+        await deleteCommentAndReplies(replyDoc.id);
+    }
+
+    // Then delete the comment itself
+    await deleteDoc(doc(db, COMMENTS_COLLECTION, commentId));
+}
+
