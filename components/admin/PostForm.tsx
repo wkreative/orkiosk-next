@@ -154,22 +154,48 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
         setError('');
 
         try {
+            // Check if user is authenticated
+            const { auth } = await import('@/lib/firebase');
+            if (!auth.currentUser) {
+                setError('Error: Debes estar autenticado para publicar. Por favor, inicia sesión nuevamente.');
+                setLoading(false);
+                return;
+            }
+
             const postData = {
                 ...formData,
                 lastUpdated: serverTimestamp(),
             };
 
+            console.log('Guardando post:', { slug: formData.slug, title: formData.title });
+
             if (isEditing && initialData.id) {
                 await updateDoc(doc(db, 'posts', initialData.id), postData);
+                console.log('Post actualizado exitosamente');
             } else {
                 // Check if slug is unique (simplified)
                 await setDoc(doc(db, 'posts', formData.slug), postData);
+                console.log('Post creado exitosamente');
             }
 
+            // Show success message before redirect
+            alert(isEditing ? '✅ Post actualizado exitosamente!' : '✅ Post publicado exitosamente!');
             router.push(`/${locale}/admin1/dashboard`);
         } catch (err: any) {
             console.error('Error saving post:', err);
-            setError('Error al guardar el post. Revisa los permisos o la conexión.');
+
+            // More specific error messages
+            let errorMessage = 'Error al guardar el post.';
+
+            if (err.code === 'permission-denied') {
+                errorMessage = '❌ Error de permisos: Asegúrate de estar autenticado correctamente.';
+            } else if (err.code === 'unavailable') {
+                errorMessage = '❌ Error de conexión: Verifica tu conexión a internet.';
+            } else if (err.message) {
+                errorMessage = `❌ Error: ${err.message}`;
+            }
+
+            setError(errorMessage);
             setLoading(false);
         }
     };

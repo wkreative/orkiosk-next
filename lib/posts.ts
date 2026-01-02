@@ -22,7 +22,7 @@ export interface Post {
   enableComments?: boolean;
 }
 
-const BUILD_TIMEOUT = 5000; // 5 seconds timeout for build-time data fetching
+const BUILD_TIMEOUT = 30000; // 30 seconds timeout for data fetching (increased to prevent 404 errors)
 
 async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, fallback: T): Promise<T> {
   const timeoutPromise = new Promise<T>((resolve) => {
@@ -73,14 +73,17 @@ export async function getAllPosts(): Promise<Post[]> {
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
+    console.log(`[getPostBySlug] Fetching post with slug: "${slug}"`);
     const q = query(collection(db, 'posts'), where('slug', '==', slug), limit(1));
 
     const fetchPromise = getDocs(q).then(querySnapshot => {
       if (querySnapshot.empty) {
+        console.log(`[getPostBySlug] No post found with slug: "${slug}"`);
         return null;
       }
 
       const data = querySnapshot.docs[0].data();
+      console.log(`[getPostBySlug] Found post: "${data.title}"`);
       return {
         slug: data.slug || querySnapshot.docs[0].id,
         title: data.title || 'Sin título',
@@ -103,7 +106,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
     return await withTimeout(fetchPromise, BUILD_TIMEOUT, null);
   } catch (error) {
-    console.error(`Error getting post by slug ${slug}:`, error);
+    console.error(`[getPostBySlug] Error getting post by slug ${slug}:`, error);
     return null;
   }
 }
