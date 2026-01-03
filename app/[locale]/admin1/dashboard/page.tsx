@@ -13,15 +13,8 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const params = useParams();
-    const searchParams = useSearchParams();
     const locale = params?.locale || 'es';
-    const tabFromUrl = searchParams.get('tab');
-    const [activeTab, setActiveTab] = useState<'overview' | 'posts'>(tabFromUrl === 'posts' ? 'posts' : 'overview');
-
-    // Update tab when URL changes
-    useEffect(() => {
-        setActiveTab(tabFromUrl === 'posts' ? 'posts' : 'overview');
-    }, [tabFromUrl]);
+    const [activeTab, setActiveTab] = useState<'overview' | 'posts'>('overview');
 
     useEffect(() => {
         fetchData();
