@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { Mail, MapPin, Facebook, Instagram, Youtube } from 'lucide-react'
 
 export type FooterLink = {
@@ -181,6 +182,11 @@ export default function Footer({ copy = defaultCopy, locale = 'es' }: { copy?: F
                   <item.icon className="w-5 h-5" />
                 </a>
               ))}
+
+              {/* Theme Toggle Divider */}
+              <div className="w-px h-6 bg-gray-700 mx-1 hidden md:block" />
+
+              <ThemeToggle />
             </div>
           </div>
         </div>

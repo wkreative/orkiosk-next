@@ -84,13 +84,17 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
 }
 
+import { ThemeProvider } from '@/components/ThemeProvider'
+
+// ... (Metadata export remains above)
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         {/* Preconnect to external domains for performance */}
@@ -158,8 +162,15 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased">
-        {children}
+      <body className="antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
