@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowRight, Search } from 'lucide-react';
@@ -38,7 +38,7 @@ export default function BlogPostsGrid({
     const searchParams = useSearchParams();
     const categoryFromUrl = searchParams.get('category') || '';
 
-    const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl);
+    const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
 
     // Extract unique categories (case-insensitive deduplication)
@@ -59,6 +59,13 @@ export default function BlogPostsGrid({
 
         return Array.from(uniqueCategories.values()).sort();
     }, [posts]);
+
+    // Apply category from URL only if it exists in categories
+    useEffect(() => {
+        if (categoryFromUrl && categories.includes(categoryFromUrl)) {
+            setSelectedCategory(categoryFromUrl);
+        }
+    }, [categoryFromUrl, categories]);
 
     // Filter posts by category and search query
     const filteredPosts = useMemo(() => {
