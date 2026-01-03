@@ -89,7 +89,7 @@ export default function DashboardPage() {
             {/* Header with Tabs */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+                    <h1 className="text-3xl font-bold text-gray-900">Dashboard - Panel de Control</h1>
                     <p className="text-gray-600">Bienvenido al panel de administración de Orkiosk</p>
                 </div>
                 <div className="flex items-center space-x-2 bg-gray-100 rounded-xl p-1">
