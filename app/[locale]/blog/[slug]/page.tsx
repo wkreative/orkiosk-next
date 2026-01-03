@@ -66,9 +66,8 @@ export async function generateStaticParams() {
   )
 }
 
-// Revalidate every 10 seconds (reduced from 60) and allow dynamic params for new posts
-export const revalidate = 10
-export const dynamicParams = true
+// Force dynamic rendering to always fetch fresh content from Firebase
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const copy = await getTranslations(params.locale)

@@ -68,8 +68,8 @@ export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
 }
 
-// Revalidate the page every 10 seconds (reduced from 60 for faster updates)
-export const revalidate = 10
+// Force dynamic rendering to always fetch fresh content from Firebase
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const copy = await getTranslations(params.locale)
