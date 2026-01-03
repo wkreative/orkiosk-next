@@ -56,15 +56,16 @@ function buildKeywords(texts: string[]): string[] {
   return Array.from(new Set(keywords)).slice(0, 20)
 }
 
-export async function generateStaticParams() {
-  const posts = await getAllPosts()
-  return locales.flatMap((locale) =>
-    posts.map((post) => ({
-      locale,
-      slug: post.slug,
-    })),
-  )
-}
+// generateStaticParams removed to enable on-demand rendering of new posts
+// export async function generateStaticParams() {
+//   const posts = await getAllPosts()
+//   return locales.flatMap((locale) =>
+//     posts.map((post) => ({
+//       locale,
+//       slug: post.slug,
+//     })),
+//   )
+// }
 
 // Force dynamic rendering to always fetch fresh content from Firebase
 export const dynamic = 'force-dynamic'

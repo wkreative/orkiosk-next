@@ -64,9 +64,10 @@ function formatDate(dateString: string, locale: Locale): string {
   })
 }
 
-export async function generateStaticParams() {
-  return locales.map((locale) => ({ locale }))
-}
+// generateStaticParams removed to enable on-demand rendering of blog list
+// export async function generateStaticParams() {
+//   return locales.map((locale) => ({ locale }));
+// }
 
 // Force dynamic rendering to always fetch fresh content from Firebase
 export const dynamic = 'force-dynamic'
