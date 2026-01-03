@@ -66,9 +66,9 @@ export async function generateStaticParams() {
   )
 }
 
-// Revalidate every 60 seconds and allow dynamic params for new posts
-export const revalidate = 60
-export const dynamicParams = true
+// Force dynamic rendering to show post edits immediately
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const copy = await getTranslations(params.locale)

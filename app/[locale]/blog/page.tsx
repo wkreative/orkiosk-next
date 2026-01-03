@@ -68,8 +68,9 @@ export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
 }
 
-// Revalidate the page every 60 seconds
-export const revalidate = 60
+// Force dynamic rendering to show new posts immediately
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const copy = await getTranslations(params.locale)
