@@ -163,3 +163,11 @@ export async function getAllCategories(): Promise<string[]> {
     return [];
   }
 }
+
+export async function updatePost(slug: string, data: Partial<Post>): Promise<void> {
+  const { doc, updateDoc } = await import('firebase/firestore');
+
+  // Since slug is the document ID in this system
+  const postRef = doc(db, 'posts', slug);
+  await updateDoc(postRef, data);
+}

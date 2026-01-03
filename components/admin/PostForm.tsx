@@ -420,6 +420,22 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                             </div>
                         </div>
 
+                        {/* Comments Toggle */}
+                        <div className="pt-4 border-t border-gray-100">
+                            <label className="flex items-center space-x-3 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.enableComments}
+                                    onChange={(e) => setFormData({ ...formData, enableComments: e.target.checked })}
+                                    className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                                />
+                                <div>
+                                    <span className="text-sm font-medium text-gray-700">Habilitar comentarios</span>
+                                    <p className="text-xs text-gray-400">Permite usuarios comentar</p>
+                                </div>
+                            </label>
+                        </div>
+
                         {/* SEO Section */}
                         <div className="pt-4 border-t border-gray-100">
                             <h3 className="text-sm font-bold text-primary-600 mb-4 uppercase tracking-wide flex items-center">
@@ -492,20 +508,6 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                     </label>
                                 </div>
 
-                                <div className="pt-4 border-t border-gray-100">
-                                    <label className="flex items-center space-x-3 cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={formData.enableComments}
-                                            onChange={(e) => setFormData({ ...formData, enableComments: e.target.checked })}
-                                            className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                                        />
-                                        <div>
-                                            <span className="text-sm font-medium text-gray-700">Habilitar comentarios</span>
-                                            <p className="text-xs text-gray-400">Permite que los usuarios comenten en esta entrada</p>
-                                        </div>
-                                    </label>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -579,8 +581,8 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                             )}
                         </button>
                     </div>
-                </div>
-            </form>
-        </div>
+                </div >
+            </form >
+        </div >
     );
 }

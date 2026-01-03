@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import SettingsPanel from '@/components/admin/SettingsPanel';
 import { db } from '@/lib/firebase';
 import { collection, query, orderBy, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { Edit2, Trash2, Plus, Search, Eye, Loader2, FileText } from 'lucide-react';
@@ -124,8 +123,6 @@ export default function DashboardPage() {
 
             {activeTab === 'overview' ? (
                 <>
-                    <SettingsPanel />
-
                     {/* Stats Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {/* Total Posts */}
