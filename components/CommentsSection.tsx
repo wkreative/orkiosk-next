@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react'
 import { Comment, getComments, deleteComment } from '@/lib/comments'
 import CommentForm from './CommentForm'
