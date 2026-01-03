@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useState } from 'react'
 import { Comment, getComments, deleteComment } from '@/lib/comments'
 import CommentForm from './CommentForm'
@@ -9,22 +7,42 @@ import { Trash2, Reply } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { es, enUS } from 'date-fns/locale'
 
+interface CommentsCopy {
+    commentsLabel: string
+    loadingComments: string
+    emptyComments: string
+    reply: string
+    deleteComment: string
+    deleteConfirm: string
+    deleteError: string
+    justNow: string
+    form: {
+        title: string
+        replyTitle: string
+        replyTo: string
+        cancel: string
+        nameLabel: string
+        namePlaceholder: string
+        contentLabel: string
+        contentPlaceholder: string
+        submit: string
+        submitting: string
+        error: string
+    }
+}
+
 interface CommentsSectionProps {
     slug: string
     enableComments?: boolean
     locale?: string
-    commentsLabel?: string
-    loadingLabel?: string
-    emptyLabel?: string
+    copy: CommentsCopy
 }
 
 export default function CommentsSection({
     slug,
     enableComments = true,
     locale = 'es',
-    commentsLabel = 'Comentarios',
-    loadingLabel = 'Cargando comentarios...',
-    emptyLabel = 'Sé el primero en comentar.'
+    copy
 }: CommentsSectionProps) {
     const [comments, setComments] = useState<Comment[]>([])
     const [user, setUser] = useState<User | null>(null)
@@ -62,14 +80,14 @@ export default function CommentsSection({
     }, [slug])
 
     const handleDelete = async (commentId: string) => {
-        if (!confirm('¿Estás seguro de que quieres eliminar este comentario?')) return
+        if (!confirm(copy.deleteConfirm)) return
 
         try {
             await deleteComment(commentId)
             setComments(comments.filter(c => c.id !== commentId))
         } catch (error) {
             console.error('Error deleting comment:', error)
-            alert('Error al eliminar el comentario.')
+            alert(copy.deleteError)
         }
     }
 
@@ -102,23 +120,23 @@ export default function CommentsSection({
                             <span className="text-xs text-gray-500">
                                 {comment.createdAt?.seconds
                                     ? formatDistanceToNow(new Date(comment.createdAt.seconds * 1000), { addSuffix: true, locale: locale === 'en' ? enUS : es })
-                                    : 'Recién'}
+                                    : copy.justNow}
                             </span>
                             {isEnabled && depth < maxDepth && (
                                 <button
                                     onClick={() => handleReply(comment.id, comment.author)}
                                     className="text-primary-600 hover:text-primary-800 p-1 rounded-md hover:bg-primary-50 transition-colors flex items-center gap-1 text-sm"
-                                    title="Responder"
+                                    title={copy.reply}
                                 >
                                     <Reply size={14} />
-                                    <span className="hidden sm:inline">Responder</span>
+                                    <span className="hidden sm:inline">{copy.reply}</span>
                                 </button>
                             )}
                             {user && (
                                 <button
                                     onClick={() => handleDelete(comment.id)}
                                     className="text-red-400 hover:text-red-600 p-1 rounded-md hover:bg-red-50 transition-colors"
-                                    title="Eliminar comentario (Admin)"
+                                    title={copy.deleteComment}
                                 >
                                     <Trash2 size={16} />
                                 </button>
@@ -147,7 +165,7 @@ export default function CommentsSection({
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-24">
             <div className="border-t border-gray-200 pt-12">
                 <h2 className="text-2xl font-heading font-bold text-gray-900 mb-8">
-                    {commentsLabel} ({comments.reduce((acc, c) => acc + 1 + (c.replies?.length || 0), 0)})
+                    {copy.commentsLabel} ({comments.reduce((acc, c) => acc + 1 + (c.replies?.length || 0), 0)})
                 </h2>
 
                 <div className="comment-form-container">
@@ -157,14 +175,15 @@ export default function CommentsSection({
                         parentId={replyingTo?.id}
                         parentAuthor={replyingTo?.author}
                         onCancel={replyingTo ? handleCancelReply : undefined}
+                        copy={copy.form}
                     />
                 </div>
 
                 <div className="space-y-6">
                     {isLoading ? (
-                        <p className="text-gray-500 animate-pulse">{loadingLabel}</p>
+                        <p className="text-gray-500 animate-pulse">{copy.loadingComments}</p>
                     ) : comments.length === 0 ? (
-                        <p className="text-gray-500 italic">{emptyLabel}</p>
+                        <p className="text-gray-500 italic">{copy.emptyComments}</p>
                     ) : (
                         comments.map(comment => renderComment(comment, 0))
                     )}
@@ -173,3 +192,4 @@ export default function CommentsSection({
         </div>
     )
 }
+

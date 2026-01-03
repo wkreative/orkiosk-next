@@ -2,15 +2,30 @@
 
 import { useState } from 'react'
 
+interface CommentFormCopy {
+    title: string
+    replyTitle: string
+    replyTo: string
+    cancel: string
+    nameLabel: string
+    namePlaceholder: string
+    contentLabel: string
+    contentPlaceholder: string
+    submit: string
+    submitting: string
+    error: string
+}
+
 interface CommentFormProps {
     slug: string
     onCommentAdded: () => void
     parentId?: string | null
     parentAuthor?: string
     onCancel?: () => void
+    copy: CommentFormCopy
 }
 
-export default function CommentForm({ slug, onCommentAdded, parentId, parentAuthor, onCancel }: CommentFormProps) {
+export default function CommentForm({ slug, onCommentAdded, parentId, parentAuthor, onCancel, copy }: CommentFormProps) {
     const [author, setAuthor] = useState('')
     const [content, setContent] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -32,7 +47,7 @@ export default function CommentForm({ slug, onCommentAdded, parentId, parentAuth
             onCommentAdded()
         } catch (err) {
             console.error('Error adding comment:', err)
-            setError('Hubo un error al publicar tu comentario. Inténtalo de nuevo.')
+            setError(copy.error)
         } finally {
             setIsSubmitting(false)
         }
@@ -43,7 +58,7 @@ export default function CommentForm({ slug, onCommentAdded, parentId, parentAuth
             {parentAuthor && (
                 <div className="mb-4 flex items-center justify-between bg-primary-50 p-3 rounded-lg">
                     <p className="text-sm text-primary-700">
-                        <span className="font-semibold">Respondiendo a {parentAuthor}</span>
+                        <span className="font-semibold">{copy.replyTo} {parentAuthor}</span>
                     </p>
                     {onCancel && (
                         <button
@@ -51,13 +66,13 @@ export default function CommentForm({ slug, onCommentAdded, parentId, parentAuth
                             onClick={onCancel}
                             className="text-primary-600 hover:text-primary-800 text-sm font-medium"
                         >
-                            Cancelar
+                            {copy.cancel}
                         </button>
                     )}
                 </div>
             )}
             <h3 className="text-xl font-bold text-gray-900 mb-4">
-                {parentId ? 'Responder' : 'Deja un comentario'}
+                {parentId ? copy.replyTitle : copy.title}
             </h3>
 
             {error && (
@@ -68,7 +83,7 @@ export default function CommentForm({ slug, onCommentAdded, parentId, parentAuth
 
             <div className="mb-4">
                 <label htmlFor="author" className="block text-sm font-medium text-gray-700 mb-1">
-                    Nombre
+                    {copy.nameLabel}
                 </label>
                 <input
                     type="text"
@@ -77,13 +92,13 @@ export default function CommentForm({ slug, onCommentAdded, parentId, parentAuth
                     value={author}
                     onChange={(e) => setAuthor(e.target.value)}
                     className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                    placeholder="Tu nombre"
+                    placeholder={copy.namePlaceholder}
                 />
             </div>
 
             <div className="mb-4">
                 <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
-                    Comentario
+                    {copy.contentLabel}
                 </label>
                 <textarea
                     id="content"
@@ -92,7 +107,7 @@ export default function CommentForm({ slug, onCommentAdded, parentId, parentAuth
                     onChange={(e) => setContent(e.target.value)}
                     rows={3}
                     className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                    placeholder="Escribe tu opinión..."
+                    placeholder={copy.contentPlaceholder}
                 />
             </div>
 
@@ -101,7 +116,7 @@ export default function CommentForm({ slug, onCommentAdded, parentId, parentAuth
                 disabled={isSubmitting}
                 className="w-full sm:w-auto px-6 py-2 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-                {isSubmitting ? 'Publicando...' : 'Publicar Comentario'}
+                {isSubmitting ? copy.submitting : copy.submit}
             </button>
         </form>
     )

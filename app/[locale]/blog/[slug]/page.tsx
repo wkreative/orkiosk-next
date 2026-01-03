@@ -320,9 +320,7 @@ export default async function BlogPostPage({ params }: Props) {
           slug={translated.slug}
           enableComments={translated.enableComments}
           locale={params.locale}
-          commentsLabel={copy.blogPost.commentsLabel}
-          loadingLabel={copy.blogPost.loadingComments}
-          emptyLabel={copy.blogPost.emptyComments}
+          copy={copy.blogPost}
         />
 
         {/* Share Section */}
