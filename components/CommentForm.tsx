@@ -54,35 +54,35 @@ export default function CommentForm({ slug, onCommentAdded, parentId, parentAuth
     }
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-black p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 mb-8 transition-colors duration-300">
             {parentAuthor && (
-                <div className="mb-4 flex items-center justify-between bg-primary-50 p-3 rounded-lg">
-                    <p className="text-sm text-primary-700">
+                <div className="mb-4 flex items-center justify-between bg-primary-50 dark:bg-primary-900/20 p-3 rounded-lg">
+                    <p className="text-sm text-primary-700 dark:text-primary-300">
                         <span className="font-semibold">{copy.replyTo} {parentAuthor}</span>
                     </p>
                     {onCancel && (
                         <button
                             type="button"
                             onClick={onCancel}
-                            className="text-primary-600 hover:text-primary-800 text-sm font-medium"
+                            className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 text-sm font-medium"
                         >
                             {copy.cancel}
                         </button>
                     )}
                 </div>
             )}
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
                 {parentId ? copy.replyTitle : copy.title}
             </h3>
 
             {error && (
-                <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg text-sm">
                     {error}
                 </div>
             )}
 
             <div className="mb-4">
-                <label htmlFor="author" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="author" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {copy.nameLabel}
                 </label>
                 <input
@@ -91,13 +91,13 @@ export default function CommentForm({ slug, onCommentAdded, parentId, parentAuth
                     required
                     value={author}
                     onChange={(e) => setAuthor(e.target.value)}
-                    className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                     placeholder={copy.namePlaceholder}
                 />
             </div>
 
             <div className="mb-4">
-                <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="content" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {copy.contentLabel}
                 </label>
                 <textarea
@@ -106,7 +106,7 @@ export default function CommentForm({ slug, onCommentAdded, parentId, parentAuth
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     rows={3}
-                    className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                     placeholder={copy.contentPlaceholder}
                 />
             </div>

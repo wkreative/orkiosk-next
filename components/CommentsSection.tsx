@@ -115,11 +115,11 @@ export default function CommentsSection({
 
         return (
             <div key={comment.id} className={isNested ? 'ml-8 mt-4' : ''}>
-                <div className={`bg-gray-50 rounded-2xl p-6 relative group ${isNested ? 'border-l-4 border-primary-200' : ''}`}>
+                <div className={`bg-gray-50 dark:bg-black rounded-2xl p-6 relative group ${isNested ? 'border-l-4 border-primary-200 dark:border-primary-800' : ''}`}>
                     <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-bold text-gray-900">{comment.author}</h4>
+                        <h4 className="font-bold text-gray-900 dark:text-white">{comment.author}</h4>
                         <div className="flex items-center gap-3">
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
                                 {comment.createdAt?.seconds
                                     ? formatDistanceToNow(new Date(comment.createdAt.seconds * 1000), { addSuffix: true, locale: locale === 'en' ? enUS : es })
                                     : copy.justNow}
@@ -127,7 +127,7 @@ export default function CommentsSection({
                             {isEnabled && depth < maxDepth && (
                                 <button
                                     onClick={() => handleReply(comment.id, comment.author)}
-                                    className="text-primary-600 hover:text-primary-800 p-1 rounded-md hover:bg-primary-50 transition-colors flex items-center gap-1 text-sm"
+                                    className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 p-1 rounded-md hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors flex items-center gap-1 text-sm"
                                     title={copy.reply}
                                 >
                                     <Reply size={14} />
@@ -137,7 +137,7 @@ export default function CommentsSection({
                             {user && (
                                 <button
                                     onClick={() => handleDelete(comment.id)}
-                                    className="text-red-400 hover:text-red-600 p-1 rounded-md hover:bg-red-50 transition-colors"
+                                    className="text-red-400 hover:text-red-600 p-1 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                                     title={copy.deleteComment}
                                 >
                                     <Trash2 size={16} />
@@ -145,7 +145,7 @@ export default function CommentsSection({
                             )}
                         </div>
                     </div>
-                    <p className="text-gray-700 whitespace-pre-wrap">{comment.content}</p>
+                    <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{comment.content}</p>
                 </div>
 
                 {/* Render replies */}
@@ -165,8 +165,8 @@ export default function CommentsSection({
 
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-24">
-            <div className="border-t border-gray-200 pt-12">
-                <h2 className="text-2xl font-heading font-bold text-gray-900 mb-8">
+            <div className="border-t border-gray-200 dark:border-gray-800 pt-12 transition-colors duration-300">
+                <h2 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-8">
                     {copy.commentsLabel} ({comments.reduce((acc, c) => acc + 1 + (c.replies?.length || 0), 0)})
                 </h2>
 
@@ -183,9 +183,9 @@ export default function CommentsSection({
 
                 <div className="space-y-6">
                     {isLoading ? (
-                        <p className="text-gray-500 animate-pulse">{copy.loadingComments}</p>
+                        <p className="text-gray-500 dark:text-gray-400 animate-pulse">{copy.loadingComments}</p>
                     ) : comments.length === 0 ? (
-                        <p className="text-gray-500 italic">{copy.emptyComments}</p>
+                        <p className="text-gray-500 dark:text-gray-400 italic">{copy.emptyComments}</p>
                     ) : (
                         comments.map(comment => renderComment(comment, 0))
                     )}

@@ -238,7 +238,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <SiteShell locale={params.locale} copy={copy}>
-      <article>
+      <article className="bg-white dark:bg-black min-h-screen">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -257,12 +257,12 @@ export default async function BlogPostPage({ params }: Props) {
         )}
 
         {/* Post Info Section */}
-        <header className={`py-12 md:py-16 ${translated.image ? 'bg-white' : 'bg-gradient-to-b from-primary-50 to-white pt-20'}`}>
+        <header className={`py-12 md:py-16 ${translated.image ? 'bg-white dark:bg-black' : 'bg-gradient-to-b from-primary-50 to-white dark:from-black dark:to-black pt-20'} transition-colors duration-300`}>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Back Link */}
             <Link
               href={`/${params.locale}/blog`}
-              className="inline-flex items-center text-gray-600 hover:text-primary-600 transition-colors mb-8"
+              className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors mb-8"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               <span>{params.locale === 'en' ? 'Back to blog' : 'Volver al blog'}</span>
@@ -271,19 +271,19 @@ export default async function BlogPostPage({ params }: Props) {
             {/* Category */}
             {translated.category && (
               <div className="mb-6">
-                <span className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full font-medium text-sm">
+                <span className="bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 px-3 py-1 rounded-full font-medium text-sm">
                   {translated.category}
                 </span>
               </div>
             )}
 
             {/* Title */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-gray-900 leading-tight mb-6">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-gray-900 dark:text-white leading-tight mb-6">
               {translated.title}
             </h1>
 
             {/* Excerpt */}
-            <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
               {translated.excerpt}
             </p>
 
@@ -294,8 +294,8 @@ export default async function BlogPostPage({ params }: Props) {
                   {translated.author.charAt(0)}
                 </div>
                 <div>
-                  <span className="text-gray-900 font-medium block">{translated.author}</span>
-                  <span className="text-gray-500 text-sm">
+                  <span className="text-gray-900 dark:text-white font-medium block">{translated.author}</span>
+                  <span className="text-gray-500 dark:text-gray-400 text-sm">
                     {new Date(translated.date).toLocaleDateString(params.locale === 'en' ? 'en-US' : 'es-ES', {
                       year: 'numeric',
                       month: 'long',
@@ -310,7 +310,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Content */}
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="prose prose-lg max-w-none">
+          <div className="prose prose-lg dark:prose-invert max-w-none">
             {renderContent(translated.content)}
           </div>
         </div>
@@ -324,9 +324,9 @@ export default async function BlogPostPage({ params }: Props) {
         />
 
         {/* Share Section */}
-        <section className="py-12 bg-gray-50 border-t border-gray-200">
+        <section className="py-12 bg-gray-50 dark:bg-black border-t border-gray-200 dark:border-gray-800 transition-colors duration-300">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
               {copy.blogPost.sharePrompt}
             </p>
             <div className="grid grid-cols-2 gap-3 md:flex md:flex-wrap md:justify-center">
@@ -334,7 +334,7 @@ export default async function BlogPostPage({ params }: Props) {
                 href={`https://x.com/intent/post?text=${encodeURIComponent(translated.title)}&url=${encodeURIComponent(shareUrl)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary text-sm flex items-center justify-center gap-2"
+                className="btn-secondary text-sm flex items-center justify-center gap-2 dark:bg-gray-900 dark:text-white dark:border-gray-800 dark:hover:bg-gray-800"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
                 {copy.blogPost.shareX}
@@ -343,7 +343,7 @@ export default async function BlogPostPage({ params }: Props) {
                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary text-sm flex items-center justify-center gap-2"
+                className="btn-secondary text-sm flex items-center justify-center gap-2 dark:bg-gray-900 dark:text-white dark:border-gray-800 dark:hover:bg-gray-800"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" /></svg>
                 {copy.blogPost.shareFacebook}
@@ -352,7 +352,7 @@ export default async function BlogPostPage({ params }: Props) {
                 href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary text-sm flex items-center justify-center gap-2"
+                className="btn-secondary text-sm flex items-center justify-center gap-2 dark:bg-gray-900 dark:text-white dark:border-gray-800 dark:hover:bg-gray-800"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" /></svg>
                 {copy.blogPost.shareLinkedIn}
@@ -361,7 +361,7 @@ export default async function BlogPostPage({ params }: Props) {
                 href={`https://wa.me/?text=${encodeURIComponent(`${translated.title} ${shareUrl}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary text-sm flex items-center justify-center gap-2"
+                className="btn-secondary text-sm flex items-center justify-center gap-2 dark:bg-gray-900 dark:text-white dark:border-gray-800 dark:hover:bg-gray-800"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M18.88 3.518A10.45 10.45 0 0011.516.44h-.016c-5.776 0-10.472 4.696-10.476 10.474a10.435 10.435 0 001.603 5.56L.96 23.01l6.674-1.752a10.451 10.451 0 005.003 1.15h.007c5.776 0 10.472-4.697 10.476-10.476a10.437 10.437 0 00-4.24-8.414zM12.636 19.34a8.877 8.877 0 01-4.526-1.157l-.325-.192-3.363.882.898-3.278-.212-.338A8.86 8.86 0 012.613 10.915c.003-4.9 3.992-8.887 8.892-8.887.005 0 .01.002.015.002 4.904.004 8.887 3.987 8.887 8.891a8.877 8.877 0 01-7.771 8.419zm4.869-6.657c-.267-.133-1.58-.78-1.824-.87-.245-.088-.423-.132-.601.134-.179.266-.69.87-.846 1.047-.155.178-.311.199-.578.066-.267-.133-1.127-.416-2.147-1.325-.795-.71-1.332-1.586-1.488-1.854-.156-.266-.017-.41.116-.543.12-.121.267-.312.4-.468.134-.155.179-.266.267-.444.089-.178.045-.333-.022-.467-.067-.133-.601-1.448-.823-1.983-.217-.52-.437-.45-.601-.458l-.512-.008c-.178 0-.467.067-.711.333-.245.267-.935.913-.935 2.226s.957 2.583 1.09 2.76c.134.178 1.884 2.877 4.565 4.035 1.554.671 2.158.647 2.946.568.873-.087 1.58-.646 1.802-1.27.222-.623.222-1.157.155-1.269-.067-.112-.244-.178-.511-.312z" clipRule="evenodd" /></svg>
                 {copy.blogPost.shareWhatsapp}
@@ -372,9 +372,9 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Recommended Posts */}
         {relatedPosts.length > 0 && (
-          <section className="py-12 border-t border-gray-200">
+          <section className="py-12 border-t border-gray-200 dark:border-gray-800 transition-colors duration-300 bg-white dark:bg-black">
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-lg font-heading font-semibold text-gray-900 mb-6 text-center">
+              <h2 className="text-lg font-heading font-semibold text-gray-900 dark:text-white mb-6 text-center">
                 {copy.blogPost.recommendedTitle}
               </h2>
               <div className="grid gap-6 md:grid-cols-3">
@@ -382,15 +382,15 @@ export default async function BlogPostPage({ params }: Props) {
                   <Link
                     key={item.slug}
                     href={`/${params.locale}/blog/${item.slug}`}
-                    className="group rounded-2xl border border-gray-200 p-5 text-left transition-colors hover:border-primary-300"
+                    className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-5 text-left transition-all hover:border-primary-300 dark:hover:border-primary-700 bg-white dark:bg-black hover:shadow-lg dark:hover:bg-gray-900"
                   >
-                    <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">
+                    <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">
                       {item.category || 'Orkiosk'}
                     </p>
-                    <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-primary-600">
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-gray-600 line-clamp-3">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
                       {item.excerpt}
                     </p>
                   </Link>
