@@ -111,7 +111,8 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
         const { name, value } = e.target;
         setFormData(prev => {
             const newData = { ...prev, [name]: value };
-            // Auto-generate slug from title if not editing a specific slug manually
+
+            // Auto-generate slug from title
             if (name === 'title' && !isEditing) {
                 newData.slug = value
                     .toLowerCase()
@@ -120,6 +121,16 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                     .replace(/[^a-z0-9]+/g, '-')
                     .replace(/^-+|-+$/g, '');
             }
+
+            // Sanitize manual slug input
+            if (name === 'slug') {
+                newData.slug = value
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-z0-9]+/g, '-')
+            }
+
             return newData;
         });
     };
@@ -282,7 +293,7 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                 value={formData.title}
                                 onChange={handleChange}
                                 placeholder="Ej: Cómo optimizar tu negocio con kioscos"
-                                className="w-full px-4 py-3 text-xl font-bold border-0 border-b-2 border-gray-100 focus:border-primary-500 outline-none transition-all placeholder:text-gray-300"
+                                className="w-full px-4 py-3 text-xl font-bold border-0 border-b-2 border-gray-100 focus:border-primary-500 outline-none transition-all placeholder:text-gray-300 text-gray-900 bg-white"
                             />
                         </div>
 
@@ -294,7 +305,7 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                 onChange={handleChange}
                                 rows={3}
                                 placeholder="Una breve descripción para los listados de blog..."
-                                className="w-full px-4 py-3 bg-gray-50 border border-transparent rounded-xl text-sm leading-relaxed focus:bg-white focus:border-primary-200 outline-none transition-all"
+                                className="w-full px-4 py-3 bg-gray-50 border border-transparent rounded-xl text-sm leading-relaxed focus:bg-white focus:border-primary-200 outline-none transition-all text-gray-900"
                             />
                         </div>
 
@@ -322,7 +333,7 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                 value={formData.titleEn}
                                 onChange={handleChange}
                                 placeholder="Ex: How to optimize your business with kiosks"
-                                className="w-full px-4 py-3 text-xl font-bold border-0 border-b-2 border-blue-100 focus:border-blue-500 outline-none transition-all placeholder:text-gray-300"
+                                className="w-full px-4 py-3 text-xl font-bold border-0 border-b-2 border-blue-100 focus:border-blue-500 outline-none transition-all placeholder:text-gray-300 text-gray-900 bg-white"
                             />
                         </div>
 
@@ -342,7 +353,7 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                 onChange={handleChange}
                                 rows={3}
                                 placeholder="A brief description for blog listings..."
-                                className="w-full px-4 py-3 bg-blue-50 border border-transparent rounded-xl text-sm leading-relaxed focus:bg-white focus:border-blue-200 outline-none transition-all"
+                                className="w-full px-4 py-3 bg-blue-50 border border-transparent rounded-xl text-sm leading-relaxed focus:bg-white focus:border-blue-200 outline-none transition-all text-gray-900"
                             />
                         </div>
 
@@ -354,7 +365,7 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                 value={formData.categoryEn}
                                 onChange={handleChange}
                                 placeholder="Ex: Technology"
-                                className="w-full px-4 py-2 bg-blue-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-blue-200 outline-none"
+                                className="w-full px-4 py-2 bg-blue-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-blue-200 outline-none text-gray-900"
                             />
                         </div>
                     </div>
@@ -376,7 +387,7 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                 required
                                 value={formData.date}
                                 onChange={handleChange}
-                                className="w-full px-4 py-2 bg-gray-50 border border-transparent rounded-lg text-sm"
+                                className="w-full px-4 py-2 bg-gray-50 border border-transparent rounded-lg text-sm text-gray-900"
                             />
                         </div>
 
@@ -388,7 +399,7 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                 value={formData.author}
                                 onChange={handleChange}
                                 placeholder="Ej: Admin"
-                                className="w-full px-4 py-2 bg-gray-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-primary-200 outline-none"
+                                className="w-full px-4 py-2 bg-gray-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-primary-200 outline-none text-gray-900"
                             />
                         </div>
 
@@ -400,7 +411,7 @@ export default function PostForm({ initialData, isEditing }: PostFormProps) {
                                 value={formData.category}
                                 onChange={handleChange}
                                 placeholder="Ej: Tecnología"
-                                className="w-full px-4 py-2 bg-gray-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-primary-200 outline-none"
+                                className="w-full px-4 py-2 bg-gray-50 border border-transparent rounded-lg text-sm focus:bg-white focus:border-primary-200 outline-none text-gray-900"
                             />
                         </div>
 

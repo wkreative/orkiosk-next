@@ -177,7 +177,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50 flex font-sans">
+        <div className="min-h-screen bg-gray-50 text-gray-900 flex font-sans">
             {/* Sidebar - Fixed/Sticky */}
             <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col h-screen sticky top-0 shadow-sm z-30">
                 <div className="p-6 border-b border-gray-100 flex items-center justify-between shrink-0 h-16">
