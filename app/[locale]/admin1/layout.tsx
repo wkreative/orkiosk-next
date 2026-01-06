@@ -1,12 +1,16 @@
 import AdminLayout from '@/components/admin/AdminLayout'
+import { ThemeProvider } from '@/components/ThemeProvider'
 
-export const dynamic = 'force-static'
-export const dynamicParams = true
+// dynamic export removed to allow proper auth handling
 
 export default function Admin1Layout({
     children,
 }: {
     children: React.ReactNode
 }) {
-    return <AdminLayout>{children}</AdminLayout>
+    return (
+        <ThemeProvider attribute="class" forcedTheme="light" enableSystem={false}>
+            <AdminLayout>{children}</AdminLayout>
+        </ThemeProvider>
+    )
 }
