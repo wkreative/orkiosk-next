@@ -8,6 +8,7 @@ export default function SettingsPage() {
     const [openaiKey, setOpenaiKey] = useState('')
     const [geminiKey, setGeminiKey] = useState('')
     const [googleSheetId, setGoogleSheetId] = useState('')
+    const [chatSystemPrompt, setChatSystemPrompt] = useState('')
     const [showOpenai, setShowOpenai] = useState(false)
     const [showGemini, setShowGemini] = useState(false)
     const [showSheetId, setShowSheetId] = useState(false)
@@ -59,6 +60,7 @@ Return ONLY a valid JSON object.`;
                 else setSystemPrompt(SYSTEM_PROMPT_DEFAULT)
 
                 if (settings.googleSheetId) setGoogleSheetId(settings.googleSheetId)
+                if (settings.chatSystemPrompt) setChatSystemPrompt(settings.chatSystemPrompt)
                 if (settings.aiModel) setAiModel(settings.aiModel)
                 if (settings.maxTokens) setMaxTokens(settings.maxTokens)
                 if (settings.temperature) setTemperature(settings.temperature)
@@ -84,6 +86,7 @@ Return ONLY a valid JSON object.`;
                 openaiApiKey: openaiKey,
                 geminiApiKey: geminiKey,
                 googleSheetId: googleSheetId,
+                chatSystemPrompt: chatSystemPrompt,
                 systemPrompt: systemPrompt,
                 aiModel: aiModel,
                 maxTokens: Number(maxTokens),
@@ -212,6 +215,24 @@ Return ONLY a valid JSON object.`;
                             <p className="mt-1 text-xs text-gray-500">
                                 ID de la hoja de cálculo de Google. Asegúrate de compartir la hoja con el email de servicio.
                             </p>
+                        </div>
+
+                        {/* Chat System Prompt */}
+                        <div>
+                            <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center justify-between">
+                                <span>Prompt del Sistema (Chat Assistant)</span>
+                                <span className="text-xs font-normal text-gray-500">Define la personalidad del asistente del chat</span>
+                            </label>
+                            <div className="relative">
+                                <MessageSquare className="absolute top-3 left-3 w-5 h-5 text-gray-400" />
+                                <textarea
+                                    value={chatSystemPrompt}
+                                    onChange={(e) => setChatSystemPrompt(e.target.value)}
+                                    rows={8}
+                                    placeholder="Eres un asistente experto..."
+                                    className="block w-full rounded-xl border-gray-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm pl-10 p-3 border font-mono text-xs leading-relaxed"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

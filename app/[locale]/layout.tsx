@@ -5,10 +5,17 @@ export function generateStaticParams() {
     ];
 }
 
+import ChatWidget from '@/components/ChatWidget';
+
 export default function LocaleLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    return children;
+    return (
+        <>
+            {children}
+            <ChatWidget />
+        </>
+    );
 }

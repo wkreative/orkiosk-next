@@ -11,6 +11,8 @@ export interface AppSettings {
     temperature?: number;
     // Integration Config
     googleSheetId?: string;
+    // Chat Config
+    chatSystemPrompt?: string;
 }
 
 const SETTINGS_COLLECTION = 'settings';

@@ -36,10 +36,10 @@ export async function POST(req: NextRequest) {
             console.log("No Knowledge Base loaded (empty or error).");
         }
 
-        const finalSystemPrompt = `${BASE_SYSTEM_PROMPT}${knowledgeBaseText}`;
-
-        // 2. Get Settings (API Keys)
+        // 2. Get Settings (API Keys & Prompt)
         const settings = await getSettings();
+        const finalSystemPrompt = `${settings.chatSystemPrompt || BASE_SYSTEM_PROMPT}${knowledgeBaseText}`;
+
         const apiKey = settings.openaiApiKey || process.env.OPENAI_API_KEY;
 
         if (!apiKey) {
