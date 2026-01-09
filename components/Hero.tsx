@@ -71,15 +71,16 @@ export default function Hero({ copy = defaultCopy }: { copy?: HeroCopy }) {
             </div>
 
             {/* Heading */}
+            {/* Heading */}
             <h1
               id="hero-heading"
-              className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-gray-900 leading-tight mb-6"
+              className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-gray-900 dark:text-white leading-tight mb-6"
             >
               {copy.heading}
             </h1>
 
             {/* Subheading */}
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0 animate-slide-up animate-delay-100">
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0 animate-slide-up animate-delay-100">
               {copy.subheading}
             </p>
 

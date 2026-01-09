@@ -111,15 +111,15 @@ export default async function BlogPage({ params }: PageProps) {
     <SiteShell locale={params.locale} copy={copy}>
       <div className="pt-4">
         {/* Hero Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-primary-50 to-white">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-black transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-gray-900 dark:text-white mb-6">
               <span className="font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900 }}>
                 Orkiosk
               </span>
               {' '}Blog
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               {copy.blogPage.heroSubtitle}
             </p>
           </div>
@@ -129,7 +129,7 @@ export default async function BlogPage({ params }: PageProps) {
         <section className="py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {translatedPosts.length > 0 ? (
-              <Suspense fallback={<div className="text-center py-12"><p className="text-gray-500">Cargando...</p></div>}>
+              <Suspense fallback={<div className="text-center py-12"><p className="text-gray-500 dark:text-gray-400">Cargando...</p></div>}>
                 <BlogPostsGrid
                   posts={translatedPosts}
                   blogPrefix={blogPrefix}

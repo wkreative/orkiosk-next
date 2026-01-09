@@ -117,7 +117,7 @@ export default function BlogPostsGrid({
                         placeholder={searchPlaceholder}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
+                        className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-gray-200 dark:border-gray-800 bg-white dark:bg-black text-gray-900 dark:text-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900/50 outline-none transition-all"
                     />
                 </div>
             </div>
@@ -128,8 +128,8 @@ export default function BlogPostsGrid({
                     <button
                         onClick={() => handleCategoryClick('')}
                         className={`px-4 py-2 md:px-5 md:py-2.5 whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-300 flex-shrink-0 ${!selectedCategory
-                            ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 scale-105'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-105'
+                            ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 dark:shadow-none scale-105'
+                            : 'bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 hover:scale-105'
                             }`}
                     >
                         {allLabel}
@@ -139,8 +139,8 @@ export default function BlogPostsGrid({
                             key={category}
                             onClick={() => handleCategoryClick(category)}
                             className={`px-4 py-2 md:px-5 md:py-2.5 whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-300 flex-shrink-0 ${selectedCategory === category
-                                ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 scale-105'
-                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-105'
+                                ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 dark:shadow-none scale-105'
+                                : 'bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 hover:scale-105'
                                 }`}
                         >
                             {category}
@@ -183,7 +183,7 @@ export default function BlogPostsGrid({
                                 <div className="mb-3">
                                     <button
                                         onClick={() => handleCategoryClick(post.category!)}
-                                        className="text-primary-600 font-medium text-sm hover:text-primary-700 hover:underline transition-colors"
+                                        className="text-primary-600 dark:text-primary-400 font-medium text-sm hover:text-primary-700 dark:hover:text-primary-300 hover:underline transition-colors"
                                     >
                                         {post.category}
                                     </button>
@@ -191,21 +191,21 @@ export default function BlogPostsGrid({
                             )}
 
                             {/* Title */}
-                            <h2 className="text-xl font-heading font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+                            <h2 className="text-xl font-heading font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                                 <Link href={`${blogPrefix}/${post.slug}`}>
                                     {post.title}
                                 </Link>
                             </h2>
 
                             {/* Excerpt */}
-                            <p className="text-gray-600 mb-4 flex-grow line-clamp-3">
+                            <p className="text-gray-600 dark:text-gray-300 mb-4 flex-grow line-clamp-3">
                                 {post.excerpt}
                             </p>
 
                             {/* Read More */}
                             <Link
                                 href={`${blogPrefix}/${post.slug}`}
-                                className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors mt-auto"
+                                className="inline-flex items-center text-primary-600 dark:text-primary-400 font-semibold hover:text-primary-700 dark:hover:text-primary-300 transition-colors mt-auto"
                             >
                                 <span>{readMoreLabel}</span>
                                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />

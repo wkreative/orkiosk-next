@@ -95,7 +95,7 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
   return (
     <section
       id="contact"
-      className="py-20 md:py-32 bg-white"
+      className="py-20 md:py-32 bg-white dark:bg-black transition-colors duration-300"
       aria-labelledby="contact-heading"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -107,11 +107,11 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
             </span>
             <h2
               id="contact-heading"
-              className="section-title"
+              className="section-title dark:text-white"
             >
               {copy.title}
             </h2>
-            <p className="text-lg text-gray-600 mb-8">
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
               {copy.subtitle}
             </p>
 
@@ -119,11 +119,11 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
             <div className="space-y-6">
               <a
                 href="https://wa.me/18777993720"
-                className="flex items-center space-x-4 text-gray-600 hover:text-primary-600 transition-colors group"
+                className="flex items-center space-x-4 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors group"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center group-hover:bg-primary-100 transition-colors">
+                <div className="w-12 h-12 bg-primary-50 dark:bg-gray-800 rounded-xl flex items-center justify-center group-hover:bg-primary-100 dark:group-hover:bg-gray-700 transition-colors">
                   <svg
                     className="w-6 h-6 text-primary-600"
                     viewBox="0 0 32 32"
@@ -136,47 +136,47 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">{copy.whatsappLabel}</p>
-                  <p className="font-semibold">1-877-799-3720</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-500">{copy.whatsappLabel}</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">1-877-799-3720</p>
                 </div>
               </a>
 
               <a
                 href="mailto:info@orkiosk.com"
-                className="flex items-center space-x-4 text-gray-600 hover:text-primary-600 transition-colors group"
+                className="flex items-center space-x-4 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors group"
               >
-                <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center group-hover:bg-primary-100 transition-colors">
+                <div className="w-12 h-12 bg-primary-50 dark:bg-gray-800 rounded-xl flex items-center justify-center group-hover:bg-primary-100 dark:group-hover:bg-gray-700 transition-colors">
                   <Mail className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">{copy.emailLabel}</p>
-                  <p className="font-semibold">info@orkiosk.com</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-500">{copy.emailLabel}</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">info@orkiosk.com</p>
                 </div>
               </a>
 
-              <div className="flex items-center space-x-4 text-gray-600">
-                <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center">
+              <div className="flex items-center space-x-4 text-gray-600 dark:text-gray-400">
+                <div className="w-12 h-12 bg-primary-50 dark:bg-gray-800 rounded-xl flex items-center justify-center">
                   <MapPin className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">{copy.locationLabel}</p>
-                  <p className="font-semibold">{copy.locationValue}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-500">{copy.locationLabel}</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{copy.locationValue}</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Right Content - Form */}
-          <div className="bg-gray-50 rounded-3xl p-8 md:p-10">
+          <div className="bg-gray-50 dark:bg-gray-900 rounded-3xl p-8 md:p-10">
             {formStatus === 'success' ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-12">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                  <CheckCircle className="w-10 h-10 text-green-600" />
+                <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6">
+                  <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-500" />
                 </div>
-                <h3 className="text-2xl font-heading font-bold text-gray-900 mb-2">
+                <h3 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-2">
                   {copy.successTitle}
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
                   {copy.successBody}
                 </p>
                 <button
@@ -196,7 +196,7 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
                   <div>
                     <label
                       htmlFor="name"
-                      className="block text-sm font-medium text-gray-700 mb-2"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                     >
                       {copy.form.nameLabel}
                     </label>
@@ -205,7 +205,7 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
                       id="name"
                       name="name"
                       required
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900/50 transition-all duration-200"
                       placeholder={copy.form.namePlaceholder}
                     />
                   </div>
@@ -213,7 +213,7 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
                   <div>
                     <label
                       htmlFor="company"
-                      className="block text-sm font-medium text-gray-700 mb-2"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                     >
                       {copy.form.companyLabel}
                     </label>
@@ -221,7 +221,7 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
                       type="text"
                       id="company"
                       name="company"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900/50 transition-all duration-200"
                       placeholder={copy.form.companyPlaceholder}
                     />
                   </div>
@@ -231,7 +231,7 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium text-gray-700 mb-2"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                     >
                       {copy.form.emailLabel}
                     </label>
@@ -240,7 +240,7 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
                       id="email"
                       name="email"
                       required
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900/50 transition-all duration-200"
                       placeholder={copy.form.emailPlaceholder}
                     />
                   </div>
@@ -248,7 +248,7 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
                   <div>
                     <label
                       htmlFor="phone"
-                      className="block text-sm font-medium text-gray-700 mb-2"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                     >
                       {copy.form.phoneLabel}
                     </label>
@@ -256,7 +256,7 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
                       type="tel"
                       id="phone"
                       name="phone"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900/50 transition-all duration-200"
                       placeholder={copy.form.phonePlaceholder}
                     />
                   </div>
@@ -265,7 +265,7 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
                 <div>
                   <label
                     htmlFor="message"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >
                     {copy.form.messageLabel}
                   </label>
@@ -274,7 +274,7 @@ export default function Contact({ copy = defaultCopy }: { copy?: ContactCopy }) 
                     name="message"
                     required
                     rows={4}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200 resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900/50 transition-all duration-200 resize-none"
                     placeholder={copy.form.messagePlaceholder}
                   />
                 </div>

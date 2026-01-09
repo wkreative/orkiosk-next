@@ -82,7 +82,7 @@ export default function Features({ copy = defaultCopy, locale = 'es' }: { copy?:
   return (
     <section
       id="benefits"
-      className="py-20 md:py-32 bg-white"
+      className="py-20 md:py-32 bg-white dark:bg-black transition-colors duration-300"
       aria-labelledby="features-heading"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -118,10 +118,10 @@ export default function Features({ copy = defaultCopy, locale = 'es' }: { copy?:
               </div>
 
               {/* Content */}
-              <h3 className="text-xl font-heading font-bold text-gray-900 mb-3">
+              <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mb-3">
                 {feature.name}
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                 {feature.description}
               </p>
             </div>

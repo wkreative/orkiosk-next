@@ -16,6 +16,20 @@ export default function DashboardPage() {
     const locale = params?.locale || 'es';
     const [activeTab, setActiveTab] = useState<'overview' | 'posts'>('overview');
 
+
+
+    const searchParams = useSearchParams();
+    const tabParam = searchParams.get('tab');
+
+    useEffect(() => {
+        if (tabParam === 'posts') {
+            setActiveTab('posts');
+        } else {
+            // Default to overview if no param or explicit overview
+            setActiveTab('overview');
+        }
+    }, [tabParam]);
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -86,31 +100,11 @@ export default function DashboardPage() {
 
     return (
         <div className="space-y-8">
-            {/* Header with Tabs */}
+            {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">Dashboard - Panel de Control</h1>
                     <p className="text-gray-600">Bienvenido al panel de administración de Orkiosk</p>
-                </div>
-                <div className="flex items-center space-x-2 bg-gray-100 rounded-xl p-1">
-                    <button
-                        onClick={() => setActiveTab('overview')}
-                        className={`px-4 py-2 rounded-lg font-medium transition-all ${activeTab === 'overview'
-                            ? 'bg-white text-primary-600 shadow-sm'
-                            : 'text-gray-600 hover:text-gray-900'
-                            }`}
-                    >
-                        Resumen
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('posts')}
-                        className={`px-4 py-2 rounded-lg font-medium transition-all ${activeTab === 'posts'
-                            ? 'bg-white text-primary-600 shadow-sm'
-                            : 'text-gray-600 hover:text-gray-900'
-                            }`}
-                    >
-                        Publicaciones
-                    </button>
                 </div>
             </div>
 

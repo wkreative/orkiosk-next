@@ -66,14 +66,14 @@ function PostCard({ post, locale, copy }: { post: Post; locale: string; copy: Bl
         )}
 
         {/* Title */}
-        <h3 className="text-xl font-heading font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+        <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
           <Link href={blogHref}>
             {post.title}
           </Link>
         </h3>
 
         {/* Excerpt */}
-        <p className="text-gray-600 mb-6 flex-grow line-clamp-3">
+        <p className="text-gray-600 dark:text-gray-400 mb-6 flex-grow line-clamp-3">
           {post.excerpt}
         </p>
 
@@ -105,7 +105,7 @@ export default function BlogPreview({
   return (
     <section
       id="blog"
-      className="py-20 md:py-32 bg-gray-50"
+      className="py-20 md:py-32 bg-gray-50 dark:bg-black transition-colors duration-300"
       aria-labelledby="blog-heading"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

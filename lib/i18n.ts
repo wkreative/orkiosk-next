@@ -430,11 +430,18 @@ export async function translatePost(post: Post, locale: Locale, includeContent: 
   }
 
   // For English, use manual translations if available, otherwise fallback to Spanish
+  const category = post.categoryEn || post.category;
+
+  // Normalize inconsistent categories (Temporary fix for data inconsistency)
+  const normalizedCategory = category === 'Business Optimization and Growth'
+    ? 'Business Optimization & Growth'
+    : category;
+
   return {
     ...post,
     title: post.titleEn || post.title,
     excerpt: post.excerptEn || post.excerpt,
-    category: post.categoryEn || post.category,
+    category: normalizedCategory,
     content: includeContent ? (post.contentEn || post.content) : post.content,
     enableComments: post.enableComments,
   }

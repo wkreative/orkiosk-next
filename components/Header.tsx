@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown, Globe } from 'lucide-react'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 export type NavItem = {
   name: string
@@ -118,7 +119,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-        ? 'bg-white/90 backdrop-blur-lg shadow-lg'
+        ? 'bg-white/90 dark:bg-black/90 backdrop-blur-lg shadow-lg'
         : 'bg-transparent'
         }`}
     >
@@ -126,7 +127,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href={copy.homeHref ?? '/'} className="flex items-center group" aria-label="Ir al inicio">
-            <span className="font-logo text-2xl md:text-3xl tracking-tight text-gray-900 group-hover:text-primary-600 transition-colors">
+            <span className="font-logo text-2xl md:text-3xl tracking-tight text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
               Orkiosk
             </span>
           </Link>
@@ -137,7 +138,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className="px-4 py-2 text-gray-600 hover:text-primary-600 font-medium transition-colors duration-200 rounded-lg hover:bg-primary-50"
+                className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-200 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/10"
                 target={item.external ? '_blank' : undefined}
                 rel={item.external ? 'noopener noreferrer' : undefined}
               >
@@ -146,38 +147,41 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
             ))}
           </div>
 
-          {/* Desktop Language Switcher */}
-          <div ref={desktopLangRef} className="hidden md:flex items-center relative">
-            <button
-              type="button"
-              className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors"
-              onClick={() => setIsDesktopLangOpen(!isDesktopLangOpen)}
-              aria-expanded={isDesktopLangOpen}
-              aria-haspopup="true"
-            >
-              <span>{currentLocale.toUpperCase()}</span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
-            {isDesktopLangOpen && (
-              <div className="absolute right-0 top-full mt-2 w-32 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-50">
-                <a
-                  href={localeHref('es')}
-                  className={`block px-4 py-2 text-sm transition-colors ${currentLocale === 'es' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
-                >
-                  Español
-                </a>
-                <a
-                  href={localeHref('en')}
-                  className={`block px-4 py-2 text-sm transition-colors ${currentLocale === 'en' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
-                >
-                  English
-                </a>
-              </div>
-            )}
-          </div>
+          <div className="hidden md:flex items-center gap-3">
+            {/* Desktop Theme Toggle */}
+            <ThemeToggle />
 
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center">
+            {/* Desktop Language Switcher */}
+            <div ref={desktopLangRef} className="relative">
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/10 transition-colors"
+                onClick={() => setIsDesktopLangOpen(!isDesktopLangOpen)}
+                aria-expanded={isDesktopLangOpen}
+                aria-haspopup="true"
+              >
+                <span>{currentLocale.toUpperCase()}</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              {isDesktopLangOpen && (
+                <div className="absolute right-0 top-full mt-2 w-32 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg overflow-hidden z-50">
+                  <a
+                    href={localeHref('es')}
+                    className={`block px-4 py-2 text-sm transition-colors ${currentLocale === 'es' ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'}`}
+                  >
+                    Español
+                  </a>
+                  <a
+                    href={localeHref('en')}
+                    className={`block px-4 py-2 text-sm transition-colors ${currentLocale === 'en' ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'}`}
+                  >
+                    English
+                  </a>
+                </div>
+              )}
+            </div>
+
+            {/* CTA Button */}
             <Link
               href={copy.ctaHref ?? '/#contact'}
               className="btn-primary text-sm"
@@ -186,13 +190,16 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
             </Link>
           </div>
 
-          {/* Mobile Language Switcher + Menu Button */}
+          {/* Mobile Actions */}
           <div className="md:hidden flex items-center gap-2">
+            {/* Mobile Theme Toggle */}
+            <ThemeToggle />
+
             {/* Mobile Language Switcher */}
             <div className="relative" ref={mobileLangRef}>
               <button
                 type="button"
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => {
                   setIsMobileLangOpen(!isMobileLangOpen)
                   setIsMobileMenuOpen(false)
@@ -201,19 +208,19 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
                 aria-haspopup="true"
                 aria-label="Seleccionar idioma"
               >
-                <Globe className="w-5 h-5 text-gray-900" />
+                <Globe className="w-5 h-5 text-gray-900 dark:text-white" />
               </button>
               {isMobileLangOpen && (
-                <div className="absolute right-0 top-full mt-2 w-32 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-50">
+                <div className="absolute right-0 top-full mt-2 w-32 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg overflow-hidden z-50">
                   <a
                     href={localeHref('es')}
-                    className={`block px-4 py-2.5 text-sm transition-colors ${currentLocale === 'es' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                    className={`block px-4 py-2.5 text-sm transition-colors ${currentLocale === 'es' ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'}`}
                   >
                     Español
                   </a>
                   <a
                     href={localeHref('en')}
-                    className={`block px-4 py-2.5 text-sm transition-colors ${currentLocale === 'en' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                    className={`block px-4 py-2.5 text-sm transition-colors ${currentLocale === 'en' ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'}`}
                   >
                     English
                   </a>
@@ -225,7 +232,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
             <div className="relative" ref={mobileMenuRef}>
               <button
                 type="button"
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => {
                   setIsMobileMenuOpen(!isMobileMenuOpen)
                   setIsMobileLangOpen(false)
@@ -235,9 +242,9 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
                 aria-label={isMobileMenuOpen ? copy.aria.closeMenu : copy.aria.openMenu}
               >
                 {isMobileMenuOpen ? (
-                  <X className="w-6 h-6 text-gray-900" />
+                  <X className="w-6 h-6 text-gray-900 dark:text-white" />
                 ) : (
-                  <Menu className="w-6 h-6 text-gray-900" />
+                  <Menu className="w-6 h-6 text-gray-900 dark:text-white" />
                 )}
               </button>
 
@@ -245,14 +252,14 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
               {isMobileMenuOpen && (
                 <div
                   id="mobile-menu"
-                  className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-50"
+                  className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg overflow-hidden z-50"
                 >
                   <div className="py-2">
                     {copy.nav.map((item) => (
                       <Link
                         key={item.name}
                         href={item.href}
-                        className="block px-4 py-2.5 text-gray-700 hover:text-primary-600 font-medium hover:bg-gray-50 transition-colors"
+                        className="block px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                         onClick={() => setIsMobileMenuOpen(false)}
                         target={item.external ? '_blank' : undefined}
                         rel={item.external ? 'noopener noreferrer' : undefined}
@@ -260,7 +267,7 @@ export default function Header({ copy = defaultCopy }: { copy?: HeaderCopy }) {
                         {item.name}
                       </Link>
                     ))}
-                    <div className="border-t border-gray-100 mt-2 pt-2 px-3">
+                    <div className="border-t border-gray-100 dark:border-gray-800 mt-2 pt-2 px-3">
                       <Link
                         href={copy.ctaHref ?? '/#contact'}
                         className="btn-primary w-full text-center block text-sm"
