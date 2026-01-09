@@ -29,6 +29,31 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Messages array is required' }, { status: 400 });
         }
 
+        // --- DEBUG COMMAND HANDLER ---
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage && lastMessage.role === 'user' && (lastMessage.content === '/debug' || lastMessage.content === '/status')) {
+            const settings = await getSettings();
+            const faqItems = await getChatKnowledgeBase();
+
+            const debugInfo = `
+**🔍 System Diagnosis (Debug Mode)**
+
+*   **Google Sheet ID Configured**: ${settings.googleSheetId ? '✅ Yes' : '❌ No'}
+*   **Google Sheet ID Value**: ${settings.googleSheetId ? `\`${settings.googleSheetId.substring(0, 5)}...${settings.googleSheetId.substring(settings.googleSheetId.length - 4)}\`` : 'N/A'}
+*   **Env Var ID**: ${process.env.GOOGLE_SHEET_ID_CHAT ? '✅ Present' : '❌ Missing'}
+*   **Knowledge Base Items Loaded**: **${faqItems.length}**
+
+**First 3 Questions Loaded:**
+${faqItems.slice(0, 3).map((item, i) => `${i + 1}. *${item.question}*`).join('\n') || '(None)'}
+
+**System Prompt Configured**:
+${settings.chatSystemPrompt ? '✅ Custom Prompt Active' : 'ℹ️ Default Prompt Active'}
+            `.trim();
+
+            return NextResponse.json({ content: debugInfo });
+        }
+        // -----------------------------
+
         // 1. Get Knowledge Base
         const faqItems = await getChatKnowledgeBase();
         let knowledgeBaseText = "";
