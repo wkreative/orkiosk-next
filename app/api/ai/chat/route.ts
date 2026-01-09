@@ -33,7 +33,14 @@ export async function POST(req: NextRequest) {
         const lastMessage = messages[messages.length - 1];
         if (lastMessage && lastMessage.role === 'user' && (lastMessage.content === '/debug' || lastMessage.content === '/status')) {
             const settings = await getSettings();
-            const faqItems = await getChatKnowledgeBase();
+            let faqItems: any[] = [];
+            let errorMsg = null;
+
+            try {
+                faqItems = await getChatKnowledgeBase();
+            } catch (err: any) {
+                errorMsg = err.message || JSON.stringify(err);
+            }
 
             const debugInfo = `
 **🔍 System Diagnosis (Debug Mode)**
@@ -41,7 +48,9 @@ export async function POST(req: NextRequest) {
 *   **Google Sheet ID Configured**: ${settings.googleSheetId ? '✅ Yes' : '❌ No'}
 *   **Google Sheet ID Value**: ${settings.googleSheetId ? `\`${settings.googleSheetId.substring(0, 5)}...${settings.googleSheetId.substring(settings.googleSheetId.length - 4)}\`` : 'N/A'}
 *   **Env Var ID**: ${process.env.GOOGLE_SHEET_ID_CHAT ? '✅ Present' : '❌ Missing'}
+*   **Service Account**: ${process.env.GOOGLE_SERVICE_ACCOUNT_KEY ? '✅ Env Var Present' : '⚠️ Using File (May fail on Vercel)'}
 *   **Knowledge Base Items Loaded**: **${faqItems.length}**
+*   **Status**: ${errorMsg ? `❌ ERROR: ${errorMsg}` : '✅ OK'}
 
 **First 3 Questions Loaded:**
 ${faqItems.slice(0, 3).map((item, i) => `${i + 1}. *${item.question}*`).join('\n') || '(None)'}
@@ -55,7 +64,14 @@ ${settings.chatSystemPrompt ? '✅ Custom Prompt Active' : 'ℹ️ Default Promp
         // -----------------------------
 
         // 1. Get Knowledge Base
-        const faqItems = await getChatKnowledgeBase();
+        let faqItems: any[] = [];
+        try {
+            faqItems = await getChatKnowledgeBase();
+        } catch (error) {
+            console.error("Failed to load knowledge base:", error);
+            // Continue with empty knowledge base
+        }
+
         let knowledgeBaseText = "";
         if (faqItems.length > 0) {
             knowledgeBaseText = "\n\n### BASE DE CONOCIMIENTO (Q&A de Google Sheets):\n" +
