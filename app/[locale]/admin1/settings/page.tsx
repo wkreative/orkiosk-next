@@ -7,8 +7,10 @@ import { Eye, EyeOff, Save, Loader2, Sparkles, MessageSquare, Sliders } from 'lu
 export default function SettingsPage() {
     const [openaiKey, setOpenaiKey] = useState('')
     const [geminiKey, setGeminiKey] = useState('')
+    const [googleSheetId, setGoogleSheetId] = useState('')
     const [showOpenai, setShowOpenai] = useState(false)
     const [showGemini, setShowGemini] = useState(false)
+    const [showSheetId, setShowSheetId] = useState(false)
 
     // Advanced Config
     const [systemPrompt, setSystemPrompt] = useState('')
@@ -56,6 +58,7 @@ Return ONLY a valid JSON object.`;
                 if (settings.systemPrompt) setSystemPrompt(settings.systemPrompt)
                 else setSystemPrompt(SYSTEM_PROMPT_DEFAULT)
 
+                if (settings.googleSheetId) setGoogleSheetId(settings.googleSheetId)
                 if (settings.aiModel) setAiModel(settings.aiModel)
                 if (settings.maxTokens) setMaxTokens(settings.maxTokens)
                 if (settings.temperature) setTemperature(settings.temperature)
@@ -80,6 +83,7 @@ Return ONLY a valid JSON object.`;
             await saveSettings({
                 openaiApiKey: openaiKey,
                 geminiApiKey: geminiKey,
+                googleSheetId: googleSheetId,
                 systemPrompt: systemPrompt,
                 aiModel: aiModel,
                 maxTokens: Number(maxTokens),
@@ -181,6 +185,33 @@ Return ONLY a valid JSON object.`;
                                     {showGemini ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
                             </div>
+                        </div>
+
+                        {/* Google Sheet ID */}
+                        <div>
+                            <label htmlFor="sheetId" className="block text-sm font-bold text-gray-700 mb-2">
+                                Google Sheet ID (Chat Knowledge Base)
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type={showSheetId ? 'text' : 'password'}
+                                    id="sheetId"
+                                    value={googleSheetId}
+                                    onChange={(e) => setGoogleSheetId(e.target.value)}
+                                    className="block w-full rounded-xl border-gray-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm p-3 border pr-10"
+                                    placeholder="1BxiMVs0XRA5nLFd..."
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowSheetId(!showSheetId)}
+                                    className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600"
+                                >
+                                    {showSheetId ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
+                            </div>
+                            <p className="mt-1 text-xs text-gray-500">
+                                ID de la hoja de cálculo de Google. Asegúrate de compartir la hoja con el email de servicio.
+                            </p>
                         </div>
                     </div>
                 </div>

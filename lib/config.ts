@@ -9,6 +9,8 @@ export interface AppSettings {
     aiModel?: string; // 'gpt-4o', 'gpt-3.5-turbo', 'gemini-pro'
     maxTokens?: number;
     temperature?: number;
+    // Integration Config
+    googleSheetId?: string;
 }
 
 const SETTINGS_COLLECTION = 'settings';

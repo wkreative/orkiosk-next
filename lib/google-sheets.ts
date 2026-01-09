@@ -1,5 +1,6 @@
 import { google } from 'googleapis';
 import path from 'path';
+import { getSettings } from '@/lib/config';
 
 export interface FAQItem {
     question: string;
@@ -8,9 +9,17 @@ export interface FAQItem {
 
 export async function getChatKnowledgeBase(): Promise<FAQItem[]> {
     try {
-        const spreadsheetId = process.env.GOOGLE_SHEET_ID_CHAT;
+        // 1. Try to get ID from AppSettings first (Admin Panel)
+        const settings = await getSettings();
+        let spreadsheetId = settings.googleSheetId;
+
+        // 2. Fallback to Env Var
         if (!spreadsheetId) {
-            console.warn("GOOGLE_SHEET_ID_CHAT is not defined. Skipping Sheets integration.");
+            spreadsheetId = process.env.GOOGLE_SHEET_ID_CHAT;
+        }
+
+        if (!spreadsheetId) {
+            console.warn("Google Sheet ID is not defined in Settings or Env. Skipping Sheets integration.");
             return [];
         }
 
