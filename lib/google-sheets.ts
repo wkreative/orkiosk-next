@@ -76,4 +76,8 @@ export async function getChatKnowledgeBase(): Promise<FAQItem[]> {
             // Let's RE-THROW the error and handle it in the caller (route.ts).
             throw error;
         }
+    } catch (error) {
+        console.error('Unexpected error in getChatKnowledgeBase:', error);
+        return [];
     }
+}
