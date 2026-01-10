@@ -50,6 +50,7 @@ ${diagnosis.sample ? diagnosis.sample.map((row: any[], i: number) => `${i + 1}. 
 **Configuration**:
 *   ID: ${settings.googleSheetId ? '...' + settings.googleSheetId.slice(-4) : 'Env'}
 *   System Prompt: ${settings.chatSystemPrompt ? 'Custom' : 'Default'}
+*   **Version**: v2.0 (Deep Diagnostic)
             `.trim();
 
             return NextResponse.json({ content: debugInfo });
