@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSettings } from '@/lib/config';
-import { getChatKnowledgeBase } from '@/lib/google-sheets';
+import { getChatKnowledgeBase, diagnoseSheet } from '@/lib/google-sheets';
 
 const BASE_SYSTEM_PROMPT = `
 ERES EL ASISTENTE VIRTUAL EXPERTO DE ORKIOSK.
@@ -33,30 +33,23 @@ export async function POST(req: NextRequest) {
         const lastMessage = messages[messages.length - 1];
         if (lastMessage && lastMessage.role === 'user' && (lastMessage.content === '/debug' || lastMessage.content === '/status')) {
             const settings = await getSettings();
-            let faqItems: any[] = [];
-            let errorMsg = null;
-
-            try {
-                faqItems = await getChatKnowledgeBase();
-            } catch (err: any) {
-                errorMsg = err.message || JSON.stringify(err);
-            }
+            const diagnosis = await diagnoseSheet();
 
             const debugInfo = `
-**🔍 System Diagnosis (Debug Mode)**
+**🔍 Deep System Diagnosis**
 
-*   **Google Sheet ID Configured**: ${settings.googleSheetId ? '✅ Yes' : '❌ No'}
-*   **Google Sheet ID Value**: ${settings.googleSheetId ? `\`${settings.googleSheetId.substring(0, 5)}...${settings.googleSheetId.substring(settings.googleSheetId.length - 4)}\`` : 'N/A'}
-*   **Env Var ID**: ${process.env.GOOGLE_SHEET_ID_CHAT ? '✅ Present' : '❌ Missing'}
-*   **Service Account**: ${process.env.GOOGLE_SERVICE_ACCOUNT_KEY ? '✅ Env Var Present' : '⚠️ Using File (May fail on Vercel)'}
-*   **Knowledge Base Items Loaded**: **${faqItems.length}**
-*   **Status**: ${errorMsg ? `❌ ERROR: ${errorMsg}` : '✅ OK'}
+*   **Spreadsheet Title**: ${diagnosis.title || 'N/A'}
+*   **Sheet Names Found**: ${diagnosis.sheets ? diagnosis.sheets.join(', ') : 'None'}
+*   **Targeting Sheet**: "${diagnosis.firstSheetName || 'Unknown'}"
+*   **Rows Read**: ${diagnosis.rowCount}
+*   **Error Status**: ${diagnosis.error ? `❌ ${diagnosis.error}` : '✅ No Errors'}
 
-**First 3 Questions Loaded:**
-${faqItems.slice(0, 3).map((item, i) => `${i + 1}. *${item.question}*`).join('\n') || '(None)'}
+**Sample Data (First 3 Rows of "${diagnosis.firstSheetName}")**:
+${diagnosis.sample ? diagnosis.sample.map((row: any[], i: number) => `${i + 1}. [A] ${row[0]?.substring(0, 20)}... | [B] ${row[1]?.substring(0, 20)}...`).join('\n') : '(No data found)'}
 
-**System Prompt Configured**:
-${settings.chatSystemPrompt ? '✅ Custom Prompt Active' : 'ℹ️ Default Prompt Active'}
+**Configuration**:
+*   ID: ${settings.googleSheetId ? '...' + settings.googleSheetId.slice(-4) : 'Env'}
+*   System Prompt: ${settings.chatSystemPrompt ? 'Custom' : 'Default'}
             `.trim();
 
             return NextResponse.json({ content: debugInfo });

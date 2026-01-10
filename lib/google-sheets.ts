@@ -81,3 +81,57 @@ export async function getChatKnowledgeBase(): Promise<FAQItem[]> {
         return [];
     }
 }
+
+export async function diagnoseSheet(): Promise<any> {
+    try {
+        const settings = await getSettings();
+        let spreadsheetId = settings.googleSheetId || process.env.GOOGLE_SHEET_ID_CHAT;
+
+        if (!spreadsheetId) return { error: "No Spreadsheet ID configuration found." };
+
+        let auth;
+        // Option A: Env Var
+        if (process.env.GOOGLE_SERVICE_ACCOUNT_KEY) {
+            const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
+            auth = new google.auth.GoogleAuth({
+                credentials,
+                scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+            });
+        }
+        // Option B: Local File
+        else {
+            auth = new google.auth.GoogleAuth({
+                keyFile: path.join(process.cwd(), 'serviceAccountKey.json'),
+                scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+            });
+        }
+
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        // 1. Get Metadata (Title, Sheets)
+        const meta = await sheets.spreadsheets.get({ spreadsheetId });
+        const sheetTitle = meta.data.properties?.title;
+        const sheetNames = meta.data.sheets?.map(s => s.properties?.title) || [];
+
+        // 2. Try to read from the first sheet explicitly
+        let firstSheetData = null;
+        if (sheetNames.length > 0) {
+            const response = await sheets.spreadsheets.values.get({
+                spreadsheetId,
+                range: `${sheetNames[0]}!A2:B`, // Explicitly use first sheet name
+            });
+            firstSheetData = response.data.values;
+        }
+
+        return {
+            title: sheetTitle,
+            sheets: sheetNames,
+            firstSheetName: sheetNames[0],
+            rowCount: firstSheetData?.length || 0,
+            sample: firstSheetData ? firstSheetData.slice(0, 3) : null
+        };
+
+    } catch (error: any) {
+        return { error: error.message || JSON.stringify(error) };
+    }
+}
