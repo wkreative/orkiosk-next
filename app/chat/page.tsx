@@ -46,7 +46,8 @@ export default function ChatPage() {
                     <div>
                         <h1 className="text-lg font-bold text-gray-800 dark:text-white leading-tight">Orkiosk Assistant</h1>
                         <p className="text-xs text-green-500 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span> Online
+                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                            Online {user?.displayName ? `• Hola, ${user.displayName.split(' ')[0]}` : ''}
                         </p>
                     </div>
                 </div>

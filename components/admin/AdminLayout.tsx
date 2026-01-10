@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { LayoutDashboard, FileText, LogOut, Loader2, Settings, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, FileText, LogOut, Loader2, Settings, MessageSquare, Users } from 'lucide-react';
 
 // Internal component for Sidebar Navigation to safely use useSearchParams
 function SidebarNav({ navItems }: { navItems: any[] }) {
@@ -101,10 +101,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             return;
         }
 
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 router.push(`/${locale}/admin1/login`);
             } else {
+                // Security Check: Only allow specific admins
+                const ALLOWED_ADMINS = ['minesartgallery@gmail.com', 'admin@orkiosk.com']; // Hardcoded backup
+                if (!ALLOWED_ADMINS.includes(user.email || '')) {
+                    console.warn(`Unauthorized access attempt by: ${user.email}`);
+                    await signOut(auth); // Force logout
+                    alert('Acceso Denegado: Esta cuenta no tiene permisos de administrador.');
+                    router.push(`/${locale}/admin1/login`);
+                    return;
+                }
                 setUser(user);
             }
             setLoading(false);
@@ -173,6 +182,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { name: 'Posts', href: `/${locale}/admin1/dashboard?tab=posts`, icon: FileText },
         { name: 'Páginas', href: `/${locale}/admin1/pages`, icon: FileText },
         { name: locale === 'es' ? 'Comentarios' : 'Comments', href: `/${locale}/admin1/comments`, icon: MessageSquare },
+        { name: 'Usuarios Chat', href: `/${locale}/admin1/chat-users`, icon: Users },
         { name: 'Settings', href: `/${locale}/admin1/settings`, icon: Settings },
     ];
 
