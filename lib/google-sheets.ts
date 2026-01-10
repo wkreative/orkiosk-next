@@ -114,7 +114,7 @@ export async function diagnoseSheet(): Promise<any> {
         const sheetNames = meta.data.sheets?.map(s => s.properties?.title) || [];
 
         // 2. Try to read from the first sheet explicitly
-        let firstSheetData = null;
+        let firstSheetData: any[] | null | undefined = null;
         if (sheetNames.length > 0) {
             const response = await sheets.spreadsheets.values.get({
                 spreadsheetId,
