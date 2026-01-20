@@ -59,8 +59,8 @@ export default function ManualSidebar({ sections, locale }: ManualSidebarProps) 
                                     : "border-gray-100 text-gray-600 hover:text-gray-900 hover:border-gray-300"
                             )}
                         >
-                            <span className="capitalize-first">
-                                {section.title.toLowerCase()}
+                            <span className="block first-letter:uppercase lowercase">
+                                {section.title}
                             </span>
                         </ScrollLink>
                     </li>
