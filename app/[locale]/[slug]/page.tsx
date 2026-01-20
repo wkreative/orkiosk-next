@@ -12,8 +12,8 @@ export async function generateStaticParams() {
     const pages = await getPublishedPages()
     const locales = ['es', 'en']
 
-    // Exclude tool pages from dynamic routing
-    const excludedSlugs = ['barcode', 'qr']
+    // Exclude specialized pages from dynamic routing
+    const excludedSlugs = ['barcode', 'qr', 'user-manual']
 
     return locales.flatMap((locale) =>
         pages

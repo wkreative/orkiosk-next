@@ -13,6 +13,12 @@ export interface Page {
     noIndex?: boolean;
     // Status
     published: boolean;
+    // Translations
+    titleEn?: string;
+    contentEn?: string;
+    focalKeywordEn?: string;
+    metaDescriptionEn?: string;
+    seoTitleEn?: string;
     createdAt?: any;
     updatedAt?: any;
 }

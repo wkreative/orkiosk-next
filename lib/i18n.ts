@@ -1,5 +1,5 @@
-import { translateStrings } from './translate'
 import type { Post } from './posts'
+import type { Page } from './pages'
 
 export const locales = ['es', 'en'] as const
 export type Locale = (typeof locales)[number]
@@ -180,6 +180,7 @@ export const baseCopy = {
         { name: 'Sobre Nosotros', href: '/#about' },
         { name: 'Productos', href: '/#products' },
         { name: 'Integraciones', href: '/#integrations' },
+        { name: 'Manual de Usuario', href: '/user-manual' },
       ],
       legal: [
         { name: 'Política de Privacidad', href: '/privacy' },
@@ -407,6 +408,7 @@ const enCopy: Translations = {
         { name: 'About Us', href: '/#about' },
         { name: 'Products', href: '/#products' },
         { name: 'Integrations', href: '/#integrations' },
+        { name: 'User Manual', href: '/user-manual' },
       ],
       legal: [
         { name: 'Privacy Policy', href: '/privacy' },
@@ -444,6 +446,20 @@ export async function translatePost(post: Post, locale: Locale, includeContent: 
     category: normalizedCategory,
     content: includeContent ? (post.contentEn || post.content) : post.content,
     enableComments: post.enableComments,
+  }
+}
+
+export async function translatePage(page: Page, locale: Locale): Promise<Page> {
+  if (locale === 'es') {
+    return page
+  }
+  return {
+    ...page,
+    title: page.titleEn || page.title,
+    content: page.contentEn || page.content,
+    focalKeyword: page.focalKeywordEn || page.focalKeyword,
+    metaDescription: page.metaDescriptionEn || page.metaDescription,
+    seoTitle: page.seoTitleEn || page.seoTitle,
   }
 }
 

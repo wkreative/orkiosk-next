@@ -1,0 +1,17 @@
+export function cn(...inputs: (string | boolean | undefined | null | { [key: string]: any })[]) {
+    const classes: string[] = [];
+
+    inputs.forEach((input) => {
+        if (!input) return;
+
+        if (typeof input === 'string') {
+            classes.push(input);
+        } else if (typeof input === 'object') {
+            Object.entries(input).forEach(([key, value]) => {
+                if (value) classes.push(key);
+            });
+        }
+    });
+
+    return classes.filter(Boolean).join(' ');
+}
