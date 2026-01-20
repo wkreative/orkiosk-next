@@ -56,19 +56,19 @@ function buildKeywords(texts: string[]): string[] {
   return Array.from(new Set(keywords)).slice(0, 20)
 }
 
-// generateStaticParams removed to enable on-demand rendering of new posts
-// export async function generateStaticParams() {
-//   const posts = await getAllPosts()
-//   return locales.flatMap((locale) =>
-//     posts.map((post) => ({
-//       locale,
-//       slug: post.slug,
-//     })),
-//   )
-// }
+export async function generateStaticParams() {
+  const posts = await getAllPosts()
+  return locales.flatMap((locale) =>
+    posts.map((post) => ({
+      locale,
+      slug: post.slug,
+    })),
+  )
+}
 
-// Force dynamic rendering to always fetch fresh content from Firebase
-export const dynamic = 'force-dynamic'
+// Enable Incremental Static Regeneration (ISR)
+// The page will be revalidated at most every hour
+export const revalidate = 3600
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const copy = await getTranslations(params.locale)

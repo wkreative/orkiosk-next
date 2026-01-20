@@ -18,8 +18,6 @@ const nextConfig = {
   // output: 'export',
   // Optimización para SEO
   compress: true,
-  // Redirects and Rewrites are moved to firebase.json or handled by Firebase Hosting because they are not supported in static exports
-  /*
   async redirects() {
     return [
       {
@@ -35,6 +33,8 @@ const nextConfig = {
       },
     ]
   },
+  // Redirects and Rewrites for /admin are NOT handled here to avoid affecting the external client server
+  /*
   async rewrites() {
     return [
       {

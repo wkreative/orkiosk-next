@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const title = page.seoTitle || page.title
     const description = page.metaDescription || `${page.title} - Orkiosk`
-    const url = `https://orkiosk.com/${params.locale}/${params.slug}`
+    const url = `https://orkiosk.com/${params.locale}/p/${params.slug}`
 
     const imageUrl = 'https://orkiosk.com/images/logo.png'
 
