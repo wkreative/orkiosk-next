@@ -102,8 +102,8 @@ export default function ManualSearch({ sections, locale }: ManualSearchProps) {
                                             }}
                                             className="flex flex-col p-3 rounded-xl hover:bg-primary-50 group transition-colors cursor-pointer"
                                         >
-                                            <span className="text-sm font-semibold text-gray-900 group-hover:text-primary-700">
-                                                {result.title}
+                                            <span className="text-sm font-bold text-gray-900 group-hover:text-primary-700 capitalize-first">
+                                                {result.title.toLowerCase()}
                                             </span>
                                             <span className="text-xs text-gray-500">
                                                 {locale === 'es' ? 'Sección' : 'Section'} {result.level === 2 ? 'Principal' : 'Subsección'}

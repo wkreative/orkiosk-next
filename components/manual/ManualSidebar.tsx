@@ -42,7 +42,7 @@ export default function ManualSidebar({ sections, locale }: ManualSidebarProps) 
                 {sections.map((section) => (
                     <li
                         key={section.id}
-                        style={{ paddingLeft: `${(section.level - 2) * 1}rem` }}
+                        style={{ paddingLeft: `${Math.max(0, (section.level - 2)) * 1}rem` }}
                     >
                         <ScrollLink
                             to={section.id}
@@ -52,13 +52,16 @@ export default function ManualSidebar({ sections, locale }: ManualSidebarProps) 
                             spy={true}
                             onSetActive={() => setActiveSection(section.id)}
                             className={cn(
-                                "block py-1.5 text-sm transition-colors cursor-pointer border-l-2 pl-4",
+                                "block py-2 text-sm transition-all cursor-pointer border-l-2 pl-4",
+                                "font-bold", // Titles in bold as requested
                                 activeSection === section.id
-                                    ? "border-primary-600 text-primary-600 font-medium bg-primary-50/50"
-                                    : "border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-200"
+                                    ? "border-primary-600 text-primary-600 bg-primary-50/30"
+                                    : "border-gray-100 text-gray-600 hover:text-gray-900 hover:border-gray-300"
                             )}
                         >
-                            {section.title}
+                            <span className="capitalize-first">
+                                {section.title.toLowerCase()}
+                            </span>
                         </ScrollLink>
                     </li>
                 ))}
