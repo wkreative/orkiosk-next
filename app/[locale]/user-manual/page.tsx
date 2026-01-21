@@ -5,6 +5,7 @@ import { getTranslations, translatePage, locales, type Locale } from '@/lib/i18n
 import SiteShell from '@/components/SiteShell'
 import ManualSidebar from '@/components/manual/ManualSidebar'
 import ManualSearch from '@/components/manual/ManualSearch'
+import ManualMobileNav from '@/components/manual/ManualMobileNav'
 import { extractSections, injectIds } from '@/lib/manual-utils'
 
 interface Props {
@@ -15,8 +16,8 @@ export async function generateStaticParams() {
     return locales.map((locale) => ({ locale }))
 }
 
-// Revalidate once per hour
-export const revalidate = 3600
+// Revalidate every 60 seconds during active debugging
+export const revalidate = 60
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const page = await getPageBySlug('user-manual')
@@ -67,6 +68,7 @@ export default async function UserManualPage({ params }: Props) {
                                 : 'Everything you need to know to master your Orkiosk dashboard.'}
                         </p>
                         <ManualSearch sections={sections} locale={params.locale} />
+                        <ManualMobileNav sections={sections} locale={params.locale} />
                     </div>
 
                     <div className="flex flex-col lg:flex-row gap-12">
