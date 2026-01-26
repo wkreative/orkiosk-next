@@ -112,6 +112,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     keywords: keywords.join(', '),
     alternates: {
       canonical: url,
+      languages: {
+        'es': `https://orkiosk.com/es/blog/${params.slug}`,
+        'en': `https://orkiosk.com/en/blog/${params.slug}`,
+        'x-default': `https://orkiosk.com/es/blog/${params.slug}`,
+      },
     },
     openGraph: {
       title,

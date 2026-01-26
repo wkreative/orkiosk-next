@@ -49,6 +49,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       languages: {
         'es': 'https://orkiosk.com/es',
         'en': 'https://orkiosk.com/en',
+        'x-default': 'https://orkiosk.com/es',
       },
     },
     openGraph: {

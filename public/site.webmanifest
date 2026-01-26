@@ -1,7 +1,7 @@
 {
-  "name": "Orkiosk",
+  "name": "Orkiosk - Quioscos de Autoservicio Inteligentes",
   "short_name": "Orkiosk",
-  "description": "Quiscos de Autoservicio Inteligentes",
+  "description": "Quioscos de autoservicio inteligentes con software, hardware y analítica en tiempo real",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

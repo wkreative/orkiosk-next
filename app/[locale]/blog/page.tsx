@@ -89,6 +89,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords,
     alternates: {
       canonical: url,
+      languages: {
+        'es': 'https://orkiosk.com/es/blog',
+        'en': 'https://orkiosk.com/en/blog',
+        'x-default': 'https://orkiosk.com/es/blog',
+      },
     },
     openGraph: {
       title: `Blog | Orkiosk`,

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: 'Orkiosk | Quioscos de Autoservicio Inteligentes',
     template: '%s | Orkiosk',
   },
-  description: 'Quioscos de autoservicio inteligentes con software, hardware y analítica en tiempo real. Reduce tiempos de espera, integra pagos y optimiza tu negocio.',
+  description: 'Quioscos de autoservicio inteligentes para restaurantes y comercios. Software POS, hardware premium y analítica en tiempo real. Optimiza tu negocio en Puerto Rico.',
   keywords: [
     'quiosco',
     'quiosco de autoservicio',
@@ -110,10 +110,13 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'Organization',
               name: 'Orkiosk',
+              alternateName: 'Orkiosk PR',
               url: 'https://orkiosk.com',
               logo: 'https://orkiosk.com/images/logo.png',
               description: 'Orkiosk es líder en quioscos de autoservicio inteligentes, analítica en tiempo real y sistemas de pago integrados. Transformamos restaurantes y comercios en Puerto Rico y Estados Unidos.',
+              slogan: 'Transforma tu negocio con tecnología inteligente',
               foundingDate: '2020',
+              knowsAbout: ['Self-Service Kiosks', 'POS Systems', 'Restaurant Technology', 'Digital Signage', 'Payment Integration'],
               areaServed: [
                 { '@type': 'Country', name: 'Puerto Rico' },
                 { '@type': 'Country', name: 'United States' },
